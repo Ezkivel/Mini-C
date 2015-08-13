@@ -2,7 +2,6 @@
 
 package minic;
 import static minic.Token.*;
-import java_cup.runtime.*;
 
 %%
 /* Expresiones Regulares */
@@ -11,25 +10,40 @@ import java_cup.runtime.*;
 %unicode
 %standalone
 %line
-%char
 %column
-%unicode
 
-co = [\"]
 Letra = [a-zA-Z]
-Entero = [0-9]
-Numero = [0-9]+
-Espacio = [" "|\t\r\n]
-CaracterEspecial = ("!"|"@"|"#"|"$"|"%"|"^"|"&"|"("|")"|"_"|"="|"+"|"-"|","|":"|"\\")
+Palabra = [a-zA-Z]+
+Entero = [0-9]+
+CaracterEspecial = ("!"|"@"|"#"|"$"|"%"|"^"|"_"|"="|","|":")
+Espacio = [\s]
+
+TipoVariable = int|char|string
+Variable = {Letra}({Letra}|{Entero}|"_")*
+ConstChar = '[a-zA-Z]'
+ConstStr = \"[ [a-zA-Z]|[0-9]|[\s] ]*\"
+ParentesisIzquierdo = "("
+ParentesisDerecho = ")"
+OperadorAritmetico = ("+"|"-"|"*"|"/")
+OperadorRelacional = (">"|">="|"<"|"<="|"=="|"!=")
+ComentarioUnaLinea = [\/][\/][ [a-zA-Z]|[0-9] ]*
+ComentarioMultiLinea = [\/][\*][ [a-zA-Z]|[0-9]|[\s] ]*[\*][\/]
 FinLinea = ;
-Cadena= (({Letra}|{Entero}|{CaracterEspecial})+{Espacio}*({Letra}|{Entero}|{CaracterEspecial})*)+
-Id = {Letra}({Letra}|{Entero}|"_")*
 
 %%
 
-{Id} {return new Token("Id", yytext(), yyline, yycolumn + 1);}
-{CaracterEspecial} {return new Token("CaracterEspecial", yytext(), yyline, yycolumn + 1);}
-{Numero} {return new Token("Numero", yytext(), yyline, yycolumn + 1);}
-{FinLinea} {return new Token("FinLinea", yytext(), yyline, yycolumn + 1);}
+{TipoVariable} {return new Token("TipoVariable", yytext(), yyline + 1, yycolumn + 1);}
+{Variable} {return new Token("Variable", yytext(), yyline + 1, yycolumn + 1);}
+{ConstChar} {return new Token("ConstChar", yytext(), yyline + 1, yycolumn + 1);}
+{ConstStr} {return new Token("ConstStr", yytext(), yyline + 1, yycolumn + 1);}
+{ParentesisIzquierdo} {return new Token("ParentesisIzquierdo", yytext(), yyline + 1, yycolumn + 1);}
+{ParentesisDerecho} {return new Token("ParentesisDerecho", yytext(), yyline + 1, yycolumn + 1);}
+{OperadorAritmetico} {return new Token("OperadorAritmetico", yytext(), yyline + 1, yycolumn + 1);}
+{OperadorRelacional} {return new Token("OperadorRelacional", yytext(), yyline + 1, yycolumn + 1);}
+{CaracterEspecial} {return new Token("CaracterEspecial", yytext(), yyline + 1, yycolumn + 1);}
+{Entero} {return new Token("Entero", yytext(), yyline + 1, yycolumn + 1);}
+{ComentarioUnaLinea} {/* ignore */}
+{ComentarioMultiLinea} {/* ignore */}
 {Espacio} {/* ignore */}
+{FinLinea} {return new Token("FinLinea", yytext(), yyline + 1, yycolumn + 1);}
 

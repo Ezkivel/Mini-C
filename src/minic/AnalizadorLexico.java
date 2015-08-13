@@ -4,7 +4,6 @@
 
 package minic;
 import static minic.Token.*;
-import java_cup.runtime.*;
 
 
 /**
@@ -37,10 +36,13 @@ class AnalizadorLexico {
    * Translates characters to character classes
    */
   private static final String ZZ_CMAP_PACKED = 
-    "\11\0\2\3\2\0\1\3\22\0\1\3\1\4\1\0\1\4\1\4"+
-    "\1\4\1\4\1\0\1\4\1\4\1\0\1\4\1\4\1\4\2\0"+
-    "\12\2\1\4\1\6\1\0\1\4\2\0\1\4\32\1\1\0\1\4"+
-    "\1\0\1\4\1\5\1\0\32\1\1\0\1\3\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uff93\0";
+    "\11\0\5\7\22\0\1\32\1\3\1\22\1\4\1\4\1\4\1\0"+
+    "\1\21\1\24\1\25\1\27\1\26\1\4\1\26\1\0\1\30\12\2"+
+    "\1\4\1\33\1\31\1\6\1\31\1\0\1\4\32\1\3\0\1\4"+
+    "\1\5\1\0\1\15\1\1\1\13\3\1\1\20\1\14\1\10\4\1"+
+    "\1\11\3\1\1\16\1\17\1\12\6\1\1\0\1\23\10\0\1\7"+
+    "\32\0\1\7\u15df\0\1\7\u097f\0\13\7\35\0\2\7\5\0\1\7"+
+    "\57\0\1\7\u0fa0\0\1\7\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\uffff\0\ud00f\0";
 
   /** 
    * Translates characters to character classes
@@ -53,10 +55,12 @@ class AnalizadorLexico {
   private static final int [] ZZ_ACTION = zzUnpackAction();
 
   private static final String ZZ_ACTION_PACKED_0 =
-    "\1\0\1\1\1\2\1\3\1\4\1\5\1\6";
+    "\1\0\1\1\1\2\1\3\2\4\1\5\3\2\2\1"+
+    "\1\6\1\7\2\10\1\11\1\12\1\11\3\2\2\0"+
+    "\1\13\1\0\1\5\1\14\2\2\1\15\1\0\2\2";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[7];
+    int [] result = new int[34];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -81,10 +85,14 @@ class AnalizadorLexico {
   private static final int [] ZZ_ROWMAP = zzUnpackRowMap();
 
   private static final String ZZ_ROWMAP_PACKED_0 =
-    "\0\0\0\7\0\16\0\25\0\7\0\7\0\7";
+    "\0\0\0\34\0\70\0\124\0\160\0\34\0\34\0\214"+
+    "\0\250\0\304\0\340\0\374\0\34\0\34\0\34\0\u0118"+
+    "\0\160\0\34\0\34\0\u0134\0\u0150\0\u016c\0\u0188\0\374"+
+    "\0\34\0\u01a4\0\u01c0\0\70\0\u01dc\0\u01f8\0\34\0\u0214"+
+    "\0\u0230\0\u024c";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[7];
+    int [] result = new int[34];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -107,11 +115,28 @@ class AnalizadorLexico {
   private static final int [] ZZ_TRANS = zzUnpackTrans();
 
   private static final String ZZ_TRANS_PACKED_0 =
-    "\1\2\1\3\1\4\1\5\2\6\1\7\10\0\2\3"+
-    "\2\0\1\3\3\0\1\4\4\0";
+    "\1\2\1\3\1\4\1\5\2\6\1\5\1\7\1\10"+
+    "\2\3\1\11\3\3\1\12\1\3\1\13\1\14\1\2"+
+    "\1\15\1\16\2\17\1\20\1\21\1\7\1\22\35\0"+
+    "\2\3\2\0\1\3\2\0\11\3\15\0\1\4\37\0"+
+    "\1\23\26\0\2\3\2\0\1\3\2\0\1\3\1\24"+
+    "\7\3\14\0\2\3\2\0\1\3\2\0\4\3\1\25"+
+    "\4\3\14\0\2\3\2\0\1\3\2\0\2\3\1\26"+
+    "\6\3\14\0\1\27\6\0\11\27\14\0\2\30\4\0"+
+    "\12\30\1\0\1\31\1\30\6\0\1\30\30\0\1\32"+
+    "\1\33\4\0\2\3\2\0\1\3\2\0\2\3\1\34"+
+    "\6\3\14\0\2\3\2\0\1\3\2\0\5\3\1\35"+
+    "\3\3\14\0\2\3\2\0\1\3\2\0\6\3\1\36"+
+    "\2\3\34\0\1\37\13\0\2\32\4\0\12\32\2\0"+
+    "\1\32\3\0\1\40\2\0\1\32\2\0\2\33\5\0"+
+    "\11\33\2\0\1\33\6\0\1\33\2\0\2\3\2\0"+
+    "\1\3\2\0\6\3\1\34\2\3\14\0\2\3\2\0"+
+    "\1\3\2\0\1\41\10\3\43\0\1\7\4\0\2\3"+
+    "\2\0\1\3\2\0\1\3\1\42\7\3\14\0\2\3"+
+    "\2\0\1\3\2\0\10\3\1\34\13\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[28];
+    int [] result = new int[616];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -149,10 +174,11 @@ class AnalizadorLexico {
   private static final int [] ZZ_ATTRIBUTE = zzUnpackAttribute();
 
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
-    "\1\0\1\11\2\1\3\11";
+    "\1\0\1\11\3\1\2\11\5\1\3\11\2\1\2\11"+
+    "\3\1\2\0\1\11\1\0\4\1\1\11\1\0\2\1";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[7];
+    int [] result = new int[34];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -248,7 +274,7 @@ class AnalizadorLexico {
     char [] map = new char[0x110000];
     int i = 0;  /* index in packed string  */
     int j = 0;  /* index in unpacked array */
-    while (i < 108) {
+    while (i < 162) {
       int  count = packed.charAt(i++);
       char value = packed.charAt(i++);
       do map[j++] = value; while (--count > 0);
@@ -476,8 +502,6 @@ class AnalizadorLexico {
     while (true) {
       zzMarkedPosL = zzMarkedPos;
 
-      yychar+= zzMarkedPosL-zzStartRead;
-
       boolean zzR = false;
       int zzCh;
       int zzCharCount;
@@ -603,27 +627,55 @@ class AnalizadorLexico {
           case 1: 
             { System.out.print(yytext());
             }
-          case 7: break;
+          case 14: break;
           case 2: 
-            { return new Token("Id", yytext(), yyline, yycolumn + 1);
+            { return new Token("Variable", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 8: break;
+          case 15: break;
           case 3: 
-            { return new Token("Numero", yytext(), yyline, yycolumn + 1);
+            { return new Token("Entero", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 9: break;
+          case 16: break;
           case 4: 
+            { return new Token("CaracterEspecial", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 17: break;
+          case 5: 
             { /* ignore */
             }
-          case 10: break;
-          case 5: 
-            { return new Token("CaracterEspecial", yytext(), yyline, yycolumn + 1);
-            }
-          case 11: break;
+          case 18: break;
           case 6: 
-            { return new Token("FinLinea", yytext(), yyline, yycolumn + 1);
+            { return new Token("ParentesisIzquierdo", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 12: break;
+          case 19: break;
+          case 7: 
+            { return new Token("ParentesisDerecho", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 20: break;
+          case 8: 
+            { return new Token("OperadorAritmetico", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 21: break;
+          case 9: 
+            { return new Token("OperadorRelacional", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 22: break;
+          case 10: 
+            { return new Token("FinLinea", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 23: break;
+          case 11: 
+            { return new Token("ConstStr", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 24: break;
+          case 12: 
+            { return new Token("TipoVariable", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 25: break;
+          case 13: 
+            { return new Token("ConstChar", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 26: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }

@@ -14,7 +14,7 @@ public class Token
         this.linea = linea;
         this.columna = columna;
     }
-
+    
     @Override
     public String toString() {
         return "Token{" + "tipo = " + tipo + ", contenido = " + contenido + ", linea = " + linea + ", columna = " + columna + '}';

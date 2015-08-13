@@ -44,16 +44,9 @@ public class MiniC
     
     public static void generarClaseAnalizadorLexico()
     {
-        //Esta funcion se encarga de crear la clase <AnalizadorLexico> en base al archivo .jflex
-        
-        JFileChooser fc = new JFileChooser();
-        
-        int returnVal = fc.showOpenDialog(fc);
-
-        if (returnVal == JFileChooser.APPROVE_OPTION) 
-        {
-            File file = fc.getSelectedFile();
-            jflex.Main.generate(file);
-        }
+        //Esta funcion se encarga de crear la clase <AnalizadorLexico> en base al archivo .jflex  
+        String path = System.getProperty("user.dir") + "\\src\\minic\\AnalizadorLexico.jflex";
+        File file = new File(path);        
+        jflex.Main.generate(file);
     }
 }
