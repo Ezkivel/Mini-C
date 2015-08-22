@@ -59,10 +59,11 @@ class AnalizadorLexico {
     "\1\0\1\1\1\2\2\3\1\4\12\1\1\5\1\6"+
     "\1\7\1\10\1\11\1\12\2\13\1\14\1\15\1\14"+
     "\1\0\1\16\7\0\1\17\4\0\1\4\1\20\5\0"+
-    "\1\21\10\0\1\22\6\0";
+    "\1\21\1\22\6\0\1\23\3\0\1\24\1\25\1\26"+
+    "\1\27\6\0";
 
   private static int [] zzUnpackAction() {
-    int [] result = new int[64];
+    int [] result = new int[70];
     int offset = 0;
     offset = zzUnpackAction(ZZ_ACTION_PACKED_0, offset, result);
     return result;
@@ -93,11 +94,12 @@ class AnalizadorLexico {
     "\0\170\0\50\0\50\0\u0258\0\50\0\u0280\0\u02a8\0\u02d0"+
     "\0\u02f8\0\u0320\0\u0348\0\u0190\0\50\0\u0370\0\u0398\0\u03c0"+
     "\0\u03e8\0\u0410\0\50\0\u0438\0\u0460\0\u0488\0\u04b0\0\u04d8"+
-    "\0\50\0\u0500\0\u0528\0\u0550\0\u0578\0\u05a0\0\u05c8\0\u05f0"+
-    "\0\u0618\0\u0640\0\u0118\0\u0668\0\u0690\0\u06b8\0\u06e0\0\u0708";
+    "\0\50\0\50\0\u0500\0\u0528\0\u0550\0\u0578\0\u05a0\0\u05c8"+
+    "\0\50\0\u05f0\0\u0618\0\u0640\0\50\0\u0668\0\50\0\50"+
+    "\0\u0118\0\u0690\0\u06b8\0\u06e0\0\u0708\0\u0730";
 
   private static int [] zzUnpackRowMap() {
-    int [] result = new int[64];
+    int [] result = new int[70];
     int offset = 0;
     offset = zzUnpackRowMap(ZZ_ROWMAP_PACKED_0, offset, result);
     return result;
@@ -131,18 +133,18 @@ class AnalizadorLexico {
     "\1\44\25\0\1\46\37\0\1\47\51\0\1\50\74\0"+
     "\1\51\1\52\15\0\1\53\52\0\1\54\50\0\1\55"+
     "\46\0\1\56\44\0\1\57\54\0\1\60\55\0\1\61"+
-    "\40\0\1\35\41\0\1\62\47\0\1\63\40\0\2\51"+
-    "\4\0\16\51\2\0\5\51\7\0\1\64\2\0\1\51"+
+    "\40\0\1\62\41\0\1\63\47\0\1\64\40\0\2\51"+
+    "\4\0\16\51\2\0\5\51\7\0\1\65\2\0\1\51"+
     "\2\0\2\52\5\0\15\52\2\0\5\52\12\0\1\52"+
-    "\17\0\1\53\41\0\1\65\50\0\1\66\54\0\1\67"+
-    "\53\0\1\35\56\0\1\60\27\0\1\70\102\0\1\6"+
-    "\14\0\1\71\66\0\1\35\34\0\1\72\44\0\1\35"+
-    "\55\0\1\53\34\0\1\72\13\0\1\73\1\0\1\74"+
-    "\35\0\1\75\50\0\1\76\57\0\1\77\43\0\1\100"+
-    "\55\0\1\72\23\0";
+    "\17\0\1\53\41\0\1\66\50\0\1\67\54\0\1\70"+
+    "\53\0\1\71\56\0\1\72\27\0\1\73\102\0\1\6"+
+    "\14\0\1\74\66\0\1\75\34\0\1\76\54\0\1\77"+
+    "\37\0\1\100\55\0\1\53\34\0\1\76\13\0\1\101"+
+    "\1\0\1\102\35\0\1\103\50\0\1\104\57\0\1\105"+
+    "\43\0\1\106\55\0\1\76\23\0";
 
   private static int [] zzUnpackTrans() {
-    int [] result = new int[1840];
+    int [] result = new int[1880];
     int offset = 0;
     offset = zzUnpackTrans(ZZ_TRANS_PACKED_0, offset, result);
     return result;
@@ -182,10 +184,10 @@ class AnalizadorLexico {
   private static final String ZZ_ATTRIBUTE_PACKED_0 =
     "\1\0\1\11\2\1\2\11\12\1\7\11\2\1\2\11"+
     "\1\0\1\11\7\0\1\11\4\0\1\1\1\11\5\0"+
-    "\1\11\10\0\1\1\6\0";
+    "\2\11\6\0\1\11\3\0\1\11\1\1\2\11\6\0";
 
   private static int [] zzUnpackAttribute() {
-    int [] result = new int[64];
+    int [] result = new int[70];
     int offset = 0;
     offset = zzUnpackAttribute(ZZ_ATTRIBUTE_PACKED_0, offset, result);
     return result;
@@ -627,82 +629,102 @@ class AnalizadorLexico {
 
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
         zzAtEOF = true;
-       // return YYEOF;
+        //return YYEOF;
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
           case 1: 
             { System.out.print(yytext());
             }
-          case 19: break;
+          case 24: break;
           case 2: 
             { return new Token("Entero", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 20: break;
+          case 25: break;
           case 3: 
             { return new Token("CaracterEspecial", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 21: break;
+          case 26: break;
           case 4: 
             { /* ignore */
             }
-          case 22: break;
+          case 27: break;
           case 5: 
             { return new Token("CorcheteIzquierdo", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 23: break;
+          case 28: break;
           case 6: 
             { return new Token("CorcheteDerecho", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 24: break;
+          case 29: break;
           case 7: 
             { return new Token("LlaveIzquierda", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 25: break;
+          case 30: break;
           case 8: 
             { return new Token("LlaveDerecha", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 26: break;
+          case 31: break;
           case 9: 
             { return new Token("ParentesisIzquierdo", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 27: break;
+          case 32: break;
           case 10: 
             { return new Token("ParentesisDerecho", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 28: break;
+          case 33: break;
           case 11: 
             { return new Token("OperadorAritmetico", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 29: break;
+          case 34: break;
           case 12: 
             { return new Token("OperadorRelacional", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 30: break;
+          case 35: break;
           case 13: 
             { return new Token("FinLinea", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 31: break;
+          case 36: break;
           case 14: 
-            { return new Token("EstructuradeControl", yytext(), yyline + 1, yycolumn + 1);
+            { return new Token("If", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 32: break;
+          case 37: break;
           case 15: 
             { return new Token("ConstStr", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 33: break;
+          case 38: break;
           case 16: 
             { return new Token("TipoVariable", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 34: break;
+          case 39: break;
           case 17: 
             { return new Token("ConstChar", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 35: break;
+          case 40: break;
           case 18: 
+            { return new Token("For", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 41: break;
+          case 19: 
+            { return new Token("Else", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 42: break;
+          case 20: 
+            { return new Token("Scanf", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 43: break;
+          case 21: 
             { return new Token("Variable", yytext(), yyline + 1, yycolumn + 1);
             }
-          case 36: break;
+          case 44: break;
+          case 22: 
+            { return new Token("While", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 45: break;
+          case 23: 
+            { return new Token("Print", yytext(), yyline + 1, yycolumn + 1);
+            }
+          case 46: break;
           default:
             zzScanError(ZZ_NO_MATCH);
         }
