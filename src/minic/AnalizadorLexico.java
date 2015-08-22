@@ -633,8 +633,8 @@ class AnalizadorLexico {
       zzMarkedPos = zzMarkedPosL;
 
       if (zzInput == YYEOF && zzStartRead == zzCurrentPos) {
- //       zzAtEOF = true;
-        return YYEOF;
+       zzAtEOF = true;
+  //      return YYEOF;
       }
       else {
         switch (zzAction < 0 ? zzAction : ZZ_ACTION[zzAction]) {
