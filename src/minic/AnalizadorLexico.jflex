@@ -32,6 +32,8 @@ While = while
 For = for
 Print = print
 Scanf = scanf
+Main = main
+Return = return
 CorcheteIzquierdo = "["
 CorcheteDerecho = "]"
 LlaveIzquierda = "{" 
@@ -47,12 +49,16 @@ FinLinea = ;
 %%
 
 {TipoVariable} {return new Token("TipoVariable", yytext(), yyline + 1, yycolumn + 1);}
+
 {If} {return new Token("If", yytext(), yyline + 1, yycolumn + 1);}
 {Else} {return new Token("Else", yytext(), yyline + 1, yycolumn + 1);}
 {While} {return new Token("While", yytext(), yyline + 1, yycolumn + 1);}
 {For} {return new Token("For", yytext(), yyline + 1, yycolumn + 1);}
 {Print} {return new Token("Print", yytext(), yyline + 1, yycolumn + 1);}
 {Scanf} {return new Token("Scanf", yytext(), yyline + 1, yycolumn + 1);}
+{Main} {return new Token("Main", yytext(), yyline + 1, yycolumn + 1);}
+{Return} {return new Token("Return", yytext(), yyline + 1, yycolumn + 1);}
+
 {CorcheteIzquierdo} {return new Token("CorcheteIzquierdo", yytext(), yyline + 1, yycolumn + 1);}
 {CorcheteDerecho} {return new Token("CorcheteDerecho", yytext(), yyline + 1, yycolumn + 1);}
 {LlaveIzquierda} {return new Token("LlaveIzquierda", yytext(), yyline + 1, yycolumn + 1);}
