@@ -8,11 +8,11 @@ import javax.swing.JFileChooser;
 
 public class MiniC 
 {
-    public static void main(String[] args) throws FileNotFoundException, IOException 
+    public static void main(String[] args) throws FileNotFoundException, IOException, Exception 
     {
         //Esta funcion se encarga de crear la clase <AnalizadorLexico> en base al archivo .jflex
         //Ejecutar luego de hacer algun cambio en el archivo .jflex
-        //generarClaseAnalizadorLexico();
+        generarClases();
         
         //Archivo fuente
         JFileChooser fc = new JFileChooser();
@@ -29,7 +29,7 @@ public class MiniC
         }
     }
     
-    public static void Analizador(FileReader file) throws IOException
+    public static void Analizador(FileReader file) throws IOException, Exception
     {
         AnalizadorLexico al = new AnalizadorLexico(file);
         Token token = null;
@@ -37,15 +37,23 @@ public class MiniC
         //Recorre todos los tokens
         do
         {
-            token = al.yylex();
+            token = (Token)al.next_token().value;
             System.out.println(token);
         } while (token != null);
+        
+        AnalizadorSintactico as = new AnalizadorSintactico(al);
+        as.parse();
     }
     
-    public static void generarClaseAnalizadorLexico()
+    public static void generarClases() throws IOException, Exception
     {
+        String path = System.getProperty("user.dir") + "\\src\\minic\\AnalizadorSintactico.cup";
+        String[] analizadorSintactico = {"-parser", "AnalizadorSintactico", path};
+        java_cup.Main.main(analizadorSintactico);
+        
+        
         //Esta funcion se encarga de crear la clase <AnalizadorLexico> en base al archivo .jflex  
-        String path = System.getProperty("user.dir") + "\\src\\minic\\AnalizadorLexico.jflex";
+        path = System.getProperty("user.dir") + "\\src\\minic\\AnalizadorLexico.jflex";
         File file = new File(path);        
         jflex.Main.generate(file);
     }
