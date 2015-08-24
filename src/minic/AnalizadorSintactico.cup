@@ -12,7 +12,7 @@ non terminal Token Var;
 
 terminal Token tipoVariable, nombreVariable, IF, ELSE, WHILE, FOR, TRUE, FALSE,
 MAIN, RETURN, corcheteIzquierdo, corcheteDerecho, llaveIzquierda, llaveDerecha,
-constChar, constStr, parentesisIzquierdo, parentesisDerecho, igual, print, scanf,
-operadorAritmetico, operadorRelacional, operadorLogico, entero, finLinea;
+constChar, constStr, parentesisIzquierdo, parentesisDerecho, igual, printf, scanf,
+operadorAritmetico, operadorRelacional, operadorLogico, entero, finLinea, coma;
 
 Var ::= tipoVariable nombreVariable;

@@ -23,7 +23,7 @@ Coma = ,
 ConstChar = '[a-zA-Z]'
 ConstStr = \"[ [a-zA-Z]|[0-9]|[\s] ]*\"
 If = if 
-parametrosScanf = \""%d"\"|\""%c"\"|\""%s"\"|\""%i"\"
+parametrosScanf = \""%d"\" | \""%c"\" | \""%s"\" | \""%i"\"
 Else = else
 While = while
 AND = &
@@ -44,23 +44,23 @@ Igual = "="
 OperadorAritmetico = ("+"|"-"|"*"|"/"|"%")
 OperadorRelacional = (">"|">="|"<"|"<="|"=="|"!=")
 OperadorLogico = ("||"|"&&")
-ComentarioUnaLinea = [\/][\/][ [a-zA-Z]|[0-9] ]*
-ComentarioMultiLinea = [\/][\*][ [a-zA-Z]|[0-9]|[\s] ]*[\*][\/]
+ComentarioUnaLinea = [\/][\/].
+ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "/" 
 FinLinea = ;
 
 %%
 
 {TipoVariable} {return new Symbol(sym.tipoVariable, new Token("TipoVariable", yytext(), yyline + 1, yycolumn + 1));}
-{AND} {return new Symbol(sym.IF, new Token("AND", yytext(), yyline + 1, yycolumn + 1));}
-{parametrosScanf} {return new Symbol(sym.IF, new Token("parametrosScanf", yytext(), yyline + 1, yycolumn + 1));}
-{Coma} {return new Symbol(sym.IF, new Token("Coma", yytext(), yyline + 1, yycolumn + 1));}
-{True} {return new Symbol(sym.IF, new Token("True", yytext(), yyline + 1, yycolumn + 1));}
-{False} {return new Symbol(sym.IF, new Token("False", yytext(), yyline + 1, yycolumn + 1));}
+{AND} {return new Symbol(sym.and, new Token("AND", yytext(), yyline + 1, yycolumn + 1));}
+{parametrosScanf} {return new Symbol(sym.parametroScanf, new Token("parametrosScanf", yytext(), yyline + 1, yycolumn + 1));}
+{Coma} {return new Symbol(sym.coma, new Token("Coma", yytext(), yyline + 1, yycolumn + 1));}
+{True} {return new Symbol(sym.TRUE, new Token("True", yytext(), yyline + 1, yycolumn + 1));}
+{False} {return new Symbol(sym.FALSE, new Token("False", yytext(), yyline + 1, yycolumn + 1));}
 {If} {return new Symbol(sym.IF, new Token("If", yytext(), yyline + 1, yycolumn + 1));}
 {Else} {return new Symbol(sym.ELSE, new Token("Else", yytext(), yyline + 1, yycolumn + 1));}
 {While} {return new Symbol(sym.WHILE, new Token("While", yytext(), yyline + 1, yycolumn + 1));}
 {For} {return new Symbol(sym.FOR, new Token("For", yytext(), yyline + 1, yycolumn + 1));}
-{Printf} {return new Symbol(sym.print, new Token("Printf", yytext(), yyline + 1, yycolumn + 1));}
+{Printf} {return new Symbol(sym.printf, new Token("Printf", yytext(), yyline + 1, yycolumn + 1));}
 {Scanf} {return new Symbol(sym.scanf, new Token("Scanf", yytext(), yyline + 1, yycolumn + 1));}
 {Main} {return new Symbol(sym.MAIN, new Token("Main", yytext(), yyline + 1, yycolumn + 1));}
 {Return} {return new Symbol(sym.RETURN, new Token("Return", yytext(), yyline + 1, yycolumn + 1));}

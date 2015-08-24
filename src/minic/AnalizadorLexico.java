@@ -728,7 +728,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 35: break;
           case 5: 
-            { return new Symbol(sym.IF, new Token("Coma", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.coma, new Token("Coma", yytext(), yyline + 1, yycolumn + 1));
             }
           case 36: break;
           case 6: 
@@ -736,7 +736,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 37: break;
           case 7: 
-            { return new Symbol(sym.IF, new Token("AND", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.and, new Token("AND", yytext(), yyline + 1, yycolumn + 1));
             }
           case 38: break;
           case 8: 
@@ -800,11 +800,11 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 53: break;
           case 23: 
-            { return new Symbol(sym.IF, new Token("True", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.TRUE, new Token("True", yytext(), yyline + 1, yycolumn + 1));
             }
           case 54: break;
           case 24: 
-            { return new Symbol(sym.IF, new Token("parametrosScanf", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.parametroScanf, new Token("parametrosScanf", yytext(), yyline + 1, yycolumn + 1));
             }
           case 55: break;
           case 25: 
@@ -820,7 +820,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 58: break;
           case 28: 
-            { return new Symbol(sym.IF, new Token("False", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.FALSE, new Token("False", yytext(), yyline + 1, yycolumn + 1));
             }
           case 59: break;
           case 29: 
@@ -832,7 +832,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 61: break;
           case 31: 
-            { return new Symbol(sym.print, new Token("Printf", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.printf, new Token("Printf", yytext(), yyline + 1, yycolumn + 1));
             }
           case 62: break;
           default:
