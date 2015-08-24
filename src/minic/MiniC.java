@@ -44,7 +44,8 @@ public class MiniC {
         } while (token != null);
 
         AnalizadorSintactico as = new AnalizadorSintactico(al);
-        as.parse();
+        //da problemas 
+       // as.parse();
     }
 
     public static void generarClases() throws IOException, Exception {

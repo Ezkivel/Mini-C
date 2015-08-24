@@ -23,9 +23,13 @@ Coma = ,
 ConstChar = '[a-zA-Z]'
 ConstStr = \"[ [a-zA-Z]|[0-9]|[\s] ]*\"
 If = if 
+parametrosScanf = \""%d"\"|\""%c"\"|\""%s"\"|\""%i"\"
 Else = else
 While = while
+AND = &
 For = for
+True = true
+False = false
 Printf = printf
 Scanf = scanf
 Main = main
@@ -37,7 +41,7 @@ LlaveDerecha = "}"
 ParentesisIzquierdo = "("
 ParentesisDerecho = ")"
 Igual = "="
-OperadorAritmetico = ("+"|"-"|"*"|"/")
+OperadorAritmetico = ("+"|"-"|"*"|"/"|"%")
 OperadorRelacional = (">"|">="|"<"|"<="|"=="|"!=")
 OperadorLogico = ("||"|"&&")
 ComentarioUnaLinea = [\/][\/][ [a-zA-Z]|[0-9] ]*
@@ -47,7 +51,11 @@ FinLinea = ;
 %%
 
 {TipoVariable} {return new Symbol(sym.tipoVariable, new Token("TipoVariable", yytext(), yyline + 1, yycolumn + 1));}
+{AND} {return new Symbol(sym.IF, new Token("AND", yytext(), yyline + 1, yycolumn + 1));}
+{parametrosScanf} {return new Symbol(sym.IF, new Token("parametrosScanf", yytext(), yyline + 1, yycolumn + 1));}
 {Coma} {return new Symbol(sym.IF, new Token("Coma", yytext(), yyline + 1, yycolumn + 1));}
+{True} {return new Symbol(sym.IF, new Token("True", yytext(), yyline + 1, yycolumn + 1));}
+{False} {return new Symbol(sym.IF, new Token("False", yytext(), yyline + 1, yycolumn + 1));}
 {If} {return new Symbol(sym.IF, new Token("If", yytext(), yyline + 1, yycolumn + 1));}
 {Else} {return new Symbol(sym.ELSE, new Token("Else", yytext(), yyline + 1, yycolumn + 1));}
 {While} {return new Symbol(sym.WHILE, new Token("While", yytext(), yyline + 1, yycolumn + 1));}
