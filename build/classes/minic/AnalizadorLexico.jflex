@@ -15,22 +15,18 @@ import java_cup.runtime.*;
 
 Letra = [a-zA-Z]
 Palabra = [a-zA-Z]+
-
 Entero = [0-9]+
 Espacio = [\s]
-
 TipoVariable = int|char|string
 NombreVariable = [a-zA-Z][[a-zA-Z]|[0-9]|"_"]*
-
+Coma = ,
 ConstChar = '[a-zA-Z]'
 ConstStr = \"[ [a-zA-Z]|[0-9]|[\s] ]*\"
-True = true
-False = false
 If = if 
 Else = else
 While = while
 For = for
-Print = print
+Printf = printf
 Scanf = scanf
 Main = main
 Return = return
@@ -51,16 +47,15 @@ FinLinea = ;
 %%
 
 {TipoVariable} {return new Symbol(sym.tipoVariable, new Token("TipoVariable", yytext(), yyline + 1, yycolumn + 1));}
-
+{Coma} {return new Symbol(sym.IF, new Token("Coma", yytext(), yyline + 1, yycolumn + 1));}
 {If} {return new Symbol(sym.IF, new Token("If", yytext(), yyline + 1, yycolumn + 1));}
 {Else} {return new Symbol(sym.ELSE, new Token("Else", yytext(), yyline + 1, yycolumn + 1));}
 {While} {return new Symbol(sym.WHILE, new Token("While", yytext(), yyline + 1, yycolumn + 1));}
 {For} {return new Symbol(sym.FOR, new Token("For", yytext(), yyline + 1, yycolumn + 1));}
-{Print} {return new Symbol(sym.print, new Token("Print", yytext(), yyline + 1, yycolumn + 1));}
+{Printf} {return new Symbol(sym.print, new Token("Printf", yytext(), yyline + 1, yycolumn + 1));}
 {Scanf} {return new Symbol(sym.scanf, new Token("Scanf", yytext(), yyline + 1, yycolumn + 1));}
 {Main} {return new Symbol(sym.MAIN, new Token("Main", yytext(), yyline + 1, yycolumn + 1));}
 {Return} {return new Symbol(sym.RETURN, new Token("Return", yytext(), yyline + 1, yycolumn + 1));}
-
 {CorcheteIzquierdo} {return new Symbol(sym.corcheteIzquierdo, new Token("CorcheteIzquierdo", yytext(), yyline + 1, yycolumn + 1));}
 {CorcheteDerecho} {return new Symbol(sym.corcheteDerecho, new Token("CorcheteDerecho", yytext(), yyline + 1, yycolumn + 1));}
 {LlaveIzquierda} {return new Symbol(sym.llaveIzquierda, new Token("LlaveIzquierda", yytext(), yyline + 1, yycolumn + 1));}
@@ -75,8 +70,6 @@ FinLinea = ;
 {OperadorRelacional} {return new Symbol(sym.operadorRelacional, new Token("OperadorRelacional", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorLogico} {return new Symbol(sym.operadorLogico, new Token("OperadorLogico", yytext(), yyline + 1, yycolumn + 1));}
 {Entero} {return new Symbol(sym.entero, new Token("Entero", yytext(), yyline + 1, yycolumn + 1));}
-{True} {return new Symbol(sym.TRUE, new Token("True", yytext(), yyline + 1, yycolumn + 1));}
-{False} {return new Symbol(sym.FALSE, new Token("False", yytext(), yyline + 1, yycolumn + 1));}
 {ComentarioUnaLinea} {/* ignore */}
 {ComentarioMultiLinea} {/* ignore */}
 {Espacio} {/* ignore */}
