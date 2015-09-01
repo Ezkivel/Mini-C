@@ -13,8 +13,6 @@ import java_cup.runtime.*;
 %line
 %column
 
-Letra = [a-zA-Z]
-Palabra = [a-zA-Z]+
 Entero = [0-9]+
 Espacio = [\s]
 TipoVariable = int|char|string
@@ -41,7 +39,10 @@ LlaveDerecha = "}"
 ParentesisIzquierdo = "("
 ParentesisDerecho = ")"
 Igual = "="
-OperadorAritmetico = ("+"|"-"|"*"|"/"|"%")
+OperadorSuma = "+"
+OperadorResta = "-"
+OperadorMultiplicacion = "*"
+OperadorDivision = "/"
 OperadorRelacional = (">"|">="|"<"|"<="|"=="|"!=")
 OperadorLogico = ("||"|"&&")
 ComentarioUnaLinea = [\/][\/].
@@ -74,7 +75,10 @@ FinLinea = ;
 {ParentesisIzquierdo} {return new Symbol(sym.parentesisIzquierdo, new Token("ParentesisIzquierdo", yytext(), yyline + 1, yycolumn + 1));}
 {ParentesisDerecho} {return new Symbol(sym.parentesisDerecho, new Token("ParentesisDerecho", yytext(), yyline + 1, yycolumn + 1));}
 {Igual} {return new Symbol(sym.igual, new Token("Igual", yytext(), yyline + 1, yycolumn + 1));}
-{OperadorAritmetico} {return new Symbol(sym.operadorAritmetico, new Token("OperadorAritmetico", yytext(), yyline + 1, yycolumn + 1));}
+{OperadorSuma} {return new Symbol(sym.operadorSuma, new Token("OperadorSuma", yytext(), yyline + 1, yycolumn + 1));}
+{OperadorResta} {return new Symbol(sym.operadorResta, new Token("OperadorResta", yytext(), yyline + 1, yycolumn + 1));}
+{OperadorMultiplicacion} {return new Symbol(sym.operadorMultiplicacion, new Token("OperadorMultiplicacion", yytext(), yyline + 1, yycolumn + 1));}
+{OperadorDivision} {return new Symbol(sym.operadorDivision, new Token("OperadorDivision", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorRelacional} {return new Symbol(sym.operadorRelacional, new Token("OperadorRelacional", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorLogico} {return new Symbol(sym.operadorLogico, new Token("OperadorLogico", yytext(), yyline + 1, yycolumn + 1));}
 {Entero} {return new Symbol(sym.entero, new Token("Entero", yytext(), yyline + 1, yycolumn + 1));}
@@ -82,4 +86,4 @@ FinLinea = ;
 {ComentarioMultiLinea} {/* ignore */}
 {Espacio} {/* ignore */}
 {FinLinea} {return new Symbol(sym.finLinea, new Token("FinLinea", yytext(), yyline + 1, yycolumn + 1));}
-[^] {throw new Error("Illegal character <"+ yytext()+">, linea: " + (yyline+1) + ", columna: " + (yycolumn+1));}
+[^] {System.out.println("Illegal character <"+ yytext()+">, linea: " + (yyline+1) + ", columna: " + (yycolumn+1));}

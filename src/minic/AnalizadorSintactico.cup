@@ -6,13 +6,54 @@ action code{:
 :};
 
 parser code{:
+    public void syntax_error(Symbol s)
+    {
+        Token t = (Token)s.value;
+        report_error("Error Sintactico cerca de < " + t.getContenido() + " > linea " + t.getLinea() + ", columna " + t.getColumna(), null);
+    }
+
+    public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception 
+    {
+        //report_fatal_error("Fatal Error: " + s.value, null);
+    }
 :};
 
-non terminal Token Var;
+non terminal Token S, DeclaracionVariable, Variable, InicializacionVariable,
+OperacionAritmetica1, OperacionAritmetica2, OperacionAritmetica3;
 
 terminal Token tipoVariable, nombreVariable, IF, ELSE, WHILE, FOR, TRUE, FALSE,
 MAIN, RETURN, corcheteIzquierdo, corcheteDerecho, llaveIzquierda, llaveDerecha,
 constChar, constStr, parentesisIzquierdo, parentesisDerecho, igual, printf, scanf,
-operadorAritmetico, operadorRelacional, operadorLogico, entero, finLinea, coma;
+operadorSuma, operadorResta, operadorMultiplicacion, operadorDivision,
+operadorRelacional, operadorLogico, entero, finLinea, coma, parametroScanf, and;
 
-Var ::= tipoVariable nombreVariable;
+start with S;
+
+S ::= DeclaracionVariable S
+    | InicializacionVariable S
+    |;
+
+DeclaracionVariable ::= tipoVariable Variable finLinea;
+Variable ::= nombreVariable Variable
+           | coma nombreVariable Variable
+           | nombreVariable igual entero Variable
+           | nombreVariable igual constChar Variable
+           | nombreVariable igual constStr Variable
+           | coma nombreVariable igual entero Variable
+           | coma nombreVariable igual constChar Variable
+           | coma nombreVariable igual constStr Variable
+           |;
+
+InicializacionVariable ::= nombreVariable igual OperacionAritmetica1 finLinea
+                         | nombreVariable igual constChar finLinea
+                         | nombreVariable igual constStr finLinea;
+
+OperacionAritmetica1 ::= OperacionAritmetica1 operadorSuma OperacionAritmetica2
+                       | OperacionAritmetica1 operadorResta OperacionAritmetica2
+                       | OperacionAritmetica2;
+OperacionAritmetica2 ::= OperacionAritmetica2 operadorMultiplicacion OperacionAritmetica3
+                       | OperacionAritmetica2 operadorDivision OperacionAritmetica3
+                       | OperacionAritmetica3;
+OperacionAritmetica3 ::= entero
+                       | nombreVariable
+                       | parentesisIzquierdo OperacionAritmetica1 parentesisDerecho;
