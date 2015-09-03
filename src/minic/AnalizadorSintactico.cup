@@ -18,14 +18,15 @@ parser code{:
     }
 :};
 
-non terminal Token S, Main, Codigo, DeclaracionVariable, Variable,
-InicializacionVariable, OperacionAritmetica1, OperacionAritmetica2,
-OperacionAritmetica3, If, Else, While, Condicion, CondicionOperadorLogico;
+non terminal Token S, Main, Codigo, DeclaracionVariable, ListaVariables,
+Asignacion, IncrementarDecrementarVariable, OperacionAritmetica1, OperacionAritmetica2,
+OperacionAritmetica3, If, Else, While, For, ForInicializacion,
+Condicion, CondicionOperadorLogico;
 
 terminal Token tipoVariable, nombreVariable, IF, ELSE, WHILE, FOR, TRUE, FALSE,
 MAIN, RETURN, corcheteIzquierdo, corcheteDerecho, llaveIzquierda, llaveDerecha,
 constChar, constStr, parentesisIzquierdo, parentesisDerecho, igual, printf, scanf,
-operadorSuma, operadorResta, operadorMultiplicacion, operadorDivision,
+operadorAritmeticoIgual, operadorSuma, operadorResta, operadorMultiplicacion, operadorDivision, incrementoDecrementoVariable,
 operadorRelacional, operadorLogico, entero, puntoYComa, coma, parametroScanf, and;
 
 start with S;
@@ -35,25 +36,29 @@ S ::= Main;
 Main ::= tipoVariable MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda Codigo RETURN entero puntoYComa llaveDerecha;
 
 Codigo ::= DeclaracionVariable Codigo
-           | InicializacionVariable Codigo
-           | While Codigo
-           | If Codigo
-           |;
+         | Asignacion Codigo
+         | IncrementarDecrementarVariable Codigo
+         | While Codigo
+         | If Codigo
+         |;
 
-DeclaracionVariable ::= tipoVariable Variable puntoYComa;
-Variable ::= nombreVariable Variable
-           | coma nombreVariable Variable
-           | nombreVariable igual entero Variable
-           | nombreVariable igual constChar Variable
-           | nombreVariable igual constStr Variable
-           | coma nombreVariable igual entero Variable
-           | coma nombreVariable igual constChar Variable
-           | coma nombreVariable igual constStr Variable
-           |;
+DeclaracionVariable ::= tipoVariable ListaVariables puntoYComa;
+ListaVariables ::= nombreVariable ListaVariables
+                 | coma nombreVariable ListaVariables
+                 | nombreVariable igual OperacionAritmetica1 ListaVariables
+                 | nombreVariable igual constChar ListaVariables
+                 | nombreVariable igual constStr ListaVariables
+                 | coma nombreVariable igual OperacionAritmetica1 ListaVariables
+                 | coma nombreVariable igual constChar ListaVariables
+                 | coma nombreVariable igual constStr ListaVariables
+                 |;
 
-InicializacionVariable ::= nombreVariable igual OperacionAritmetica1 puntoYComa
-                         | nombreVariable igual constChar puntoYComa
-                         | nombreVariable igual constStr puntoYComa;
+Asignacion ::= nombreVariable igual OperacionAritmetica1 puntoYComa
+             | nombreVariable operadorAritmeticoIgual OperacionAritmetica1 puntoYComa
+             | nombreVariable igual constChar puntoYComa
+             | nombreVariable igual constStr puntoYComa;
+
+IncrementarDecrementarVariable ::= incrementoDecrementoVariable puntoYComa;
 
 OperacionAritmetica1 ::= OperacionAritmetica1 operadorSuma OperacionAritmetica2
                        | OperacionAritmetica1 operadorResta OperacionAritmetica2
@@ -71,6 +76,12 @@ Else ::= ELSE IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda 
        |;
 
 While ::= WHILE parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha;
+
+For ::= FOR parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha;
+ForInicializacion ::= tipoVariable nombreVariable igual OperacionAritmetica1 ForInicializacion
+                    | nombreVariable igual OperacionAritmetica1 ForInicializacion
+                    | nombreVariable operadorAritmeticoIgual OperacionAritmetica1 ForInicializacion
+                    |;
 
 Condicion ::= nombreVariable operadorRelacional nombreVariable CondicionOperadorLogico
                  | nombreVariable operadorRelacional entero CondicionOperadorLogico

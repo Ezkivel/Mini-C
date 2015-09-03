@@ -39,10 +39,12 @@ LlaveDerecha = "}"
 ParentesisIzquierdo = "("
 ParentesisDerecho = ")"
 Igual = "="
+OperadorAritmeticoIgual = ("+="|"-="|"*="|"/=")
 OperadorSuma = "+"
 OperadorResta = "-"
 OperadorMultiplicacion = "*"
 OperadorDivision = "/"
+IncrementoDecrementoVariable = ([a-zA-Z][[a-zA-Z]|[0-9]|"_"]*\+\+|[a-zA-Z][[a-zA-Z]|[0-9]|"_"]*\-\-|\+\+[a-zA-Z][[a-zA-Z]|[0-9]|"_"]*|\-\-[a-zA-Z][[a-zA-Z]|[0-9]|"_"]*)
 OperadorRelacional = (">"|">="|"<"|"<="|"=="|"!=")
 OperadorLogico = ("||"|"&&")
 ComentarioUnaLinea = [\/][\/].
@@ -75,10 +77,12 @@ PuntoYComa = ;
 {ParentesisIzquierdo} {return new Symbol(sym.parentesisIzquierdo, new Token("ParentesisIzquierdo", yytext(), yyline + 1, yycolumn + 1));}
 {ParentesisDerecho} {return new Symbol(sym.parentesisDerecho, new Token("ParentesisDerecho", yytext(), yyline + 1, yycolumn + 1));}
 {Igual} {return new Symbol(sym.igual, new Token("Igual", yytext(), yyline + 1, yycolumn + 1));}
+{OperadorAritmeticoIgual} {return new Symbol(sym.operadorAritmeticoIgual, new Token("OperadorAritmeticoIgual", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorSuma} {return new Symbol(sym.operadorSuma, new Token("OperadorSuma", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorResta} {return new Symbol(sym.operadorResta, new Token("OperadorResta", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorMultiplicacion} {return new Symbol(sym.operadorMultiplicacion, new Token("OperadorMultiplicacion", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorDivision} {return new Symbol(sym.operadorDivision, new Token("OperadorDivision", yytext(), yyline + 1, yycolumn + 1));}
+{IncrementoDecrementoVariable} {return new Symbol(sym.incrementoDecrementoVariable, new Token("IncrementoDecrementoVariable", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorRelacional} {return new Symbol(sym.operadorRelacional, new Token("OperadorRelacional", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorLogico} {return new Symbol(sym.operadorLogico, new Token("OperadorLogico", yytext(), yyline + 1, yycolumn + 1));}
 {Entero} {return new Symbol(sym.entero, new Token("Entero", yytext(), yyline + 1, yycolumn + 1));}
