@@ -18,9 +18,9 @@ parser code{:
     }
 :};
 
-non terminal Token S, Main, Codigo, DeclaracionVariable, ListaVariables,
-Asignacion, IncrementarDecrementarVariable, OperacionAritmetica1, OperacionAritmetica2,
-OperacionAritmetica3, If, Else, While, For, ForInicializacion,
+non terminal Token S, Main, Codigo, DeclaracionVariables, ListaVariables, ListaVariablesComa,
+AsignacionVariable, IncrementarDecrementarVariable, OperacionAritmetica1, OperacionAritmetica2,
+OperacionAritmetica3, If, Else, While, For, ForInicializacion, ForInicializacionComa, ForActualizacion, ForActualizacionComa,
 Condicion, CondicionOperadorLogico;
 
 terminal Token tipoVariable, nombreVariable, IF, ELSE, WHILE, FOR, TRUE, FALSE,
@@ -35,28 +35,27 @@ S ::= Main;
 
 Main ::= tipoVariable MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda Codigo RETURN entero puntoYComa llaveDerecha;
 
-Codigo ::= DeclaracionVariable Codigo
-         | Asignacion Codigo
+Codigo ::= DeclaracionVariables Codigo
+         | AsignacionVariable Codigo
          | IncrementarDecrementarVariable Codigo
          | While Codigo
          | If Codigo
+         | For Codigo
          |;
 
-DeclaracionVariable ::= tipoVariable ListaVariables puntoYComa;
-ListaVariables ::= nombreVariable ListaVariables
-                 | coma nombreVariable ListaVariables
-                 | nombreVariable igual OperacionAritmetica1 ListaVariables
-                 | nombreVariable igual constChar ListaVariables
-                 | nombreVariable igual constStr ListaVariables
-                 | coma nombreVariable igual OperacionAritmetica1 ListaVariables
-                 | coma nombreVariable igual constChar ListaVariables
-                 | coma nombreVariable igual constStr ListaVariables
-                 |;
+DeclaracionVariables ::= tipoVariable ListaVariables puntoYComa;
+ListaVariables ::= nombreVariable ListaVariablesComa
+                 | nombreVariable igual OperacionAritmetica1 ListaVariablesComa
+                 | nombreVariable igual constChar ListaVariablesComa
+                 | nombreVariable igual constStr ListaVariablesComa;
+                 
+ListaVariablesComa ::= coma ListaVariables
+                     |;
 
-Asignacion ::= nombreVariable igual OperacionAritmetica1 puntoYComa
-             | nombreVariable operadorAritmeticoIgual OperacionAritmetica1 puntoYComa
-             | nombreVariable igual constChar puntoYComa
-             | nombreVariable igual constStr puntoYComa;
+AsignacionVariable ::= nombreVariable igual OperacionAritmetica1 puntoYComa
+                     | nombreVariable operadorAritmeticoIgual OperacionAritmetica1 puntoYComa
+                     | nombreVariable igual constChar puntoYComa
+                     | nombreVariable igual constStr puntoYComa;
 
 IncrementarDecrementarVariable ::= incrementoDecrementoVariable puntoYComa;
 
@@ -77,11 +76,23 @@ Else ::= ELSE IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda 
 
 While ::= WHILE parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha;
 
-For ::= FOR parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha;
-ForInicializacion ::= tipoVariable nombreVariable igual OperacionAritmetica1 ForInicializacion
-                    | nombreVariable igual OperacionAritmetica1 ForInicializacion
-                    | nombreVariable operadorAritmeticoIgual OperacionAritmetica1 ForInicializacion
-                    |;
+For ::= FOR parentesisIzquierdo ForInicializacion puntoYComa Condicion puntoYComa ForActualizacion parentesisDerecho llaveIzquierda Codigo llaveDerecha
+      | FOR parentesisIzquierdo puntoYComa Condicion puntoYComa ForActualizacion parentesisDerecho llaveIzquierda Codigo llaveDerecha
+      | FOR parentesisIzquierdo ForInicializacion puntoYComa Condicion puntoYComa parentesisDerecho llaveIzquierda Codigo llaveDerecha
+      | FOR parentesisIzquierdo puntoYComa Condicion puntoYComa parentesisDerecho llaveIzquierda Codigo llaveDerecha;
+ForInicializacion ::= tipoVariable nombreVariable igual OperacionAritmetica1 ForInicializacionComa                    
+                    | tipoVariable nombreVariable igual constChar ForInicializacionComa
+                    | tipoVariable nombreVariable igual constStr ForInicializacionComa
+                    | nombreVariable igual OperacionAritmetica1 ForInicializacionComa
+                    | nombreVariable igual constChar ForInicializacionComa
+                    | nombreVariable igual constStr ForInicializacionComa;
+ForInicializacionComa ::= coma ForInicializacion
+                        |;
+ForActualizacion ::= nombreVariable igual OperacionAritmetica1 ForActualizacionComa
+                   | nombreVariable operadorAritmeticoIgual OperacionAritmetica1 ForActualizacionComa
+                   | incrementoDecrementoVariable ForActualizacionComa;
+ForActualizacionComa ::= coma ForActualizacion
+                       |;
 
 Condicion ::= nombreVariable operadorRelacional nombreVariable CondicionOperadorLogico
                  | nombreVariable operadorRelacional entero CondicionOperadorLogico
