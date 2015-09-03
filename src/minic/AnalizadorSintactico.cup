@@ -18,22 +18,29 @@ parser code{:
     }
 :};
 
-non terminal Token S, DeclaracionVariable, Variable, InicializacionVariable,
-OperacionAritmetica1, OperacionAritmetica2, OperacionAritmetica3;
+non terminal Token S, Main, Codigo, DeclaracionVariable, Variable,
+InicializacionVariable, OperacionAritmetica1, OperacionAritmetica2,
+OperacionAritmetica3, If, Else, While, Condicion, CondicionOperadorLogico;
 
 terminal Token tipoVariable, nombreVariable, IF, ELSE, WHILE, FOR, TRUE, FALSE,
 MAIN, RETURN, corcheteIzquierdo, corcheteDerecho, llaveIzquierda, llaveDerecha,
 constChar, constStr, parentesisIzquierdo, parentesisDerecho, igual, printf, scanf,
 operadorSuma, operadorResta, operadorMultiplicacion, operadorDivision,
-operadorRelacional, operadorLogico, entero, finLinea, coma, parametroScanf, and;
+operadorRelacional, operadorLogico, entero, puntoYComa, coma, parametroScanf, and;
 
 start with S;
 
-S ::= DeclaracionVariable S
-    | InicializacionVariable S
-    |;
+S ::= Main;
 
-DeclaracionVariable ::= tipoVariable Variable finLinea;
+Main ::= tipoVariable MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda Codigo RETURN entero puntoYComa llaveDerecha;
+
+Codigo ::= DeclaracionVariable Codigo
+           | InicializacionVariable Codigo
+           | While Codigo
+           | If Codigo
+           |;
+
+DeclaracionVariable ::= tipoVariable Variable puntoYComa;
 Variable ::= nombreVariable Variable
            | coma nombreVariable Variable
            | nombreVariable igual entero Variable
@@ -44,9 +51,9 @@ Variable ::= nombreVariable Variable
            | coma nombreVariable igual constStr Variable
            |;
 
-InicializacionVariable ::= nombreVariable igual OperacionAritmetica1 finLinea
-                         | nombreVariable igual constChar finLinea
-                         | nombreVariable igual constStr finLinea;
+InicializacionVariable ::= nombreVariable igual OperacionAritmetica1 puntoYComa
+                         | nombreVariable igual constChar puntoYComa
+                         | nombreVariable igual constStr puntoYComa;
 
 OperacionAritmetica1 ::= OperacionAritmetica1 operadorSuma OperacionAritmetica2
                        | OperacionAritmetica1 operadorResta OperacionAritmetica2
@@ -57,3 +64,21 @@ OperacionAritmetica2 ::= OperacionAritmetica2 operadorMultiplicacion OperacionAr
 OperacionAritmetica3 ::= entero
                        | nombreVariable
                        | parentesisIzquierdo OperacionAritmetica1 parentesisDerecho;
+
+If ::= IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha Else;
+Else ::= ELSE IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha Else
+       | ELSE llaveIzquierda Codigo llaveDerecha
+       |;
+
+While ::= WHILE parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha;
+
+Condicion ::= nombreVariable operadorRelacional nombreVariable CondicionOperadorLogico
+                 | nombreVariable operadorRelacional entero CondicionOperadorLogico
+                 | nombreVariable operadorRelacional constChar CondicionOperadorLogico
+                 | nombreVariable operadorRelacional constStr CondicionOperadorLogico
+                 | entero operadorRelacional nombreVariable CondicionOperadorLogico
+                 | constChar operadorRelacional nombreVariable CondicionOperadorLogico
+                 | constStr operadorRelacional nombreVariable CondicionOperadorLogico
+                 | parentesisIzquierdo Condicion parentesisDerecho CondicionOperadorLogico;
+CondicionOperadorLogico ::= operadorLogico Condicion
+                      |;

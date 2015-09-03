@@ -47,7 +47,7 @@ OperadorRelacional = (">"|">="|"<"|"<="|"=="|"!=")
 OperadorLogico = ("||"|"&&")
 ComentarioUnaLinea = [\/][\/].
 ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "/" 
-FinLinea = ;
+PuntoYComa = ;
 
 %%
 
@@ -85,5 +85,5 @@ FinLinea = ;
 {ComentarioUnaLinea} {/* ignore */}
 {ComentarioMultiLinea} {/* ignore */}
 {Espacio} {/* ignore */}
-{FinLinea} {return new Symbol(sym.finLinea, new Token("FinLinea", yytext(), yyline + 1, yycolumn + 1));}
+{PuntoYComa} {return new Symbol(sym.puntoYComa, new Token("PuntoYComa", yytext(), yyline + 1, yycolumn + 1));}
 [^] {System.out.println("Illegal character <"+ yytext()+">, linea: " + (yyline+1) + ", columna: " + (yycolumn+1));}

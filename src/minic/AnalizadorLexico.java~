@@ -783,7 +783,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 52: break;
           case 19: 
-            { return new Symbol(sym.finLinea, new Token("FinLinea", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.puntoYComa, new Token("PuntoYComa", yytext(), yyline + 1, yycolumn + 1));
             }
           case 53: break;
           case 20: 
