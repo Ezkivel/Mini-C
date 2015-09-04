@@ -37,15 +37,15 @@ public class MiniC {
         AnalizadorLexico al = new AnalizadorLexico(file);
         
         //Imprime los tokens 
-        /*Token token = null;
+        Token token = null;
         do {
             token = (Token) al.next_token().value;
             System.out.println(token);
-        } while (token != null);*/
+        } while (token != null);
 
         AnalizadorSintactico as = new AnalizadorSintactico(al);
        
-        as.parse();
+        //as.parse();
     }
 
     public static void generarClases() throws IOException, Exception {
