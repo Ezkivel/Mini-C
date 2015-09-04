@@ -21,7 +21,7 @@ Coma = ,
 ConstChar = '[a-zA-Z]'
 ConstStr = \"[ [a-zA-Z]|[0-9]|[\s] ]*\"
 If = if 
-ParamentroScanf = \""%"d\"
+ParamentroScanf = \""%"d\" | \""%"c\" | \""%"s\" | \""%"i\"
 Else = else
 While = while
 AND = &
@@ -44,11 +44,11 @@ OperadorSuma = "+"
 OperadorResta = "-"
 OperadorMultiplicacion = "*"
 OperadorDivision = "/"
-OperadorIncrementoDecremento = ("++"|"--")
+IncrementoDecrementoVariable = ([a-zA-Z][[a-zA-Z]|[0-9]|"_"]*\+\+|[a-zA-Z][[a-zA-Z]|[0-9]|"_"]*\-\-|\+\+[a-zA-Z][[a-zA-Z]|[0-9]|"_"]*|\-\-[a-zA-Z][[a-zA-Z]|[0-9]|"_"]*)
 OperadorRelacional = (">"|">="|"<"|"<="|"=="|"!=")
 OperadorLogico = ("||"|"&&")
-ComentarioUnaLinea = [\/][\/].
-ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "/" 
+ComentarioUnaLinea = "//" ~[^*] | "//" "*"+ 
+ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "*/" 
 PuntoYComa = ;
 
 %%
@@ -82,7 +82,7 @@ PuntoYComa = ;
 {OperadorResta} {return new Symbol(sym.operadorResta, new Token("OperadorResta", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorMultiplicacion} {return new Symbol(sym.operadorMultiplicacion, new Token("OperadorMultiplicacion", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorDivision} {return new Symbol(sym.operadorDivision, new Token("OperadorDivision", yytext(), yyline + 1, yycolumn + 1));}
-{OperadorIncrementoDecremento} {return new Symbol(sym.operadorIncrementoDecremento, new Token("OperadorIncrementoDecremento", yytext(), yyline + 1, yycolumn + 1));}
+{IncrementoDecrementoVariable} {return new Symbol(sym.incrementoDecrementoVariable, new Token("IncrementoDecrementoVariable", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorRelacional} {return new Symbol(sym.operadorRelacional, new Token("OperadorRelacional", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorLogico} {return new Symbol(sym.operadorLogico, new Token("OperadorLogico", yytext(), yyline + 1, yycolumn + 1));}
 {Entero} {return new Symbol(sym.entero, new Token("Entero", yytext(), yyline + 1, yycolumn + 1));}

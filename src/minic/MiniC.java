@@ -36,6 +36,7 @@ public class MiniC {
     public static void Analizador(FileReader file) throws IOException, Exception {
         AnalizadorLexico al = new AnalizadorLexico(file);
         
+        //Imprime los tokens 
         /*Token token = null;
         do {
             token = (Token) al.next_token().value;
