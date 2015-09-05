@@ -37,7 +37,7 @@ public class MiniC {
         AnalizadorLexico al = new AnalizadorLexico(file);
         
         //Imprime los tokens 
-        /*Token token = null;
+       /*Token token = null;
         do {
             token = (Token) al.next_token().value;
             System.out.println(token);

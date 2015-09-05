@@ -19,7 +19,7 @@ TipoVariable = int|char|string
 NombreVariable = [a-zA-Z][[a-zA-Z]|[0-9]|"_"]*
 Coma = ,
 ConstChar = '[a-zA-Z]'
-ConstStr = \".*\"
+ConstStr = \" [[\w]|[\d]|[\s]|[\\n]|[\\t]|[\\r]|[:]|[!]|[%d]|[%c]|[%s]|[%i]|[(]|[)]|[+]|[-]|[*]|[/]|[?]|[>]|[<]|[,]|[_]]* \"
 If = if 
 ParamentroScanf = \""%"d\" | \""%"c\" | \""%"s\" | \""%"i\"
 Else = else
@@ -48,7 +48,7 @@ OperadorDivision = "/"
 OperadorIncrementoDecremento = ("++"|"--")
 OperadorRelacional = (">"|">="|"<"|"<="|"=="|"!=")
 OperadorLogico = ("||"|"&&")
-ComentarioUnaLinea = "//" ~[^*] | "//" "*"+ 
+ComentarioUnaLinea = "//" .* 
 ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "*/" 
 PuntoYComa = ;
 
