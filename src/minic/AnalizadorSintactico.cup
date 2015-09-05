@@ -19,15 +19,15 @@ parser code{:
 :};
 
 non terminal Token S, Main, Codigo, Variable, DeclaracionVariables, ListaVariables, ListaVariablesComa,
-AsignacionVariable, AsignacionVariableComa,
+AsignacionVariable, AsignacionVariableComa, Scanf, Printf,
 InicializacionArreglo, InicializacionArregloComa, IncrementarDecrementarVariable, ElementoDeUnArreglo,
 OperacionAritmetica, OperacionAritmetica2, OperacionAritmetica3,
 If, Else, While, For, ForInicializacion, ForInicializacion2, ForInicializacionComa, ForActualizacion, ForActualizacionComa, Condicion, CondicionOperadorLogico,
-Scanf, Printf, DeclaracionFuncion, DeclaracionFuncionParametros, DeclaracionFuncionParametrosComa, Funciones, FuncionesParametros, FuncionesParametrosComa,
-Return;
+DeclaracionFuncion, DeclaracionFuncionParametros, DeclaracionFuncionParametrosComa, Funciones, FuncionesParametros, FuncionesParametrosComa,
+LlamadoAFuncion, LlamadoAFuncionParametros, LlamadoAFuncionParametrosComa, Return;
 
 terminal Token tipoVariable, nombreVariable, IF, ELSE, WHILE, FOR, TRUE, FALSE,
-MAIN, RETURN, corcheteIzquierdo, corcheteDerecho, llaveIzquierda, llaveDerecha,
+MAIN, RETURN, VOID, corcheteIzquierdo, corcheteDerecho, llaveIzquierda, llaveDerecha,
 constChar, constStr, parentesisIzquierdo, parentesisDerecho, igual, printf, scanf,
 operadorAritmeticoIgual, operadorSuma, operadorResta, operadorMultiplicacion, operadorDivision, operadorIncrementoDecremento,
 operadorRelacional, operadorLogico, entero, puntoYComa, coma, parametroScanf, and;
@@ -37,7 +37,8 @@ start with S;
 S ::= DeclaracionFuncion S
      | Main;
 
-DeclaracionFuncion ::= tipoVariable nombreVariable parentesisIzquierdo DeclaracionFuncionParametros parentesisDerecho puntoYComa;
+DeclaracionFuncion ::= tipoVariable nombreVariable parentesisIzquierdo DeclaracionFuncionParametros parentesisDerecho puntoYComa
+                     | VOID nombreVariable parentesisIzquierdo DeclaracionFuncionParametros parentesisDerecho puntoYComa;
 DeclaracionFuncionParametros ::= tipoVariable DeclaracionFuncionParametrosComa
                                | tipoVariable corcheteIzquierdo corcheteDerecho DeclaracionFuncionParametrosComa
                                | tipoVariable nombreVariable DeclaracionFuncionParametrosComa
@@ -46,12 +47,16 @@ DeclaracionFuncionParametros ::= tipoVariable DeclaracionFuncionParametrosComa
 DeclaracionFuncionParametrosComa ::= coma DeclaracionFuncionParametros
                                    |;
 
-Main ::= tipoVariable MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda Codigo RETURN entero puntoYComa llaveDerecha Funciones;
+
+Main ::= tipoVariable MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda Codigo Return llaveDerecha Funciones;
+
 
 Funciones ::= tipoVariable nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda Codigo llaveDerecha Funciones
+            | VOID nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda Codigo llaveDerecha Funciones
             |;
-FuncionesParametros ::= | tipoVariable nombreVariable FuncionesParametrosComa
-                        | tipoVariable nombreVariable corcheteIzquierdo corcheteDerecho FuncionesParametrosComa;
+FuncionesParametros ::= tipoVariable nombreVariable FuncionesParametrosComa
+                      | tipoVariable nombreVariable corcheteIzquierdo corcheteDerecho FuncionesParametrosComa
+                      |;
 FuncionesParametrosComa ::= coma FuncionesParametros
                          |;
 
@@ -63,7 +68,16 @@ Codigo ::= DeclaracionVariables Codigo
          | While Codigo
          | If Codigo
          | For Codigo
+         | LlamadoAFuncion puntoYComa Codigo
          |;
+
+LlamadoAFuncion ::= nombreVariable parentesisIzquierdo LlamadoAFuncionParametros parentesisDerecho;
+LlamadoAFuncionParametros ::= OperacionAritmetica LlamadoAFuncionParametrosComa
+                            | constChar LlamadoAFuncionParametrosComa
+                            | constStr LlamadoAFuncionParametrosComa
+                            |;
+LlamadoAFuncionParametrosComa ::= coma LlamadoAFuncionParametros
+                                |;
 
 Scanf ::= scanf parentesisIzquierdo parametroScanf coma and nombreVariable parentesisDerecho puntoYComa
         | scanf parentesisIzquierdo parametroScanf coma nombreVariable parentesisDerecho puntoYComa;
@@ -151,7 +165,8 @@ InicializacionArregloComa ::= coma InicializacionArreglo
 
 Return ::= RETURN OperacionAritmetica puntoYComa
          | RETURN constChar puntoYComa
-         | RETURN constStr puntoYComa;
+         | RETURN constStr puntoYComa
+         |;
 
 OperacionAritmetica ::= OperacionAritmetica operadorSuma OperacionAritmetica2
                       | OperacionAritmetica operadorResta OperacionAritmetica2
@@ -161,4 +176,5 @@ OperacionAritmetica2 ::= OperacionAritmetica2 operadorMultiplicacion OperacionAr
                        | OperacionAritmetica3;
 OperacionAritmetica3 ::= entero
                        | Variable
+                       | LlamadoAFuncion
                        | parentesisIzquierdo OperacionAritmetica parentesisDerecho;

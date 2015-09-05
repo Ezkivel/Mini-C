@@ -32,6 +32,7 @@ Printf = printf
 Scanf = scanf
 Main = main
 Return = return
+Void = void
 CorcheteIzquierdo = "["
 CorcheteDerecho = "]"
 LlaveIzquierda = "{" 
@@ -67,6 +68,7 @@ PuntoYComa = ;
 {Scanf} {return new Symbol(sym.scanf, new Token("Scanf", yytext(), yyline + 1, yycolumn + 1));}
 {Main} {return new Symbol(sym.MAIN, new Token("Main", yytext(), yyline + 1, yycolumn + 1));}
 {Return} {return new Symbol(sym.RETURN, new Token("Return", yytext(), yyline + 1, yycolumn + 1));}
+{Void} {return new Symbol(sym.VOID, new Token("Void", yytext(), yyline + 1, yycolumn + 1));}
 {CorcheteIzquierdo} {return new Symbol(sym.corcheteIzquierdo, new Token("CorcheteIzquierdo", yytext(), yyline + 1, yycolumn + 1));}
 {CorcheteDerecho} {return new Symbol(sym.corcheteDerecho, new Token("CorcheteDerecho", yytext(), yyline + 1, yycolumn + 1));}
 {LlaveIzquierda} {return new Symbol(sym.llaveIzquierda, new Token("LlaveIzquierda", yytext(), yyline + 1, yycolumn + 1));}
