@@ -135,4 +135,5 @@ Scanf ::= scanf parentesisIzquierdo parametroScanf coma and nombreVariable paren
 Printf ::= printf parentesisIzquierdo constStr parentesisDerecho puntoYComa
          | printf parentesisIzquierdo constStr coma constStr parametroScanf parentesisDerecho puntoYComa
          | printf parentesisIzquierdo constStr coma entero parametroScanf parentesisDerecho puntoYComa
-         | printf parentesisIzquierdo constStr coma constChar parametroScanf parentesisDerecho puntoYComa;
+         | printf parentesisIzquierdo constStr coma constChar parametroScanf parentesisDerecho puntoYComa
+         | printf parentesisIzquierdo constStr coma nombreVariable parentesisDerecho puntoYComa;
