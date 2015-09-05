@@ -22,7 +22,7 @@ non terminal Token S, Main, Codigo, Variable, DeclaracionVariables, ListaVariabl
 AsignacionVariable, AsignacionVariableComa,
 InicializacionArreglo, InicializacionArregloComa, IncrementarDecrementarVariable, ElementoDeUnArreglo,
 OperacionAritmetica, OperacionAritmetica2, OperacionAritmetica3,
-If, Else, While, For, ForInicializacion, ForInicializacion2, ForInicializacionComa, ForActualizacion, ForActualizacionComa, Condicion, CondicionOperadorLogico;
+If, Else, While, For, ForInicializacion, ForInicializacion2, ForInicializacionComa, ForActualizacion, ForActualizacionComa, Condicion, CondicionOperadorLogico, Scanf, Printf;
 
 terminal Token tipoVariable, nombreVariable, IF, ELSE, WHILE, FOR, TRUE, FALSE,
 MAIN, RETURN, corcheteIzquierdo, corcheteDerecho, llaveIzquierda, llaveDerecha,
@@ -128,3 +128,11 @@ OperacionAritmetica2 ::= OperacionAritmetica2 operadorMultiplicacion OperacionAr
 OperacionAritmetica3 ::= entero
                        | Variable
                        | parentesisIzquierdo OperacionAritmetica parentesisDerecho;
+
+Scanf ::= scanf parentesisIzquierdo parametroScanf coma and nombreVariable parentesisDerecho puntoYComa
+        | scanf parentesisIzquierdo parametroScanf coma nombreVariable parentesisDerecho puntoYComa;
+
+Printf ::= printf parentesisIzquierdo constStr parentesisDerecho puntoYComa
+         | printf parentesisIzquierdo constStr coma constStr parametroScanf parentesisDerecho puntoYComa
+         | printf parentesisIzquierdo constStr coma entero parametroScanf parentesisDerecho puntoYComa
+         | printf parentesisIzquierdo constStr coma constChar parametroScanf parentesisDerecho puntoYComa;
