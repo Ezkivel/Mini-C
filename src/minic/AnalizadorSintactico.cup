@@ -48,7 +48,7 @@ DeclaracionFuncionParametrosComa ::= coma DeclaracionFuncionParametros
                                    |;
 
 
-Main ::= tipoVariable MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda Codigo Return llaveDerecha Funciones;
+Main ::= tipoVariable MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda Codigo llaveDerecha Funciones;
 
 
 Funciones ::= tipoVariable nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda Codigo llaveDerecha Funciones
@@ -69,6 +69,10 @@ Codigo ::= DeclaracionVariables Codigo
          | If Codigo
          | For Codigo
          | LlamadoAFuncion puntoYComa Codigo
+         | RETURN OperacionAritmetica puntoYComa Codigo
+         | RETURN constChar puntoYComa Codigo
+         | RETURN constStr puntoYComa Codigo
+         | error Codigo
          |;
 
 LlamadoAFuncion ::= nombreVariable parentesisIzquierdo LlamadoAFuncionParametros parentesisDerecho;
@@ -162,11 +166,6 @@ InicializacionArreglo ::= OperacionAritmetica InicializacionArregloComa
                         | constStr InicializacionArregloComa;
 InicializacionArregloComa ::= coma InicializacionArreglo
                             |;
-
-Return ::= RETURN OperacionAritmetica puntoYComa
-         | RETURN constChar puntoYComa
-         | RETURN constStr puntoYComa
-         |;
 
 OperacionAritmetica ::= OperacionAritmetica operadorSuma OperacionAritmetica2
                       | OperacionAritmetica operadorResta OperacionAritmetica2
