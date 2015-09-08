@@ -83,14 +83,11 @@ LlamadoAFuncionParametros ::= OperacionAritmetica LlamadoAFuncionParametrosComa
 LlamadoAFuncionParametrosComa ::= coma LlamadoAFuncionParametros
                                 |;
 
-Scanf ::= scanf parentesisIzquierdo parametroScanf coma and nombreVariable parentesisDerecho puntoYComa
-        | scanf parentesisIzquierdo parametroScanf coma nombreVariable parentesisDerecho puntoYComa;
+Scanf ::= scanf parentesisIzquierdo parametroScanf coma nombreVariable parentesisDerecho puntoYComa
+        | scanf parentesisIzquierdo parametroScanf coma ElementoDeUnArreglo parentesisDerecho puntoYComa;
 
 Printf ::= printf parentesisIzquierdo constStr parentesisDerecho puntoYComa
-         | printf parentesisIzquierdo constStr coma constStr parametroScanf parentesisDerecho puntoYComa
-         | printf parentesisIzquierdo constStr coma entero parametroScanf parentesisDerecho puntoYComa
-         | printf parentesisIzquierdo constStr coma constChar parametroScanf parentesisDerecho puntoYComa
-         | printf parentesisIzquierdo constStr coma nombreVariable parentesisDerecho puntoYComa;
+         | printf parentesisIzquierdo constStr coma OperacionAritmetica parentesisDerecho puntoYComa;
 
 If ::= IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha Else;
 Else ::= ELSE IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha Else
