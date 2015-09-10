@@ -9,7 +9,7 @@ parser code{:
     public void syntax_error(Symbol s)
     {
         Token t = (Token)s.value;
-        report_error("Error Sintactico cerca de < " + t.getContenido() + " > linea " + t.getLinea() + ", columna " + t.getColumna(), null);
+        report_error("Se ha encontrado un error sintactico en linea " + t.getLinea() + ", columna " + t.getColumna() + " -> No se esperaba un < " + t.getContenido() + " >", null);
     }
 
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception 
