@@ -18,7 +18,7 @@ parser code{:
     }
 :};
 
-non terminal Token S, Main, Codigo, Variable, DeclaracionVariables, ListaVariables, ListaVariablesComa,
+non terminal S, Main, Codigo, Variable, DeclaracionVariables, ListaVariables, ListaVariablesComa,
 AsignacionVariable, AsignacionVariableComa, Scanf, Printf,
 InicializacionArreglo, InicializacionArregloComa, IncrementarDecrementarVariable, ElementoDeUnArreglo,
 OperacionAritmetica, OperacionAritmetica2, OperacionAritmetica3,
