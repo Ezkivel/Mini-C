@@ -16,7 +16,7 @@ public class MiniC {
         //Esta funcion se encarga de crear la clase <AnalizadorLexico> en base al archivo .jflex
         //Ejecutar luego de hacer algun cambio en el archivo .jflex
         generarClases();
-      
+
         MoverArchivosCAP();
         //Archivo fuente
         JFileChooser fc = new JFileChooser();
@@ -30,33 +30,42 @@ public class MiniC {
             //Analizar e imprimir los tokens
             Analizador(fr);
         }
-          
+
     }
 
     public static void Analizador(FileReader file) throws IOException, Exception {
         AnalizadorLexico al = new AnalizadorLexico(file);
-        
-        //Imprime los tokens 
-       /*Token token = null;
-        do {
-            token = (Token) al.next_token().value;
-            System.out.println(token);
-        } while (token != null);*/
 
-        AnalizadorSintactico as = new AnalizadorSintactico(al);
-       
-        as.parse();
+        //Imprime los tokens 
+        try {
+            /*Token token = null;
+             do {
+             token = (Token) al.next_token().value;
+             if (token != null) {
+             System.out.println(token);
+             }
+             } while (token != null);*/
+
+            AnalizadorSintactico as = new AnalizadorSintactico(al);
+            as.parse();
+        } catch (Exception e) {
+            System.err.println("ERROR Analizador: " + e.getMessage());
+        }
     }
 
-    public static void generarClases() throws IOException, Exception {
-        String path = System.getProperty("user.dir") + "\\src\\minic\\AnalizadorSintactico.cup";
-        String[] analizadorSintactico = {"-parser", "AnalizadorSintactico", path};
-        java_cup.Main.main(analizadorSintactico);
+    public static void generarClases() {
+        try {
+            String path = System.getProperty("user.dir") + "\\src\\minic\\AnalizadorSintactico.cup";
+            String[] analizadorSintactico = {"-parser", "AnalizadorSintactico", path};
+            java_cup.Main.main(analizadorSintactico);
 
-        //Esta funcion se encarga de crear la clase <AnalizadorLexico> en base al archivo .jflex  
-        path = System.getProperty("user.dir") + "\\src\\minic\\AnalizadorLexico.jflex";
-        File file = new File(path);
-        jflex.Main.generate(file);
+            //Esta funcion se encarga de crear la clase <AnalizadorLexico> en base al archivo .jflex  
+            path = System.getProperty("user.dir") + "\\src\\minic\\AnalizadorLexico.jflex";
+            File file = new File(path);
+            jflex.Main.generate(file);
+        } catch (Exception e) {
+            System.err.println("ERROR generarClases: " + e.getMessage());
+        }
     }
 
     public static void MoverArchivosCAP() {
@@ -109,6 +118,7 @@ public class MiniC {
             System.out.println(pathB.getName());
 
         } catch (IOException e) {
+            System.err.println("ERROR MoverArchivosCAP: " + e.getMessage());
         }
     }
 

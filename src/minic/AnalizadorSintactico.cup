@@ -17,19 +17,60 @@ parser code{:
     }
 :};
 
-non terminal S, Main, Codigo, Variable, DeclaracionVariables, ListaVariables, ListaVariablesComa,
-AsignacionVariable, AsignacionVariableComa, Scanf, Printf,
-InicializacionArreglo, InicializacionArregloComa, IncrementarDecrementarVariable, ElementoDeUnArreglo,
-OperacionAritmetica, OperacionAritmetica2, OperacionAritmetica3,
-If, Else, While, For, ForInicializacion, ForInicializacion2, ForInicializacionComa, ForActualizacion, ForActualizacionComa, Condicion, CondicionOperadorLogico,
-DeclaracionFuncion, DeclaracionFuncionParametros, DeclaracionFuncionParametrosComa, Funciones, FuncionesParametros, FuncionesParametrosComa,
-LlamadoAFuncion, LlamadoAFuncionParametros, LlamadoAFuncionParametrosComa, Return;
+
+/* Terminals Tokens */
 
 terminal Token tipoVariable, nombreVariable, IF, ELSE, WHILE, FOR, TRUE, FALSE,
 MAIN, RETURN, VOID, corcheteIzquierdo, corcheteDerecho, llaveIzquierda, llaveDerecha,
 constChar, constStr, parentesisIzquierdo, parentesisDerecho, igual, printf, scanf,
 operadorAritmeticoIgual, operadorSuma, operadorResta, operadorMultiplicacion, operadorDivision, operadorIncrementoDecremento,
-operadorRelacional, operadorLogico, entero, puntoYComa, coma, parametroScanf, and;
+operadorRelacional, operadorLogico , puntoYComa, coma, parametroScanf, and;
+
+terminal Integer
+entero;
+
+/* noterminals */
+
+non terminal S;
+non terminal Main;
+non terminal Codigo;
+non terminal Variable;
+non terminal DeclaracionVariables;
+non terminal ListaVariables;
+non terminal ListaVariablesComa;
+non terminal AsignacionVariable;
+non terminal AsignacionVariableComa;
+non terminal Scanf;
+non terminal Printf;
+non terminal InicializacionArreglo;
+non terminal InicializacionArregloComa;
+non terminal IncrementarDecrementarVariable;
+non terminal ElementoDeUnArreglo;
+non terminal OperacionAritmetica;
+non terminal OperacionAritmetica2;
+non terminal OperacionAritmetica3;
+non terminal If;
+non terminal Else;
+non terminal While;
+non terminal For;
+non terminal ForInicializacion;
+non terminal ForInicializacion2;
+non terminal ForInicializacionComa;
+non terminal ForActualizacion;
+non terminal ForActualizacionComa; 
+non terminal Condicion;
+non terminal CondicionOperadorLogico;
+non terminal DeclaracionFuncion;
+non terminal DeclaracionFuncionParametros;
+non terminal DeclaracionFuncionParametrosComa;
+non terminal Funciones;
+non terminal FuncionesParametros;
+non terminal FuncionesParametrosComa;
+non terminal LlamadoAFuncion;
+non terminal LlamadoAFuncionParametros;
+non terminal LlamadoAFuncionParametrosComa;
+non terminal Return;
+
 
 start with S;
 
@@ -38,11 +79,13 @@ S ::= DeclaracionFuncion S
 
 DeclaracionFuncion ::= tipoVariable nombreVariable parentesisIzquierdo DeclaracionFuncionParametros parentesisDerecho puntoYComa
                      | VOID nombreVariable parentesisIzquierdo DeclaracionFuncionParametros parentesisDerecho puntoYComa;
+                     
 DeclaracionFuncionParametros ::= tipoVariable DeclaracionFuncionParametrosComa
                                | tipoVariable corcheteIzquierdo corcheteDerecho DeclaracionFuncionParametrosComa
                                | tipoVariable nombreVariable DeclaracionFuncionParametrosComa
                                | tipoVariable nombreVariable corcheteIzquierdo corcheteDerecho DeclaracionFuncionParametrosComa
                                |;
+
 DeclaracionFuncionParametrosComa ::= coma DeclaracionFuncionParametros
                                    |;
 
@@ -53,9 +96,11 @@ Main ::= tipoVariable MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda 
 Funciones ::= tipoVariable nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda Codigo llaveDerecha Funciones
             | VOID nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda Codigo llaveDerecha Funciones
             |;
+
 FuncionesParametros ::= tipoVariable nombreVariable FuncionesParametrosComa
                       | tipoVariable nombreVariable corcheteIzquierdo corcheteDerecho FuncionesParametrosComa
                       |;
+
 FuncionesParametrosComa ::= coma FuncionesParametros
                          |;
 
@@ -75,20 +120,23 @@ Codigo ::= DeclaracionVariables Codigo
          |;
 
 LlamadoAFuncion ::= nombreVariable parentesisIzquierdo LlamadoAFuncionParametros parentesisDerecho;
+
 LlamadoAFuncionParametros ::= OperacionAritmetica LlamadoAFuncionParametrosComa
                             | constChar LlamadoAFuncionParametrosComa
                             | constStr LlamadoAFuncionParametrosComa
                             |;
+
 LlamadoAFuncionParametrosComa ::= coma LlamadoAFuncionParametros
                                 |;
 
 Scanf ::= scanf parentesisIzquierdo parametroScanf coma nombreVariable parentesisDerecho puntoYComa
         | scanf parentesisIzquierdo parametroScanf coma ElementoDeUnArreglo parentesisDerecho puntoYComa;
 
-Printf ::= printf parentesisIzquierdo constStr parentesisDerecho puntoYComa
+Printf ::= printf parentesisIzquierdo constStr:c parentesisDerecho puntoYComa {: System.out.println(c.getContenido() );  :}
          | printf parentesisIzquierdo constStr coma OperacionAritmetica parentesisDerecho puntoYComa;
 
 If ::= IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha Else;
+
 Else ::= ELSE IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha Else
        | ELSE llaveIzquierda Codigo llaveDerecha
        |;
@@ -100,6 +148,7 @@ For ::= FOR parentesisIzquierdo ForInicializacion puntoYComa Condicion puntoYCom
       | FOR parentesisIzquierdo ForInicializacion puntoYComa Condicion puntoYComa parentesisDerecho llaveIzquierda Codigo llaveDerecha
       | FOR parentesisIzquierdo puntoYComa Condicion puntoYComa parentesisDerecho llaveIzquierda Codigo llaveDerecha
       | FOR parentesisIzquierdo puntoYComa puntoYComa parentesisDerecho llaveIzquierda Codigo llaveDerecha;
+
 ForInicializacion ::= tipoVariable Variable ForInicializacionComa
                     | tipoVariable nombreVariable igual OperacionAritmetica ForInicializacionComa
                     | tipoVariable nombreVariable igual constChar ForInicializacionComa
@@ -108,12 +157,14 @@ ForInicializacion ::= tipoVariable Variable ForInicializacionComa
                     | Variable operadorAritmeticoIgual OperacionAritmetica ForInicializacionComa
                     | Variable igual constChar ForInicializacionComa
                     | Variable igual constStr ForInicializacionComa;
+
 ForInicializacion2 ::= Variable igual OperacionAritmetica ForInicializacionComa
                      | Variable operadorAritmeticoIgual OperacionAritmetica ForInicializacionComa
                      | Variable igual constChar ForInicializacionComa
                      | Variable igual constStr ForInicializacionComa;
 ForInicializacionComa ::= coma ForInicializacion2
                         |;
+
 ForActualizacion ::= Variable igual OperacionAritmetica ForActualizacionComa
                    | Variable operadorAritmeticoIgual OperacionAritmetica ForActualizacionComa
                    | Variable igual constChar ForActualizacionComa
@@ -129,10 +180,12 @@ Condicion ::= OperacionAritmetica operadorRelacional OperacionAritmetica Condici
             | constChar operadorRelacional OperacionAritmetica CondicionOperadorLogico
             | constStr operadorRelacional OperacionAritmetica CondicionOperadorLogico
             | parentesisIzquierdo Condicion parentesisDerecho CondicionOperadorLogico;
+
 CondicionOperadorLogico ::= operadorLogico Condicion
                       |;
 
 DeclaracionVariables ::= tipoVariable ListaVariables puntoYComa;
+
 ListaVariables ::= Variable ListaVariablesComa
                  | nombreVariable igual OperacionAritmetica ListaVariablesComa
                  | nombreVariable igual constChar ListaVariablesComa
@@ -146,6 +199,7 @@ AsignacionVariable ::= Variable igual OperacionAritmetica AsignacionVariableComa
                      | Variable operadorAritmeticoIgual OperacionAritmetica AsignacionVariableComa
                      | Variable igual constChar AsignacionVariableComa
                      | Variable igual constStr AsignacionVariableComa;
+
 AsignacionVariableComa ::= coma AsignacionVariable
                         | puntoYComa;
 
@@ -160,15 +214,19 @@ ElementoDeUnArreglo ::= nombreVariable corcheteIzquierdo OperacionAritmetica cor
 InicializacionArreglo ::= OperacionAritmetica InicializacionArregloComa
                         | constChar InicializacionArregloComa
                         | constStr InicializacionArregloComa;
+
 InicializacionArregloComa ::= coma InicializacionArreglo
                             |;
+
 
 OperacionAritmetica ::= OperacionAritmetica operadorSuma OperacionAritmetica2
                       | OperacionAritmetica operadorResta OperacionAritmetica2
                       | OperacionAritmetica2;
+
 OperacionAritmetica2 ::= OperacionAritmetica2 operadorMultiplicacion OperacionAritmetica3
                        | OperacionAritmetica2 operadorDivision OperacionAritmetica3
                        | OperacionAritmetica3;
+
 OperacionAritmetica3 ::= entero
                        | Variable
                        | LlamadoAFuncion
