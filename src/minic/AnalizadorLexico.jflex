@@ -48,7 +48,7 @@ OperadorIncrementoDecremento = ("++"|"--")
 OperadorRelacional = (">"|">="|"<"|"<="|"=="|"!=")
 OperadorLogico = ("||"|"&&")
 ComentarioUnaLinea = "//" .* 
-ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "*/" | "/*" [^*] ~"}"| "/*" "*"+ "}"
+ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "*/" | "/*" [^*] ~"}"| "/*" "*"+ "}" | "/*" [^*] ~\w| "/*" "*"+ \w
 PuntoYComa = ;
 
 %%
