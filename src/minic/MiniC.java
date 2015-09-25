@@ -42,16 +42,16 @@ public class MiniC {
 
         //Imprime los tokens 
         try {
-            Token token = null;
+            /*Token token = null;
             do {
                 token = (Token) al.next_token().value;
                 if (token != null) {
                     System.out.println(token);
                 }
-            } while (token != null);
+            } while (token != null);*/
 
-            //AnalizadorSintactico as = new AnalizadorSintactico(al);
-            // as.parse();
+            AnalizadorSintactico as = new AnalizadorSintactico(al);
+            as.parse();
         } catch (Exception e) {
             System.err.println("ERROR Analizador: " + e.getMessage());
         }
