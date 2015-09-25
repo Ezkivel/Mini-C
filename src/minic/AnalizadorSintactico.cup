@@ -1,5 +1,7 @@
 package minic;
+
 import java_cup.runtime.*;
+import ast.*;
 
 action code{:
 :};
@@ -14,20 +16,21 @@ parser code{:
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception 
     {
         //report_fatal_error("Fatal Error: " + s.value, null);
-    }
+    } 
+
 :};
 
 
 /* Terminals Tokens */
 
-terminal Token tipoVariable, nombreVariable, IF, ELSE, WHILE, FOR, TRUE, FALSE,
-MAIN, RETURN, VOID, corcheteIzquierdo, corcheteDerecho, llaveIzquierda, llaveDerecha,
-constChar, constStr, parentesisIzquierdo, parentesisDerecho, igual, printf, scanf,
-operadorAritmeticoIgual, operadorSuma, operadorResta, operadorMultiplicacion, operadorDivision, operadorIncrementoDecremento,
-operadorRelacional, operadorLogico , puntoYComa, coma, parametroScanf, and;
+terminal Token tipoVariable, 
+nombreVariable, IF, ELSE, WHILE, FOR, TRUE, FALSE,
+MAIN, RETURN, VOID, corcheteIzquierdo, corcheteDerecho, 
+llaveIzquierda, llaveDerecha,constChar, constStr, parentesisIzquierdo, 
+parentesisDerecho, igual, printf, scanf, operadorAritmeticoIgual, operadorSuma, 
+operadorResta, operadorMultiplicacion, operadorDivision, operadorIncrementoDecremento,
+operadorRelacional, operadorLogico , puntoYComa, coma, parametroScanf, entero, and;
 
-terminal Integer
-entero;
 
 /* noterminals */
 
@@ -71,16 +74,15 @@ non terminal LlamadoAFuncionParametros;
 non terminal LlamadoAFuncionParametrosComa;
 non terminal Return;
 
-
 start with S;
 
 S ::= DeclaracionFuncion S
      | Main;
 
-DeclaracionFuncion ::= tipoVariable nombreVariable parentesisIzquierdo DeclaracionFuncionParametros parentesisDerecho puntoYComa
+DeclaracionFuncion ::= tipoVariable:t nombreVariable:nv parentesisIzquierdo DeclaracionFuncionParametros:dfp parentesisDerecho puntoYComa
                      | VOID nombreVariable parentesisIzquierdo DeclaracionFuncionParametros parentesisDerecho puntoYComa;
-                     
-DeclaracionFuncionParametros ::= tipoVariable DeclaracionFuncionParametrosComa
+
+DeclaracionFuncionParametros ::= tipoVariable DeclaracionFuncionParametrosComa 
                                | tipoVariable corcheteIzquierdo corcheteDerecho DeclaracionFuncionParametrosComa
                                | tipoVariable nombreVariable DeclaracionFuncionParametrosComa
                                | tipoVariable nombreVariable corcheteIzquierdo corcheteDerecho DeclaracionFuncionParametrosComa
