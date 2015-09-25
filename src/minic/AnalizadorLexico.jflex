@@ -1,7 +1,6 @@
 /* Directivas JFlex */
 
 package minic;
-import static minic.Token.*;
 import java_cup.runtime.*;
 
 %%
@@ -49,7 +48,7 @@ OperadorIncrementoDecremento = ("++"|"--")
 OperadorRelacional = (">"|">="|"<"|"<="|"=="|"!=")
 OperadorLogico = ("||"|"&&")
 ComentarioUnaLinea = "//" .* 
-ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "*/" 
+ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "*/" | "/*" [^*] ~"}"| "/*" "*"+ "}"
 PuntoYComa = ;
 
 %%

@@ -9,27 +9,30 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.TreeSet;
 
 public class MiniC {
 
     public static void main(String[] args) throws FileNotFoundException, IOException, Exception {
         //Esta funcion se encarga de crear la clase <AnalizadorLexico> en base al archivo .jflex
         //Ejecutar luego de hacer algun cambio en el archivo .jflex
-        generarClases();
+        try {
+            generarClases();
 
-        MoverArchivosCAP();
-        //Archivo fuente
-        JFileChooser fc = new JFileChooser();
+            MoverArchivosCAP();
+            //Archivo fuente
+            JFileChooser fc = new JFileChooser();
 
-        int returnVal = fc.showOpenDialog(fc);
+            int returnVal = fc.showOpenDialog(fc);
 
-        if (returnVal == JFileChooser.APPROVE_OPTION) {
-            File file = fc.getSelectedFile();
-            FileReader fr = new FileReader(file);
+            if (returnVal == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                FileReader fr = new FileReader(file);
 
-            //Analizar e imprimir los tokens
-            Analizador(fr);
+                //Analizar e imprimir los tokens
+                Analizador(fr);
+            }
+        } catch (Exception e) {
+            System.err.println("ERROR main: " + e.getMessage());
         }
 
     }
@@ -39,16 +42,16 @@ public class MiniC {
 
         //Imprime los tokens 
         try {
-            /*Token token = null;
-             do {
-             token = (Token) al.next_token().value;
-             if (token != null) {
-             System.out.println(token);
-             }
-             } while (token != null);*/
+            Token token = null;
+            do {
+                token = (Token) al.next_token().value;
+                if (token != null) {
+                    System.out.println(token);
+                }
+            } while (token != null);
 
-            AnalizadorSintactico as = new AnalizadorSintactico(al);
-            as.parse();
+            //AnalizadorSintactico as = new AnalizadorSintactico(al);
+            // as.parse();
         } catch (Exception e) {
             System.err.println("ERROR Analizador: " + e.getMessage());
         }

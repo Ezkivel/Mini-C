@@ -134,7 +134,7 @@ LlamadoAFuncionParametrosComa ::= coma LlamadoAFuncionParametros
 Scanf ::= scanf parentesisIzquierdo parametroScanf coma nombreVariable parentesisDerecho puntoYComa
         | scanf parentesisIzquierdo parametroScanf coma ElementoDeUnArreglo parentesisDerecho puntoYComa;
 
-Printf ::= printf parentesisIzquierdo constStr:c parentesisDerecho puntoYComa {: System.out.println(c.getContenido() );  :}
+Printf ::= printf parentesisIzquierdo constStr:c parentesisDerecho puntoYComa
          | printf parentesisIzquierdo constStr coma OperacionAritmetica parentesisDerecho puntoYComa;
 
 If ::= IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda Codigo llaveDerecha Else;
