@@ -9,11 +9,12 @@ package ast;
  *
  * @author Gabriel
  */
-class DeclaracionVariables {
+public class MainClass {
 
-    public Tipo t;
-    
-    public DeclaracionVariables() {
+    public Codigo c;
+
+    public MainClass(Codigo c) {
+        this.c = c;
     }
-    
+
 }

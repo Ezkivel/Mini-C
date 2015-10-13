@@ -9,11 +9,6 @@ package ast;
  *
  * @author Gabriel
  */
-class DeclaracionVariables {
-
-    public Tipo t;
-    
-    public DeclaracionVariables() {
-    }
+public class Exp {
     
 }

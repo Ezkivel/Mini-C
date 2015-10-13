@@ -47,8 +47,9 @@ OperadorDivision = "/"
 OperadorIncrementoDecremento = ("++"|"--")
 OperadorRelacional = (">"|">="|"<"|"<="|"=="|"!=")
 OperadorLogico = ("||"|"&&")
-ComentarioUnaLinea = "//" .* 
-ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "*/" | "/*" [^*] ~"}"| "/*" "*"+ "}" | "/*" [^*] ~\w| "/*" "*"+ \w
+ComentarioUnaLinea = "//" .*
+/* Ocupa mejoras */ 
+ComentarioMultiLinea = "/*" [^*] ~"*/" | "/*" "*"+ "*/" 
 PuntoYComa = ;
 
 %%

@@ -5,7 +5,6 @@
  */
 package ast;
 
-import minic.Token;
 
 /**
  *
@@ -23,8 +22,5 @@ public class DeclaracionFuncion {
         this.p = p;
     }
 
-    public DeclaracionFuncion(Token t, nombreVariable nombreVariable, Object dfp) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
 }
