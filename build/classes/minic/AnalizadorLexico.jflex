@@ -14,7 +14,10 @@ import java_cup.runtime.*;
 
 Entero = [0-9]+
 Espacio = [\s]
-TipoVariable = int|char|string
+
+Integer = int
+Char = char
+String = string
 NombreVariable = [a-zA-Z][[a-zA-Z]|[0-9]|"_"]*
 Coma = ,
 ConstChar = '[a-zA-Z]'
@@ -54,7 +57,9 @@ PuntoYComa = ;
 
 %%
 
-{TipoVariable} {return new Symbol(sym.tipoVariable, new Token("TipoVariable", yytext(), yyline + 1, yycolumn + 1));}
+{Integer} {return new Symbol(sym.INTEGER, new Token("Integer", yytext(), yyline + 1, yycolumn + 1));}
+{String} {return new Symbol(sym.STRING, new Token("String", yytext(), yyline + 1, yycolumn + 1));}
+{Char} {return new Symbol(sym.CHAR, new Token("Char", yytext(), yyline + 1, yycolumn + 1));}
 {AND} {return new Symbol(sym.and, new Token("AND", yytext(), yyline + 1, yycolumn + 1));}
 {ParamentroScanf} {return new Symbol(sym.parametroScanf, new Token("ParamentroScanf", yytext(), yyline + 1, yycolumn + 1));}
 {Coma} {return new Symbol(sym.coma, new Token("Coma", yytext(), yyline + 1, yycolumn + 1));}

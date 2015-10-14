@@ -9,12 +9,9 @@ package ast;
  *
  * @author Gabriel
  */
-public class MainClass {
+public class StringTipo extends Tipo{
 
-    public Codigo cs;
-
-    public MainClass(Codigo cs) {
-        this.cs = cs;
+    public StringTipo() {
     }
-
+    
 }

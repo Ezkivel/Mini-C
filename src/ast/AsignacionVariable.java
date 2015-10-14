@@ -10,5 +10,8 @@ package ast;
  * @author Gabriel
  */
 class AsignacionVariable {
+
+    public AsignacionVariable() {
+    }
     
 }

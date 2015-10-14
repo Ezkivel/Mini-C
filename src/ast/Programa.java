@@ -13,6 +13,7 @@ public class Programa {
 
     public DeclaracionFuncion df;
     public MainClass m;
+    public Programa p;
 
     public Programa(DeclaracionFuncion df) {
         this.df = df;
@@ -22,9 +23,9 @@ public class Programa {
         this.m = m;
     }
 
-    public Programa(DeclaracionFuncion df, MainClass m) {
+    public Programa(DeclaracionFuncion df, Programa p) {
         this.df = df;
-        this.m = m;
+        this.p = p;
     }
 
 }

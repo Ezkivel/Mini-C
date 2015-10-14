@@ -9,11 +9,14 @@ package ast;
  *
  * @author Gabriel
  */
-class DeclaracionVariables {
+public class DeclaracionVariables extends Codigo {
 
     public Tipo t;
-    
-    public DeclaracionVariables() {
+    public ListaVariables lv;
+
+    public DeclaracionVariables(Tipo t, ListaVariables lv) {
+        this.t = t;
+        this.lv = lv;
     }
-    
+
 }

@@ -9,6 +9,9 @@ package ast;
  *
  * @author Gabriel
  */
-public class Exp {
+public class CharTipo extends Tipo{
+
+    public CharTipo() {
+    }
     
 }

@@ -10,9 +10,6 @@ package ast;
  * @author Gabriel
  */
 public class Tipo {
-
-    public Tipo() {
-
-    }
+   
 
 }

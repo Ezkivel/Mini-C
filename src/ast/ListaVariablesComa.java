@@ -11,20 +11,20 @@ import java.util.Vector;
  *
  * @author Gabriel
  */
-public class Codigos {
+public class ListaVariablesComa {
 
     private Vector list;
 
-    public Codigos() {
+    public ListaVariablesComa() {
         list = new Vector();
     }
 
-    public void add(Codigo n) {
+    public void add(ListaVariables n) {
         list.add(0, n);
     }
 
-    public Codigo elementAt(int i) {
-        return (Codigo) list.elementAt(i);
+    public ListaVariables elementAt(int i) {
+        return (ListaVariables) list.elementAt(i);
     }
 
     public int size() {

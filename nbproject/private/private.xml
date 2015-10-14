@@ -3,11 +3,22 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/MiniC.java</file>
-            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/AnalizadorLexico.jflex</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/AsignacionVariable.java</file>
             <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/AnalizadorSintactico.cup</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/IncrementarDecrementarVariable.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/AnalizadorLexico.jflex</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/DeclaracionVariables.java</file>
             <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/AnalizadorSintactico.java</file>
-            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/AnalizadorLexico.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/Codigo.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/Codigos.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/Exp.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/DeclaracionFuncionParametros.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/ListaVariables.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/Programa.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/ListaVariable.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/MiniC.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/DeclaracionFuncion.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/MainClass.java</file>
         </group>
     </open-files>
 </project-private>
