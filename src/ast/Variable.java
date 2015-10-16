@@ -9,7 +9,7 @@ package ast;
  *
  * @author Gabriel
  */
-class Variable {
+public class Variable {
 
     public nombreVariable i;
     public ElementoDeUnArreglo ea;

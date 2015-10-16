@@ -9,11 +9,12 @@ package ast;
  *
  * @author Gabriel
  */
-public class nombreVariable {
+public class AsignacionVariableComa {
 
-    public String id;
+    public AsignacionVariable av;
 
-    public nombreVariable() {
-
+    public AsignacionVariableComa(AsignacionVariable av) {
+        this.av = av;
     }
+
 }

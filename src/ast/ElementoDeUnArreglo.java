@@ -9,6 +9,13 @@ package ast;
  *
  * @author Gabriel
  */
-class ElementoDeUnArreglo {
-    
+public class ElementoDeUnArreglo {
+
+    public nombreVariable nv;
+    public OperacionAritmetica o;
+
+    public ElementoDeUnArreglo(nombreVariable nv, OperacionAritmetica o) {
+        this.nv = nv;
+        this.o = o;
+    }
 }

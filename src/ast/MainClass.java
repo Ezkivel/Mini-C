@@ -12,9 +12,11 @@ package ast;
 public class MainClass {
 
     public Codigo cs;
+    public Tipo p;
 
-    public MainClass(Codigo cs) {
+    public MainClass(Codigo cs, Tipo p) {
         this.cs = cs;
+        this.p = p;
     }
 
 }
