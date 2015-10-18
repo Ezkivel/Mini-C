@@ -149,7 +149,7 @@ lista_variables ::= variable lista_variablesComa
                  | nombreVariable corcheteIzquierdo operacion_aritmetica corcheteDerecho igual llaveIzquierda InicializacionArreglo llaveDerecha lista_variablesComa
                  | nombreVariable corcheteIzquierdo corcheteDerecho igual llaveIzquierda InicializacionArreglo llaveDerecha lista_variablesComa;
 
-lista_variablesComa ::= coma lista_variables
+lista_variablesComa ::= coma lista_variables:lv {: RESULT = new ListaVariablesComa(lv); :}
                      |;
 
 

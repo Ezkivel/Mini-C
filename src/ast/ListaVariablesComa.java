@@ -13,22 +13,10 @@ import java.util.Vector;
  */
 public class ListaVariablesComa {
 
-    private Vector list;
+    private ListaVariables lv;
 
-    public ListaVariablesComa() {
-        list = new Vector();
-    }
-
-    public void add(ListaVariables n) {
-        list.add(0, n);
-    }
-
-    public ListaVariables elementAt(int i) {
-        return (ListaVariables) list.elementAt(i);
-    }
-
-    public int size() {
-        return list.size();
+    public ListaVariablesComa(ListaVariables lv) {
+        this.lv = lv;
     }
 
 }
