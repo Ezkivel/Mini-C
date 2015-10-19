@@ -80,10 +80,10 @@ non terminal Variable variable;
 non terminal ElementoDeUnArreglo elemento_array;
 non terminal AsignacionVariableComa asignacion_variable_coma;
 
-non terminal AsignacionVariable;
+non terminal AsignacionVariable asignacion_variable;
 non terminal IncrementarDecrementarVariable;
-non terminal Scanf;
-non terminal Printf;
+non terminal Scanf scans;
+non terminal Printf print;
 non terminal If;
 non terminal Else;
 non terminal While;
@@ -122,10 +122,10 @@ programa ::= declaracion_funcion:df  programa:p {: RESULT = new Programa(df, p);
 main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigo:c llaveDerecha Funciones {: RESULT = new MainClass(c,t);    :};
 
 codigo ::= declaracion_variables:dv codigo:c {: RESULT = new Codigo(dv, c); :} 
-         | AsignacionVariable codigo  
+         | asignacion_variable:av codigo:c  {: RESULT = new Codigo(av,c);    :}
          | IncrementarDecrementarVariable codigo
-         | Printf codigo
-         | Scanf codigo
+         | print:p codigo:c {: RESULT = new Codigo(p,c);    :}
+         | scans codigo
          | While codigo
          | If codigo
          | For codigo
@@ -190,11 +190,12 @@ LlamadoAFuncionParametros ::= operacion_aritmetica LlamadoAFuncionParametrosComa
 LlamadoAFuncionParametrosComa ::= coma LlamadoAFuncionParametros
                                 |;
 
-Scanf ::= scanf parentesisIzquierdo parametroScanf coma nombreVariable parentesisDerecho puntoYComa
+scans ::= scanf parentesisIzquierdo parametroScanf coma nombreVariable parentesisDerecho puntoYComa
         | scanf parentesisIzquierdo parametroScanf coma elemento_array parentesisDerecho puntoYComa;
 
-Printf ::= printf parentesisIzquierdo constStr:c parentesisDerecho puntoYComa
-         | printf parentesisIzquierdo constStr coma operacion_aritmetica parentesisDerecho puntoYComa;
+print ::= printf parentesisIzquierdo constStr parentesisDerecho puntoYComa    {: RESULT = new Printf( new constStr() ); :}
+         | printf parentesisIzquierdo constStr coma operacion_aritmetica:o parentesisDerecho puntoYComa   {: RESULT = new Printf(new constStr() ,o); :}
+        ;
 
 If ::= IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda codigo llaveDerecha Else
      | IF error parentesisDerecho llaveIzquierda codigo llaveDerecha Else;
@@ -251,13 +252,13 @@ Condicion ::= operacion_aritmetica operadorRelacional operacion_aritmetica Condi
 CondicionOperadorLogico ::= operadorLogico Condicion
                       |;
 
-AsignacionVariable ::= variable igual operacion_aritmetica asignacion_variable_coma
-                     | variable operadorAritmeticoIgual operacion_aritmetica asignacion_variable_coma
-                     | variable igual constChar asignacion_variable_coma
-                     | variable igual constStr asignacion_variable_coma
+asignacion_variable ::= variable:v igual operacion_aritmetica:oa asignacion_variable_coma:av {: RESULT = new AsignacionVariable(v,oa,av);  :}
+                     | variable:v operadorAritmeticoIgual operacion_aritmetica:o asignacion_variable_coma:av {:  RESULT = new AsignacionVariable(v,o,av, new operadorAritmeticoIgual());  :}
+                     | variable:v igual constChar asignacion_variable_coma:ac {: RESULT = new AsignacionVariable(v,ac,new constChar()); :}
+                     | variable:v igual constStr asignacion_variable_coma:ac {:  RESULT = new AsignacionVariable(v,ac, new constStr());:}
                      | error puntoYComa;
 
-asignacion_variable_coma ::= coma AsignacionVariable
+asignacion_variable_coma ::= coma asignacion_variable:av   {: RESULT = new AsignacionVariableComa(av);  :}
                         | puntoYComa;
 
 IncrementarDecrementarVariable ::= variable operadorIncrementoDecremento puntoYComa

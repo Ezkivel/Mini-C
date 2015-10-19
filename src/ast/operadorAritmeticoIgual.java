@@ -9,11 +9,9 @@ package ast;
  *
  * @author Gabriel
  */
-public class Scanf {
-    
-   
-    
-    public Scanf() {
+public class operadorAritmeticoIgual {
+
+    public operadorAritmeticoIgual() {
     }
     
 }

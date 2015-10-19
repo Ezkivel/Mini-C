@@ -9,7 +9,7 @@ package ast;
  *
  * @author Gabriel
  */
-class Printf {
+public class Printf {
 
     public constStr cs;
     public OperacionAritmetica oa;

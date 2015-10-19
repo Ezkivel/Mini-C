@@ -9,12 +9,10 @@ package ast;
  *
  * @author Gabriel
  */
-class constStr {
+public class constStr {
 
-    public String cs;
+    public constStr() {
 
-    public constStr(String cs) {
-        this.cs = cs;
     }
 
 }

@@ -9,12 +9,12 @@ package ast;
  *
  * @author Gabriel
  */
-class constChar {
+public class constChar {
 
     public char c;
 
-    public constChar(char c) {
-        this.c = c;
+    public constChar() {
+
     }
 
 }
