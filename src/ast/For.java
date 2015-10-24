@@ -9,9 +9,9 @@ package ast;
  *
  * @author Gabriel
  */
-class For {
+public class For {
 
     public For() {
     }
-    
+
 }

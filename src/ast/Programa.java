@@ -15,8 +15,8 @@ public class Programa {
     public MainClass m;
     public Programa p;
 
-    public Programa(DeclaracionFuncion df) {
-        this.df = df;
+    public Programa() {
+
     }
 
     public Programa(MainClass m) {

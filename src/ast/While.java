@@ -9,7 +9,7 @@ package ast;
  *
  * @author Gabriel
  */
-class While {
+public class While {
 
     public Condicion c;
     public Codigo cc;

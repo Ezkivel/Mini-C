@@ -1,5 +1,6 @@
 package minic;
 
+import ast.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -17,7 +18,7 @@ public class MiniC {
         //Ejecutar luego de hacer algun cambio en el archivo .jflex
         try {
             generarClases();
-
+            
             MoverArchivosCAP();
             //Archivo fuente
             JFileChooser fc = new JFileChooser();
@@ -43,12 +44,12 @@ public class MiniC {
         //Imprime los tokens 
         try {
             /*Token token = null;
-            do {
-                token = (Token) al.next_token().value;
-                if (token != null) {
-                    System.out.println(token);
-                }
-            } while (token != null);*/
+             do {
+             token = (Token) al.next_token().value;
+             if (token != null) {
+             System.out.println(token);
+             }
+             } while (token != null);*/
 
             AnalizadorSintactico as = new AnalizadorSintactico(al);
             as.parse();

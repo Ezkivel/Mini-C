@@ -9,9 +9,5 @@ package ast;
  *
  * @author Gabriel
  */
-class If {
-
-    public If() {
-    }
-    
+public class If {
 }

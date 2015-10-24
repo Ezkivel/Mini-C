@@ -9,11 +9,11 @@ package ast;
  *
  * @author Gabriel
  */
-public class RETURN {
+public class parentesisIzquierdo {
+    public String parentesisIzquierdo;
     
-    public String RETURN;
-    public RETURN() {
-        this.RETURN = "return";
+    public parentesisIzquierdo() {
+        this.parentesisIzquierdo = "(";
     }
-
+    
 }

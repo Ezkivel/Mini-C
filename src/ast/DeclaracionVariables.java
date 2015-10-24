@@ -13,10 +13,12 @@ public class DeclaracionVariables extends Codigo {
 
     public Tipo t;
     public ListaVariables lv;
+    public puntoYComa pyc;
 
-    public DeclaracionVariables(Tipo t, ListaVariables lv) {
+    public DeclaracionVariables(Tipo t, ListaVariables lv, puntoYComa pyc) {
         this.t = t;
         this.lv = lv;
+        this.pyc = pyc;
     }
 
 }

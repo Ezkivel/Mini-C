@@ -13,8 +13,11 @@ public class constChar {
 
     public char c;
 
-    public constChar() {
+    public constChar(char c) {
+        this.c = c;
+    }
 
+    public constChar() {
     }
 
 }

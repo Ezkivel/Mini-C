@@ -9,11 +9,11 @@ package ast;
  *
  * @author Gabriel
  */
-public class RETURN {
+public class llaveIzquierda {
     
-    public String RETURN;
-    public RETURN() {
-        this.RETURN = "return";
+    public String llaveIzquierda;
+    public llaveIzquierda() {
+        this.llaveIzquierda = "{";
     }
-
+    
 }

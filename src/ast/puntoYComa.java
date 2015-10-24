@@ -9,11 +9,12 @@ package ast;
  *
  * @author Gabriel
  */
-public class RETURN {
-    
-    public String RETURN;
-    public RETURN() {
-        this.RETURN = "return";
+public class puntoYComa {
+
+    public String puntoYComa;
+
+    public puntoYComa() {
+        this.puntoYComa = ";";
     }
 
 }

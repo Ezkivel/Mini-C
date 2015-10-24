@@ -11,12 +11,29 @@ package ast;
  */
 public class MainClass {
 
-    public Codigo cs;
     public Tipo p;
+    public MainClass main;
+    public parentesisIzquierdo parIz;
+    public parentesisDerecho parDer;
+    public llaveIzquierda llIz;
+    public Codigo cs;
+    public llaveDerecha llDer;
+    public Funciones fun;
+    public String Main;
 
-    public MainClass(Codigo cs, Tipo p) {
-        this.cs = cs;
+    public MainClass() {
+        this.Main = "Main";
+    }
+
+    public MainClass(Tipo p, MainClass main, parentesisIzquierdo parIz, parentesisDerecho parDer, llaveIzquierda llIz, Codigo cs, llaveDerecha llDer, Funciones fun) {
         this.p = p;
+        this.main = main;
+        this.parIz = parIz;
+        this.parDer = parDer;
+        this.llIz = llIz;
+        this.cs = cs;
+        this.llDer = llDer;
+        this.fun = fun;
     }
 
 }

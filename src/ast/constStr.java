@@ -11,8 +11,19 @@ package ast;
  */
 public class constStr {
 
+    public String constStr;
+
+    public constStr(String constStr) {
+        this.constStr = constStr;
+    }
+
     public constStr() {
 
     }
+
+    public String getConstStr() {
+        return constStr;
+    }
+    
 
 }

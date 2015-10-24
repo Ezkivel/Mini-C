@@ -4,6 +4,7 @@
 
 package minic;
 import java_cup.runtime.*;
+import ast.*;
 
 
 /**
@@ -943,7 +944,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 60: break;
           case 22: 
-            { return new Symbol(sym.constStr, new Token("ConstStr", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.constStr, new constStr(yytext()));
             }
           case 61: break;
           case 23: 
@@ -959,7 +960,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 64: break;
           case 26: 
-            { return new Symbol(sym.constChar, new Token("ConstChar", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.constChar, new constChar(yytext().charAt(0)));
             }
           case 65: break;
           case 27: 

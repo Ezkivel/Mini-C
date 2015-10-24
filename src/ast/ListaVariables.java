@@ -16,19 +16,26 @@ public class ListaVariables {
     public OperacionAritmetica oa;
     public constChar csC;
     public constStr csS;
+    public ListaVariablesComa lvc;
+    public igual i;
 
-    public ListaVariables(Variable v) {
+    public ListaVariables(Variable v, ListaVariablesComa lvc) {
         this.v = v;
+        this.lvc = lvc;
     }
 
-    public ListaVariables(nombreVariable nv, OperacionAritmetica oa) {
+    public ListaVariables(nombreVariable nv, igual i, OperacionAritmetica oa, ListaVariablesComa lvc) {
         this.nv = nv;
+        this.i = i;
         this.oa = oa;
+        this.lvc = lvc;
     }
 
-    public ListaVariables(nombreVariable nv, constChar csC) {
+    public ListaVariables(nombreVariable nv, igual i, constChar csC, ListaVariablesComa lv) {
         this.nv = nv;
+        this.i = i;
         this.csC = csC;
+        this.lvc = lvc;
     }
 
     public ListaVariables(nombreVariable nv, constStr csS) {

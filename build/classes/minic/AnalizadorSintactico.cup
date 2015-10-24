@@ -41,8 +41,8 @@ terminal corcheteIzquierdo;
 terminal corcheteDerecho;
 terminal llaveIzquierda;
 terminal llaveDerecha;
-terminal constChar; 
-terminal constStr;
+terminal constChar constChar; 
+terminal constStr constStr;
 terminal parentesisIzquierdo; 
 terminal parentesisDerecho;
 terminal igual;
@@ -84,10 +84,10 @@ non terminal AsignacionVariable asignacion_variable;
 non terminal IncrementarDecrementarVariable;
 non terminal Scanf scans;
 non terminal Printf print;
-non terminal If;
+non terminal If _if;
 non terminal Else;
-non terminal While;
-non terminal For;
+non terminal While whil;
+non terminal For _for;
 
 non terminal ForInicializacion;
 non terminal ForInicializacion2;
@@ -106,45 +106,49 @@ non terminal InicializacionArreglo;
 non terminal InicializacionArregloComa;
 non terminal DeclaracionFuncionParametros;
 non terminal DeclaracionFuncionParametrosComa;
-non terminal Funciones;
+non terminal Funciones funciones;
 non terminal FuncionesParametros;
 non terminal FuncionesParametrosComa;
-non terminal LlamadoAFuncion;
+non terminal LlamadoAFuncion llamado_funcion;
 non terminal LlamadoAFuncionParametros;
 non terminal LlamadoAFuncionParametrosComa;
 non terminal Return;
 
 start with programa;
 
-programa ::= declaracion_funcion:df  programa:p {: RESULT = new Programa(df, p);   :}
+programa ::= declaracion_funcion:df  programa:p {: RESULT = new Programa(df, p); :}
      | main:m  {:   RESULT = new Programa(m); :};
 
-main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigo:c llaveDerecha Funciones {: RESULT = new MainClass(c,t);    :};
+main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f 
+{: RESULT = new MainClass(t, new MainClass(), new parentesisIzquierdo(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f ); :};
 
 codigo ::= declaracion_variables:dv codigo:c {: RESULT = new Codigo(dv, c); :} 
-         | asignacion_variable:av codigo:c  {: RESULT = new Codigo(av,c);    :}
+         | asignacion_variable:av codigo:c   {: RESULT = new Codigo(av,c);  :}
          | IncrementarDecrementarVariable codigo
-         | print:p codigo:c {: RESULT = new Codigo(p,c);    :}
-         | scans codigo
-         | While codigo
-         | If codigo
-         | For codigo
-         | LlamadoAFuncion puntoYComa codigo
-         | RETURN operacion_aritmetica puntoYComa codigo
-         | RETURN constChar puntoYComa codigo
-         | RETURN constStr puntoYComa codigo
+         | print:p codigo:c {:  RESULT = new Codigo(p,c); 
+            System.out.print(RESULT.p.cs.constStr); :}
+         | scans:s codigo:c {:  RESULT = new Codigo(s,c);  :}
+         | whil:w codigo:c  {:  RESULT = new Codigo(w,c);  :}
+         | _if:i codigo:c   {:  RESULT = new Codigo(i,c);  :}
+         | _for:f codigo:c  {:  RESULT = new Codigo(f,c);  :}
+         | llamado_funcion:lf puntoYComa codigo:c {:  RESULT = new Codigo(lf,new puntoYComa(), c);  :}   
+         | RETURN operacion_aritmetica:o puntoYComa codigo:c  {: RESULT = new Codigo(new RETURN(), o, new puntoYComa(),   c); :}           
+         | RETURN constChar:csc puntoYComa codigo:c   {: RESULT = new Codigo(new RETURN(), new constChar(csc.c), new puntoYComa(), c); :}
+         | RETURN constStr puntoYComa codigo:c    {: RESULT = new Codigo(new RETURN(), new constStr(), new puntoYComa(),  c); :}
          | error codigo
          |;
 
-declaracion_variables ::= tipo:t lista_variables:lv puntoYComa {: RESULT = new DeclaracionVariables(t,lv);   :};
+declaracion_variables ::= tipo:t lista_variables:lv puntoYComa {: RESULT = new DeclaracionVariables(t,lv, new puntoYComa() );   :};
 
 tipo ::= INTEGER {: RESULT = new IntegerTipo(); :}
        | STRING  {: RESULT = new StringTipo();  :}  
        | CHAR    {: RESULT = new CharTipo();   :};
 
-lista_variables ::= variable lista_variablesComa
-                 | nombreVariable igual operacion_aritmetica lista_variablesComa
-                 | nombreVariable igual constChar lista_variablesComa
+lista_variables ::= variable:v lista_variablesComa:lc {: RESULT = new ListaVariables(v,lc);  :}
+                 | nombreVariable igual operacion_aritmetica:o lista_variablesComa:lc 
+                    {: RESULT = new ListaVariables(new nombreVariable(), new igual(), o, lc);  :}
+                 | nombreVariable igual constChar lista_variablesComa:lc
+                    {:  RESULT = new ListaVariables(new nombreVariable(), new igual(), new constChar(), lc);   :}
                  | nombreVariable igual constStr lista_variablesComa
                  | nombreVariable corcheteIzquierdo operacion_aritmetica corcheteDerecho igual llaveIzquierda InicializacionArreglo llaveDerecha lista_variablesComa
                  | nombreVariable corcheteIzquierdo corcheteDerecho igual llaveIzquierda InicializacionArreglo llaveDerecha lista_variablesComa;
@@ -166,10 +170,10 @@ DeclaracionFuncionParametros ::= tipo DeclaracionFuncionParametrosComa
 DeclaracionFuncionParametrosComa ::= coma DeclaracionFuncionParametros
                                    |;
 
-Funciones ::= tipo nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda codigo llaveDerecha Funciones
-            | VOID nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda codigo llaveDerecha Funciones
-            | tipo error parentesisDerecho llaveIzquierda codigo llaveDerecha Funciones
-            | VOID error parentesisDerecho llaveIzquierda codigo llaveDerecha Funciones
+funciones ::= tipo nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda codigo llaveDerecha funciones
+            | VOID nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda codigo llaveDerecha funciones
+            | tipo error parentesisDerecho llaveIzquierda codigo llaveDerecha funciones
+            | VOID error parentesisDerecho llaveIzquierda codigo llaveDerecha funciones
             |;
 
 FuncionesParametros ::= tipo nombreVariable FuncionesParametrosComa
@@ -179,7 +183,7 @@ FuncionesParametros ::= tipo nombreVariable FuncionesParametrosComa
 FuncionesParametrosComa ::= coma FuncionesParametros
                          |;
 
-LlamadoAFuncion ::= nombreVariable parentesisIzquierdo LlamadoAFuncionParametros parentesisDerecho
+llamado_funcion ::= nombreVariable parentesisIzquierdo LlamadoAFuncionParametros parentesisDerecho
                   | nombreVariable error parentesisDerecho;
 
 LlamadoAFuncionParametros ::= operacion_aritmetica LlamadoAFuncionParametrosComa
@@ -193,11 +197,11 @@ LlamadoAFuncionParametrosComa ::= coma LlamadoAFuncionParametros
 scans ::= scanf parentesisIzquierdo parametroScanf coma nombreVariable parentesisDerecho puntoYComa
         | scanf parentesisIzquierdo parametroScanf coma elemento_array parentesisDerecho puntoYComa;
 
-print ::= printf parentesisIzquierdo constStr parentesisDerecho puntoYComa    {: RESULT = new Printf( new constStr() ); :}
+print ::= printf parentesisIzquierdo constStr:csts parentesisDerecho puntoYComa    {: RESULT = new Printf( new constStr(csts.constStr) ); :}
          | printf parentesisIzquierdo constStr coma operacion_aritmetica:o parentesisDerecho puntoYComa   {: RESULT = new Printf(new constStr() ,o); :}
         ;
 
-If ::= IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda codigo llaveDerecha Else
+_if ::= IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda codigo llaveDerecha Else
      | IF error parentesisDerecho llaveIzquierda codigo llaveDerecha Else;
 
 Else ::= ELSE IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda codigo llaveDerecha Else
@@ -205,10 +209,10 @@ Else ::= ELSE IF parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda 
        | ELSE IF error parentesisDerecho llaveIzquierda codigo llaveDerecha Else
        |;
 
-While ::= WHILE parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda codigo llaveDerecha
+whil ::= WHILE parentesisIzquierdo Condicion parentesisDerecho llaveIzquierda codigo llaveDerecha
         | WHILE error parentesisDerecho llaveIzquierda codigo llaveDerecha;
 
-For ::= FOR parentesisIzquierdo ForInicializacion puntoYComa Condicion puntoYComa ForActualizacion parentesisDerecho llaveIzquierda codigo llaveDerecha
+_for ::= FOR parentesisIzquierdo ForInicializacion puntoYComa Condicion puntoYComa ForActualizacion parentesisDerecho llaveIzquierda codigo llaveDerecha
       | FOR parentesisIzquierdo puntoYComa Condicion puntoYComa ForActualizacion parentesisDerecho llaveIzquierda codigo llaveDerecha
       | FOR parentesisIzquierdo ForInicializacion puntoYComa Condicion puntoYComa parentesisDerecho llaveIzquierda codigo llaveDerecha
       | FOR parentesisIzquierdo puntoYComa Condicion puntoYComa parentesisDerecho llaveIzquierda codigo llaveDerecha
@@ -287,5 +291,5 @@ operacion_aritmetica2 ::= operacion_aritmetica2 operadorMultiplicacion operacion
 
 operacion_aritmetica3 ::= entero
                        | variable
-                       | LlamadoAFuncion
+                       | llamado_funcion
                        | parentesisIzquierdo operacion_aritmetica parentesisDerecho;

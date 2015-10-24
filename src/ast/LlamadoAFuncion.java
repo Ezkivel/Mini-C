@@ -9,7 +9,7 @@ package ast;
  *
  * @author Gabriel
  */
-class LlamadoAFuncion {
+public class LlamadoAFuncion {
 
     public LlamadoAFuncion() {
     }

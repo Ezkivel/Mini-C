@@ -21,6 +21,7 @@ public class Codigo {
     public If i;
     public For f;
     public LlamadoAFuncion lf;
+    public puntoYComa pyc;
     public RETURN r;
     public OperacionAritmetica o;
     public constChar cstC;
@@ -67,26 +68,29 @@ public class Codigo {
         this.c = c;
     }
 
-    public Codigo(LlamadoAFuncion lf, Codigo c) {
+    public Codigo(LlamadoAFuncion lf, puntoYComa pyc, Codigo c) {
         this.lf = lf;
+        this.pyc = pyc;
         this.c = c;
     }
 
-    public Codigo(RETURN r, OperacionAritmetica o, Codigo c) {
+    public Codigo(RETURN r, OperacionAritmetica o, puntoYComa pyc, Codigo c) {
         this.r = r;
         this.o = o;
         this.c = c;
     }
 
-    public Codigo(RETURN r, constChar cstC, Codigo c) {
+    public Codigo(RETURN r, constChar cstC, puntoYComa pyc, Codigo c) {
         this.r = r;
         this.cstC = cstC;
+        this.pyc = pyc;
         this.c = c;
     }
 
-    public Codigo(RETURN r, constStr cstS, Codigo c) {
+    public Codigo(RETURN r, constStr cstS, puntoYComa pyc, Codigo c) {
         this.r = r;
         this.cstS = cstS;
+        this.pyc = pyc;
         this.c = c;
     }
 
@@ -96,6 +100,5 @@ public class Codigo {
 
     public Codigo() {
     }
-    
 
 }
