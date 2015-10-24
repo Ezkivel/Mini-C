@@ -11,7 +11,9 @@ package ast;
  */
 public class igual {
 
+    public String igual;
     public igual() {
+        this.igual = "=";
     }
     
 }

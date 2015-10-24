@@ -9,15 +9,9 @@ package ast;
  *
  * @author Gabriel
  */
-public class nombreVariable {
+public class InicializacionArreglo {
 
-    public String id;
-
-    public nombreVariable(String id) {
-        this.id = id;
+    public InicializacionArreglo() {
     }
 
-    public nombreVariable() {
-
-    }
 }

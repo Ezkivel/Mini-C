@@ -79,7 +79,7 @@ PuntoYComa = ;
 {CorcheteDerecho} {return new Symbol(sym.corcheteDerecho, new Token("CorcheteDerecho", yytext(), yyline + 1, yycolumn + 1));}
 {LlaveIzquierda} {return new Symbol(sym.llaveIzquierda, new Token("LlaveIzquierda", yytext(), yyline + 1, yycolumn + 1));}
 {LlaveDerecha} {return new Symbol(sym.llaveDerecha, new Token("LlaveDerecha", yytext(), yyline + 1, yycolumn + 1));}
-{NombreVariable} {return new Symbol(sym.nombreVariable, new Token("NombreVariable", yytext(), yyline + 1, yycolumn + 1));}
+{NombreVariable} {return new Symbol(sym.nombreVariable, new nombreVariable(yytext()));}
 {ConstChar} {return new Symbol(sym.constChar, new constChar(yytext().charAt(0)));}
 {ConstStr} {return new Symbol(sym.constStr, new constStr(yytext()));}
 {ParentesisIzquierdo} {return new Symbol(sym.parentesisIzquierdo, new Token("ParentesisIzquierdo", yytext(), yyline + 1, yycolumn + 1));}
@@ -93,7 +93,7 @@ PuntoYComa = ;
 {OperadorIncrementoDecremento} {return new Symbol(sym.operadorIncrementoDecremento, new Token("OperadorIncrementoDecremento", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorRelacional} {return new Symbol(sym.operadorRelacional, new Token("OperadorRelacional", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorLogico} {return new Symbol(sym.operadorLogico, new Token("OperadorLogico", yytext(), yyline + 1, yycolumn + 1));}
-{Entero} {return new Symbol(sym.entero, new Token("Entero", yytext(), yyline + 1, yycolumn + 1));}
+{Entero} {return new Symbol(sym.entero, new entero(Integer.parseInt(yytext())));}
 {ComentarioUnaLinea} {/* ignore */}
 {ComentarioMultiLinea} {/* ignore */}
 {Espacio} {/* ignore */}

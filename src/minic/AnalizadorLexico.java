@@ -864,7 +864,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 40: break;
           case 2: 
-            { return new Symbol(sym.entero, new Token("Entero", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.entero, new entero(Integer.parseInt(yytext())));
             }
           case 41: break;
           case 3: 
@@ -872,7 +872,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 42: break;
           case 4: 
-            { return new Symbol(sym.nombreVariable, new Token("NombreVariable", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.nombreVariable, new nombreVariable(yytext()));
             }
           case 43: break;
           case 5: 

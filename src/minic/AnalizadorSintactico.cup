@@ -27,7 +27,7 @@ parser code{:
 
 terminal INTEGER, CHAR, STRING;
 
-terminal nombreVariable;
+terminal nombreVariable nombreVariable;
 terminal IF;
 terminal ELSE;
 terminal WHILE;
@@ -59,7 +59,7 @@ terminal operadorLogico;
 terminal puntoYComa;
 terminal coma;
 terminal parametroScanf;
-terminal entero;
+terminal entero entero;
 terminal and;
 
 
@@ -102,7 +102,7 @@ non terminal ForActualizacion;
 non terminal ForActualizacionComa; 
 non terminal Condicion;
 non terminal CondicionOperadorLogico;
-non terminal InicializacionArreglo;
+non terminal InicializacionArreglo inicializacion_arreglo;
 non terminal InicializacionArregloComa;
 non terminal DeclaracionFuncionParametros;
 non terminal DeclaracionFuncionParametrosComa;
@@ -125,8 +125,7 @@ main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigo
 codigo ::= declaracion_variables:dv codigo:c {: RESULT = new Codigo(dv, c); :} 
          | asignacion_variable:av codigo:c   {: RESULT = new Codigo(av,c);  :}
          | IncrementarDecrementarVariable codigo
-         | print:p codigo:c {:  RESULT = new Codigo(p,c); 
-            System.out.print(RESULT.p.cs.constStr); :}
+         | print:p codigo:c {:  RESULT = new Codigo(p,c); /*System.out.print( RESULT.p.cs.constStr);*/ :}
          | scans:s codigo:c {:  RESULT = new Codigo(s,c);  :}
          | whil:w codigo:c  {:  RESULT = new Codigo(w,c);  :}
          | _if:i codigo:c   {:  RESULT = new Codigo(i,c);  :}
@@ -134,8 +133,8 @@ codigo ::= declaracion_variables:dv codigo:c {: RESULT = new Codigo(dv, c); :}
          | llamado_funcion:lf puntoYComa codigo:c {:  RESULT = new Codigo(lf,new puntoYComa(), c);  :}   
          | RETURN operacion_aritmetica:o puntoYComa codigo:c  {: RESULT = new Codigo(new RETURN(), o, new puntoYComa(),   c); :}           
          | RETURN constChar:csc puntoYComa codigo:c   {: RESULT = new Codigo(new RETURN(), new constChar(csc.c), new puntoYComa(), c); :}
-         | RETURN constStr puntoYComa codigo:c    {: RESULT = new Codigo(new RETURN(), new constStr(), new puntoYComa(),  c); :}
-         | error codigo
+         | RETURN constStr:cst puntoYComa codigo:c    {: RESULT = new Codigo(new RETURN(), new constStr(cst.constStr), new puntoYComa(),  c); :}
+         | error codigo:c {:System.out.println("ERROR"); RESULT = new Codigo(c); :}
          |;
 
 declaracion_variables ::= tipo:t lista_variables:lv puntoYComa {: RESULT = new DeclaracionVariables(t,lv, new puntoYComa() );   :};
@@ -144,14 +143,13 @@ tipo ::= INTEGER {: RESULT = new IntegerTipo(); :}
        | STRING  {: RESULT = new StringTipo();  :}  
        | CHAR    {: RESULT = new CharTipo();   :};
 
-lista_variables ::= variable:v lista_variablesComa:lc {: RESULT = new ListaVariables(v,lc);  :}
-                 | nombreVariable igual operacion_aritmetica:o lista_variablesComa:lc 
-                    {: RESULT = new ListaVariables(new nombreVariable(), new igual(), o, lc);  :}
-                 | nombreVariable igual constChar lista_variablesComa:lc
-                    {:  RESULT = new ListaVariables(new nombreVariable(), new igual(), new constChar(), lc);   :}
-                 | nombreVariable igual constStr lista_variablesComa
-                 | nombreVariable corcheteIzquierdo operacion_aritmetica corcheteDerecho igual llaveIzquierda InicializacionArreglo llaveDerecha lista_variablesComa
-                 | nombreVariable corcheteIzquierdo corcheteDerecho igual llaveIzquierda InicializacionArreglo llaveDerecha lista_variablesComa;
+lista_variables ::= variable:v lista_variablesComa:lc                                       {: RESULT = new ListaVariables(v,lc);  :}
+                 | nombreVariable:id igual operacion_aritmetica:o lista_variablesComa:lc    {: RESULT = new ListaVariables(new nombreVariable(id.id), new igual(), o, lc);  :}
+                 | nombreVariable:id igual constChar:csc lista_variablesComa:lc             {:  RESULT = new ListaVariables(new nombreVariable(id.id), new igual(), new constChar(csc.c), lc);   :}
+                 | nombreVariable:id igual constStr:css lista_variablesComa:lc              {:  RESULT = new ListaVariables(new nombreVariable(id.id), new igual(), new constStr(css.constStr), lc);   :}
+                 | nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho igual llaveIzquierda inicializacion_arreglo:ia llaveDerecha lista_variablesComa:lv
+                    {:  RESULT = new ListaVariables(new nombreVariable(id.id), new corcheteIzquierdo(), o, new corcheteDerecho(), new igual(), new llaveIzquierda(), ia, new llaveDerecha(), lv);  :}
+                 | nombreVariable corcheteIzquierdo corcheteDerecho igual llaveIzquierda inicializacion_arreglo llaveDerecha lista_variablesComa;
 
 lista_variablesComa ::= coma lista_variables:lv {: RESULT = new ListaVariablesComa(lv); :}
                      |;
@@ -273,11 +271,11 @@ variable ::= nombreVariable    {: RESULT = new Variable(new nombreVariable());  
 
 elemento_array ::= nombreVariable corcheteIzquierdo operacion_aritmetica:o corcheteDerecho  {: RESULT = new ElementoDeUnArreglo(new nombreVariable(), o); :};
 
-InicializacionArreglo ::= operacion_aritmetica InicializacionArregloComa
+inicializacion_arreglo ::= operacion_aritmetica InicializacionArregloComa
                         | constChar InicializacionArregloComa
                         | constStr InicializacionArregloComa;
 
-InicializacionArregloComa ::= coma InicializacionArreglo
+InicializacionArregloComa ::= coma inicializacion_arreglo
                             |;
 
 

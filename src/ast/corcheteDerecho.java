@@ -9,15 +9,11 @@ package ast;
  *
  * @author Gabriel
  */
-public class nombreVariable {
-
-    public String id;
-
-    public nombreVariable(String id) {
-        this.id = id;
+public class corcheteDerecho {
+    public String corcheteDerecho;
+    
+    public corcheteDerecho() {
+        this.corcheteDerecho = "]";
     }
-
-    public nombreVariable() {
-
-    }
+    
 }

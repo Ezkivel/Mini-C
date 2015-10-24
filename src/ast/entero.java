@@ -9,12 +9,12 @@ package ast;
  *
  * @author Gabriel
  */
-class entero {
+public class entero {
 
-    int e;
+    public int n;
 
-    public entero(int e) {
-        this.e = e;
+    public entero(int n) {
+        this.n = n;
     }
 
 }
