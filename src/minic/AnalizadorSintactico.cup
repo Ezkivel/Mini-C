@@ -145,13 +145,14 @@ tipo ::= INTEGER {: RESULT = new IntegerTipo(); :}
 
 lista_variables ::= variable:v lista_variablesComa:lc                                       {: RESULT = new ListaVariables(v,lc);  :}
                  | nombreVariable:id igual operacion_aritmetica:o lista_variablesComa:lc    {: RESULT = new ListaVariables(new nombreVariable(id.id), new igual(), o, lc);  :}
-                 | nombreVariable:id igual constChar:csc lista_variablesComa:lc             {:  RESULT = new ListaVariables(new nombreVariable(id.id), new igual(), new constChar(csc.c), lc);   :}
-                 | nombreVariable:id igual constStr:css lista_variablesComa:lc              {:  RESULT = new ListaVariables(new nombreVariable(id.id), new igual(), new constStr(css.constStr), lc);   :}
+                 | nombreVariable:id igual constChar:csc lista_variablesComa:lc             {: RESULT = new ListaVariables(new nombreVariable(id.id), new igual(), new constChar(csc.c), lc);   :}
+                 | nombreVariable:id igual constStr:css lista_variablesComa:lc              {: RESULT = new ListaVariables(new nombreVariable(id.id), new igual(), new constStr(css.constStr), lc);   :}
                  | nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho igual llaveIzquierda inicializacion_arreglo:ia llaveDerecha lista_variablesComa:lv
                     {:  RESULT = new ListaVariables(new nombreVariable(id.id), new corcheteIzquierdo(), o, new corcheteDerecho(), new igual(), new llaveIzquierda(), ia, new llaveDerecha(), lv);  :}
-                 | nombreVariable corcheteIzquierdo corcheteDerecho igual llaveIzquierda inicializacion_arreglo llaveDerecha lista_variablesComa;
+                 | nombreVariable:id corcheteIzquierdo corcheteDerecho igual llaveIzquierda inicializacion_arreglo:iA llaveDerecha lista_variablesComa:lv
+                    {:  RESULT = new ListaVariables(new nombreVariable(id.id), new corcheteIzquierdo(), new corcheteDerecho(), new igual(), new llaveIzquierda(), iA, new llaveDerecha(), lv);  :};
 
-lista_variablesComa ::= coma lista_variables:lv {: RESULT = new ListaVariablesComa(lv); :}
+lista_variablesComa ::= coma lista_variables:lv {: RESULT = new ListaVariablesComa(lv, new coma()); :}
                      |;
 
 

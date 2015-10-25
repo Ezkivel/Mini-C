@@ -61,5 +61,16 @@ public class ListaVariables {
         this.llDER = llDER;
         this.lvc = lv;
     }
+    
+     public ListaVariables(nombreVariable nv, corcheteIzquierdo corIz, corcheteDerecho corDer, igual i, llaveIzquierda llIz, InicializacionArreglo iA, llaveDerecha llDER, ListaVariablesComa lv) {
+        this.nv = nv;
+        this.corIz = corIz;
+        this.corDER = corDer;
+        this.i = i;
+        this.llIz = llIz;
+        this.iA = iA;
+        this.llDER = llDER;
+        this.lvc = lv;
+    }
 
 }

@@ -5,20 +5,16 @@
  */
 package ast;
 
-import java.util.Vector;
-
 /**
  *
  * @author Gabriel
  */
-public class ListaVariablesComa {
+public class coma {
 
-    public ListaVariables lv;
-    public coma coma;
+    public String _coma;
 
-    public ListaVariablesComa(ListaVariables lv, coma coma) {
-        this.lv = lv;
-        this.coma = coma;
+    public coma() {
+        this._coma = ",";
     }
 
 }
