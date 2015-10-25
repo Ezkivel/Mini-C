@@ -159,7 +159,8 @@ lista_variablesComa ::= coma lista_variables:lv {: RESULT = new ListaVariablesCo
 
 declaracion_funcion ::= tipo:t nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfp parentesisDerecho puntoYComa 
                         {:  RESULT = new DeclaracionFuncion(t, new nombreVariable(id.id), new parentesisIzquierdo(), dfp, new parentesisDerecho(), new puntoYComa());  :}
-                     | VOID nombreVariable parentesisIzquierdo declaracion_funcion_parametros parentesisDerecho puntoYComa
+                     | VOID nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfs parentesisDerecho puntoYComa
+                       {:   RESULT = new DeclaracionFuncion(new VOID(), new nombreVariable(id.id), new parentesisIzquierdo(), dfs, new parentesisDerecho(), new puntoYComa());  :}
                      | error puntoYComa;
 
 declaracion_funcion_parametros ::= tipo DeclaracionFuncionParametrosComa 
