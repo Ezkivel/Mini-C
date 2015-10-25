@@ -104,7 +104,7 @@ non terminal Condicion;
 non terminal CondicionOperadorLogico;
 non terminal InicializacionArreglo inicializacion_arreglo;
 non terminal InicializacionArregloComa;
-non terminal DeclaracionFuncionParametros;
+non terminal DeclaracionFuncionParametros declaracion_funcion_parametros;
 non terminal DeclaracionFuncionParametrosComa;
 non terminal Funciones funciones;
 non terminal FuncionesParametros;
@@ -157,16 +157,17 @@ lista_variablesComa ::= coma lista_variables:lv {: RESULT = new ListaVariablesCo
 
 
 
-declaracion_funcion ::= tipo:t nombreVariable:nv parentesisIzquierdo DeclaracionFuncionParametros:dfp parentesisDerecho puntoYComa 
-                     | VOID nombreVariable parentesisIzquierdo DeclaracionFuncionParametros parentesisDerecho puntoYComa
+declaracion_funcion ::= tipo:t nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfp parentesisDerecho puntoYComa 
+                        {:  RESULT = new DeclaracionFuncion(t, new nombreVariable(id.id), new parentesisIzquierdo(), dfp, new parentesisDerecho(), new puntoYComa());  :}
+                     | VOID nombreVariable parentesisIzquierdo declaracion_funcion_parametros parentesisDerecho puntoYComa
                      | error puntoYComa;
 
-DeclaracionFuncionParametros ::= tipo DeclaracionFuncionParametrosComa 
+declaracion_funcion_parametros ::= tipo DeclaracionFuncionParametrosComa 
                                | tipo corcheteIzquierdo corcheteDerecho DeclaracionFuncionParametrosComa
                                | tipo nombreVariable DeclaracionFuncionParametrosComa
                                | tipo nombreVariable corcheteIzquierdo corcheteDerecho DeclaracionFuncionParametrosComa
                                |;
-DeclaracionFuncionParametrosComa ::= coma DeclaracionFuncionParametros
+DeclaracionFuncionParametrosComa ::= coma declaracion_funcion_parametros
                                    |;
 
 funciones ::= tipo nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda codigo llaveDerecha funciones

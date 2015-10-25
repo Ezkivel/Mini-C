@@ -14,6 +14,7 @@ import java.util.Vector;
 public class ListaVariablesComa {
 
     public ListaVariables lv;
+    public nombreVariable nb;
     public coma coma;
 
     public ListaVariablesComa(ListaVariables lv, coma coma) {

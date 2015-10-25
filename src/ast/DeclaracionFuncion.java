@@ -5,7 +5,6 @@
  */
 package ast;
 
-
 /**
  *
  * @author Gabriel
@@ -15,12 +14,17 @@ public class DeclaracionFuncion {
     public Tipo t;
     public nombreVariable i;
     public DeclaracionFuncionParametros p;
+    public parentesisIzquierdo parIz;
+    public parentesisDerecho parDer;
+    public puntoYComa puntoComa;
 
-    public DeclaracionFuncion(Tipo t, nombreVariable i, DeclaracionFuncionParametros p) {
+    public DeclaracionFuncion(Tipo t, nombreVariable i, parentesisIzquierdo parIz, DeclaracionFuncionParametros p, parentesisDerecho parDer, puntoYComa punto_coma) {
         this.t = t;
         this.i = i;
+        this.parIz = parIz;
         this.p = p;
+        this.parDer = parDer;
+        this.puntoComa = punto_coma;
     }
-
 
 }
