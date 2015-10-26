@@ -11,66 +11,66 @@ package ast;
  */
 public class ListaVariables {
 
-    public Variable v;
-    public nombreVariable nv;
-    public OperacionAritmetica oa;
-    public constChar csC;
-    public constStr csS;
-    public ListaVariablesComa lvc;
-    public igual i;
-    public corcheteIzquierdo corIz;
-    public corcheteDerecho corDER;
-    public llaveIzquierda llIz;
-    public llaveDerecha llDER;
-    public InicializacionArreglo iA;
+    public Variable _variable;
+    public nombreVariable _nombreVariable;
+    public OperacionAritmetica _operacionAritmetica;
+    public constChar _constChar;
+    public constStr _constStr;
+    public ListaVariablesComa _listaVariablesComa;
+    public igual _igual;
+    public corcheteIzquierdo _corIz;
+    public corcheteDerecho _corDER;
+    public llaveIzquierda _llIz;
+    public llaveDerecha _llDer;
+    public InicializacionArreglo _inicializacionArreglo;
 
     public ListaVariables(Variable v, ListaVariablesComa lvc) {
-        this.v = v;
-        this.lvc = lvc;
+        this._variable = v;
+        this._listaVariablesComa = lvc;
     }
 
     public ListaVariables(nombreVariable nv, igual i, OperacionAritmetica oa, ListaVariablesComa lvc) {
-        this.nv = nv;
-        this.i = i;
-        this.oa = oa;
-        this.lvc = lvc;
+        this._nombreVariable = nv;
+        this._igual = i;
+        this._operacionAritmetica = oa;
+        this._listaVariablesComa = lvc;
     }
 
     public ListaVariables(nombreVariable nv, igual i, constChar csC, ListaVariablesComa lv) {
-        this.nv = nv;
-        this.i = i;
-        this.csC = csC;
-        this.lvc = lv;
+        this._nombreVariable = nv;
+        this._igual = i;
+        this._constChar = csC;
+        this._listaVariablesComa = lv;
     }
 
     public ListaVariables(nombreVariable nv, igual i, constStr csS, ListaVariablesComa lv) {
-        this.nv = nv;
-        this.i = i;
-        this.csS = csS;
-        this.lvc = lv;
+        this._nombreVariable = nv;
+        this._igual = i;
+        this._constStr = csS;
+        this._listaVariablesComa = lv;
     }
 
     public ListaVariables(nombreVariable nv, corcheteIzquierdo corIz, OperacionAritmetica o, corcheteDerecho corDer, igual i, llaveIzquierda llIz, InicializacionArreglo iA, llaveDerecha llDER, ListaVariablesComa lv) {
-        this.nv = nv;
-        this.corIz = corIz;
-        this.oa = o;
-        this.corDER = corDer;
-        this.i = i;
-        this.llIz = llIz;
-        this.iA = iA;
-        this.llDER = llDER;
-        this.lvc = lv;
+        this._nombreVariable = nv;
+        this._corIz = corIz;
+        this._operacionAritmetica = o;
+        this._corDER = corDer;
+        this._igual = i;
+        this._llIz = llIz;
+        this._inicializacionArreglo = iA;
+        this._llDer = llDER;
+        this._listaVariablesComa = lv;
     }
     
      public ListaVariables(nombreVariable nv, corcheteIzquierdo corIz, corcheteDerecho corDer, igual i, llaveIzquierda llIz, InicializacionArreglo iA, llaveDerecha llDER, ListaVariablesComa lv) {
-        this.nv = nv;
-        this.corIz = corIz;
-        this.corDER = corDer;
-        this.i = i;
-        this.llIz = llIz;
-        this.iA = iA;
-        this.llDER = llDER;
-        this.lvc = lv;
+        this._nombreVariable = nv;
+        this._corIz = corIz;
+        this._corDER = corDer;
+        this._igual = i;
+        this._llIz = llIz;
+        this._inicializacionArreglo = iA;
+        this._llDer = llDER;
+        this._listaVariablesComa = lv;
     }
 
 }

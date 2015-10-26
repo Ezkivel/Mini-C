@@ -11,14 +11,14 @@ package ast;
  */
 public class MainClass {
 
-    public Tipo p;
-    public MainClass main;
-    public parentesisIzquierdo parIz;
-    public parentesisDerecho parDer;
-    public llaveIzquierda llIz;
-    public Codigo cs;
-    public llaveDerecha llDer;
-    public Funciones fun;
+    public Tipo _tipo;
+    public MainClass _main;
+    public parentesisIzquierdo _parIz;
+    public parentesisDerecho _parDer;
+    public llaveIzquierda _llIz;
+    public Codigo _codigo;
+    public llaveDerecha _llDer;
+    public Funciones _funciones;
     public String Main;
 
     public MainClass() {
@@ -26,14 +26,14 @@ public class MainClass {
     }
 
     public MainClass(Tipo p, MainClass main, parentesisIzquierdo parIz, parentesisDerecho parDer, llaveIzquierda llIz, Codigo cs, llaveDerecha llDer, Funciones fun) {
-        this.p = p;
-        this.main = main;
-        this.parIz = parIz;
-        this.parDer = parDer;
-        this.llIz = llIz;
-        this.cs = cs;
-        this.llDer = llDer;
-        this.fun = fun;
+        this._tipo = p;
+        this._main = main;
+        this._parIz = parIz;
+        this._parDer = parDer;
+        this._llIz = llIz;
+        this._codigo = cs;
+        this._llDer = llDer;
+        this._funciones = fun;
     }
 
 }

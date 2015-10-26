@@ -11,10 +11,10 @@ package ast;
  */
 public class AsignacionVariableComa {
 
-    public AsignacionVariable av;
+    public AsignacionVariable _asignacionVariable;
 
     public AsignacionVariableComa(AsignacionVariable av) {
-        this.av = av;
+        this._asignacionVariable = av;
     }
 
 }

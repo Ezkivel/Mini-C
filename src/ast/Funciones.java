@@ -11,18 +11,18 @@ package ast;
  */
 public class Funciones {
 
-    public Tipo t;
-    public nombreVariable i;
-    public FuncionesParametros fp;
-    public Codigo c;
-    public Funciones f;
+    public Tipo _tipo;
+    public nombreVariable _nombreVariable;
+    public FuncionesParametros _funcionesParametros;
+    public Codigo _codigo;
+    public Funciones _funciones;
 
     public Funciones(Tipo t, nombreVariable i, FuncionesParametros fp, Codigo c, Funciones f) {
-        this.t = t;
-        this.i = i;
-        this.fp = fp;
-        this.c = c;
-        this.f = f;
+        this._tipo = t;
+        this._nombreVariable = i;
+        this._funcionesParametros = fp;
+        this._codigo = c;
+        this._funciones = f;
     }
 
 }

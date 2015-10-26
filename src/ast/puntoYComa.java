@@ -11,10 +11,10 @@ package ast;
  */
 public class puntoYComa {
 
-    public String puntoYComa;
+    public String _puntoYComa;
 
     public puntoYComa() {
-        this.puntoYComa = ";";
+        this._puntoYComa = ";";
     }
 
 }

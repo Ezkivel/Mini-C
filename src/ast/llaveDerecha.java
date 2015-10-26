@@ -11,10 +11,10 @@ package ast;
  */
 public class llaveDerecha {
 
-    public String llaveDerecha;
+    public String _llaveDerecha;
 
     public llaveDerecha() {
-           this.llaveDerecha = "}";
+           this._llaveDerecha = "}";
     }
 
 }

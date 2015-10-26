@@ -11,9 +11,9 @@ package ast;
  */
 public class llaveIzquierda {
     
-    public String llaveIzquierda;
+    public String _llaveIzquierda;
     public llaveIzquierda() {
-        this.llaveIzquierda = "{";
+        this._llaveIzquierda = "{";
     }
     
 }

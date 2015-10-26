@@ -10,10 +10,11 @@ package ast;
  * @author Gabriel
  */
 public class RETURN {
-    
-    public String RETURN;
+
+    public String _return;
+
     public RETURN() {
-        this.RETURN = "return";
+        this._return = "return";
     }
 
 }

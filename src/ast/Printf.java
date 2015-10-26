@@ -11,16 +11,16 @@ package ast;
  */
 public class Printf {
 
-    public constStr cs;
-    public OperacionAritmetica oa;
+    public constStr _constStr;
+    public OperacionAritmetica _operacionAritmetica;
 
     public Printf(constStr cs, OperacionAritmetica oa) {
-        this.cs = cs;
-        this.oa = oa;
+        this._constStr = cs;
+        this._operacionAritmetica = oa;
     }
 
     public Printf(constStr cs) {
-        this.cs = cs;
+        this._constStr = cs;
     }
 
 }

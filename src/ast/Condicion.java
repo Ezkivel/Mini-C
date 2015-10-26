@@ -11,14 +11,14 @@ package ast;
  */
 class Condicion {
 
-    public OperacionAritmetica oa;
-    public constChar cc;
-    public constStr cs;
-    public Condicion cn;
-    public CondicionOperadorLogico co;
+    public OperacionAritmetica _operacionAritmetica;
+    public constChar _constChar;
+    public constStr _constStr;
+    public Condicion _condicion;
+    public CondicionOperadorLogico _condicionOperadorLogico;
 
     public Condicion(OperacionAritmetica oa) {
-        this.oa = oa;
+        this._operacionAritmetica = oa;
     }
 
 }

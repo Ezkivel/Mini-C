@@ -11,19 +11,15 @@ package ast;
  */
 public class constStr {
 
-    public String constStr;
+    public String _constStr;
+    public final int linea;
+    public final int columna;
 
-    public constStr(String constStr) {
-        this.constStr = constStr;
+    public constStr(String _constStr, int linea, int columna) {
+        this._constStr = _constStr;
+        this.linea = linea;
+        this.columna = columna;
     }
 
-    public constStr() {
-
-    }
-
-    public String getConstStr() {
-        return constStr;
-    }
-    
 
 }

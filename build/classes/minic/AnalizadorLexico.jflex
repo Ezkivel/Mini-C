@@ -80,8 +80,11 @@ PuntoYComa = ;
 {LlaveIzquierda} {return new Symbol(sym.llaveIzquierda, new Token("LlaveIzquierda", yytext(), yyline + 1, yycolumn + 1));}
 {LlaveDerecha} {return new Symbol(sym.llaveDerecha, new Token("LlaveDerecha", yytext(), yyline + 1, yycolumn + 1));}
 {NombreVariable} {return new Symbol(sym.nombreVariable, new nombreVariable(yytext()));}
-{ConstChar} {return new Symbol(sym.constChar, new constChar(yytext().charAt(0)));}
-{ConstStr} {return new Symbol(sym.constStr, new constStr(yytext()));}
+
+{ConstChar} {return new Symbol(sym.constChar, new constChar(yytext().charAt(0), yyline + 1, yycolumn + 1));}
+
+{ConstStr} {return new Symbol(sym.constStr, new constStr(yytext(), yyline + 1, yycolumn + 1));}
+
 {ParentesisIzquierdo} {return new Symbol(sym.parentesisIzquierdo, new Token("ParentesisIzquierdo", yytext(), yyline + 1, yycolumn + 1));}
 {ParentesisDerecho} {return new Symbol(sym.parentesisDerecho, new Token("ParentesisDerecho", yytext(), yyline + 1, yycolumn + 1));}
 {Igual} {return new Symbol(sym.igual, new Token("Igual", yytext(), yyline + 1, yycolumn + 1));}
@@ -93,7 +96,9 @@ PuntoYComa = ;
 {OperadorIncrementoDecremento} {return new Symbol(sym.operadorIncrementoDecremento, new Token("OperadorIncrementoDecremento", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorRelacional} {return new Symbol(sym.operadorRelacional, new Token("OperadorRelacional", yytext(), yyline + 1, yycolumn + 1));}
 {OperadorLogico} {return new Symbol(sym.operadorLogico, new Token("OperadorLogico", yytext(), yyline + 1, yycolumn + 1));}
-{Entero} {return new Symbol(sym.entero, new entero(Integer.parseInt(yytext())));}
+
+{Entero} {return new Symbol(sym.entero, new entero(Integer.parseInt(yytext()), yyline + 1, yycolumn + 1));}
+
 {ComentarioUnaLinea} {/* ignore */}
 {ComentarioMultiLinea} {/* ignore */}
 {Espacio} {/* ignore */}

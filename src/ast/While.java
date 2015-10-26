@@ -11,12 +11,12 @@ package ast;
  */
 public class While {
 
-    public Condicion c;
-    public Codigo cc;
+    public Condicion _condicion;
+    public Codigo _codigo;
 
     public While(Condicion c, Codigo cc) {
-        this.c = c;
-        this.cc = cc;
+        this._condicion = c;
+        this._codigo = cc;
     }
 
 }

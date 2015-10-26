@@ -11,15 +11,15 @@ package ast;
  */
 public class Variable {
 
-    public nombreVariable i;
-    public ElementoDeUnArreglo ea;
+    public nombreVariable _nombreVariable;
+    public ElementoDeUnArreglo _elementoDeUnArreglo;
 
     public Variable(nombreVariable i) {
-        this.i = i;
+        this._nombreVariable = i;
     }
 
     public Variable(ElementoDeUnArreglo ea) {
-        this.ea = ea;
+        this._elementoDeUnArreglo = ea;
     }
 
 }

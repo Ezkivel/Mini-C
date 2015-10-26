@@ -11,10 +11,14 @@ package ast;
  */
 public class entero {
 
-    public int n;
+    public int _entero;
+    public final int linea;
+    public final int columna;
 
-    public entero(int n) {
-        this.n = n;
+    public entero(int _entero, int linea, int columna) {
+        this._entero = _entero;
+        this.linea = linea;
+        this.columna = columna;
     }
 
 }

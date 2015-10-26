@@ -11,10 +11,10 @@ package ast;
  */
 public class corcheteIzquierdo {
 
-    public String corcheteIzquierdo;
+    public String _corcheteIzquierdo;
 
     public corcheteIzquierdo() {
-        this.corcheteIzquierdo = "[";
+        this._corcheteIzquierdo = "[";
     }
 
 }

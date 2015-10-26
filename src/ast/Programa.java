@@ -11,21 +11,21 @@ package ast;
  */
 public class Programa {
 
-    public DeclaracionFuncion df;
-    public MainClass m;
-    public Programa p;
+    public DeclaracionFuncion _declaracionFuncion;
+    public MainClass _mainClass;
+    public Programa _programa;
 
     public Programa() {
 
     }
 
     public Programa(MainClass m) {
-        this.m = m;
+        this._mainClass = m;
     }
 
     public Programa(DeclaracionFuncion df, Programa p) {
-        this.df = df;
-        this.p = p;
+        this._declaracionFuncion = df;
+        this._programa = p;
     }
 
 }

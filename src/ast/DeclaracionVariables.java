@@ -11,14 +11,14 @@ package ast;
  */
 public class DeclaracionVariables extends Codigo {
 
-    public Tipo t;
-    public ListaVariables lv;
-    public puntoYComa pyc;
+    public Tipo _tipo;
+    public ListaVariables _listaVariables;
+    public puntoYComa _puntoYComa;
 
     public DeclaracionVariables(Tipo t, ListaVariables lv, puntoYComa pyc) {
-        this.t = t;
-        this.lv = lv;
-        this.pyc = pyc;
+        this._tipo = t;
+        this._listaVariables = lv;
+        this._puntoYComa = pyc;
     }
 
 }

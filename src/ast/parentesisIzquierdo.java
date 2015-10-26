@@ -10,10 +10,10 @@ package ast;
  * @author Gabriel
  */
 public class parentesisIzquierdo {
-    public String parentesisIzquierdo;
+    public String _parentesisIzquierdo;
     
     public parentesisIzquierdo() {
-        this.parentesisIzquierdo = "(";
+        this._parentesisIzquierdo = "(";
     }
     
 }

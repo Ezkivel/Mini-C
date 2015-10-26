@@ -11,12 +11,12 @@ package ast;
  */
 public class FuncionesParametros {
 
-    public Tipo t;
-    public nombreVariable i;
+    public Tipo _tipo;
+    public nombreVariable _nombreVariable;
 
     public FuncionesParametros(Tipo t, nombreVariable i) {
-        this.t = t;
-        this.i = i;
+        this._tipo = t;
+        this._nombreVariable = i;
     }
 
 }

@@ -13,13 +13,13 @@ import java.util.Vector;
  */
 public class ListaVariablesComa {
 
-    public ListaVariables lv;
-    public nombreVariable nb;
-    public coma coma;
+    public ListaVariables _listaVariables;
+    public nombreVariable _nombreVariable;
+    public coma _coma;
 
     public ListaVariablesComa(ListaVariables lv, coma coma) {
-        this.lv = lv;
-        this.coma = coma;
+        this._listaVariables = lv;
+        this._coma = coma;
     }
 
 }

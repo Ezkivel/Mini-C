@@ -11,11 +11,11 @@ package ast;
  */
 public class ElementoDeUnArreglo {
 
-    public nombreVariable nv;
-    public OperacionAritmetica o;
+    public nombreVariable _nombreVariable;
+    public OperacionAritmetica _operacionAritmetica;
 
     public ElementoDeUnArreglo(nombreVariable nv, OperacionAritmetica o) {
-        this.nv = nv;
-        this.o = o;
+        this._nombreVariable = nv;
+        this._operacionAritmetica = o;
     }
 }

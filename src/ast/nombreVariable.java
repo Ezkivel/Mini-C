@@ -11,10 +11,10 @@ package ast;
  */
 public class nombreVariable {
 
-    public String id;
+    public String _nombreVariable;
 
     public nombreVariable(String id) {
-        this.id = id;
+        this._nombreVariable = id;
     }
 
     public nombreVariable() {

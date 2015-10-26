@@ -10,10 +10,10 @@ package ast;
  * @author Gabriel
  */
 public class corcheteDerecho {
-    public String corcheteDerecho;
+    public String _corcheteDerecho;
     
     public corcheteDerecho() {
-        this.corcheteDerecho = "]";
+        this._corcheteDerecho = "]";
     }
     
 }

@@ -11,36 +11,36 @@ package ast;
  */
 public class AsignacionVariable {
 
-    public Variable v;
-    public OperacionAritmetica oa;
-    public AsignacionVariableComa avc;
-    public operadorAritmeticoIgual oi;
-    public constChar cstC;
-    public constStr cstS;
+    public Variable _variable;
+    public OperacionAritmetica _operacionAritmetica;
+    public AsignacionVariableComa _asignacionVariableComa;
+    public operadorAritmeticoIgual _operadorAritmeticoIgual;
+    public constChar _constChar;
+    public constStr _constStr;
 
     public AsignacionVariable(Variable v, OperacionAritmetica oa, AsignacionVariableComa avc) {
-        this.v = v;
-        this.oa = oa;
-        this.avc = avc;
+        this._variable = v;
+        this._operacionAritmetica = oa;
+        this._asignacionVariableComa = avc;
     }
 
     public AsignacionVariable(Variable v, OperacionAritmetica oa, AsignacionVariableComa avc, operadorAritmeticoIgual oi) {
-        this.v = v;
-        this.oa = oa;
-        this.avc = avc;
-        this.oi = oi;
+        this._variable = v;
+        this._operacionAritmetica = oa;
+        this._asignacionVariableComa = avc;
+        this._operadorAritmeticoIgual = oi;
     }
 
     public AsignacionVariable(Variable v, AsignacionVariableComa avc, constChar cstC) {
-        this.v = v;
-        this.avc = avc;
-        this.cstC = cstC;
+        this._variable = v;
+        this._asignacionVariableComa = avc;
+        this._constChar = cstC;
     }
 
     public AsignacionVariable(Variable v, AsignacionVariableComa avc, constStr cstS) {
-        this.v = v;
-        this.avc = avc;
-        this.cstS = cstS;
+        this._variable = v;
+        this._asignacionVariableComa = avc;
+        this._constStr = cstS;
     }
 
     public AsignacionVariable() {

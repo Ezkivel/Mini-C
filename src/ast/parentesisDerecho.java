@@ -11,10 +11,10 @@ package ast;
  */
 public class parentesisDerecho {
 
-    public String parentesisDerecho;
+    public String _parentesisDerecho;
 
     public parentesisDerecho() {
-        this.parentesisDerecho = ")";
+        this._parentesisDerecho = ")";
     }
 
 }
