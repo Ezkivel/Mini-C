@@ -27,8 +27,7 @@ public class DeclaracionFuncion {
         this._parDer = parDer;
         this._puntoYComa = punto_coma;
     }
-    
-    
+
     public DeclaracionFuncion(VOID _void, nombreVariable i, parentesisIzquierdo parIz, DeclaracionFuncionParametros p, parentesisDerecho parDer, puntoYComa punto_coma) {
         this._void = _void;
         this._nombreVariable = i;
@@ -38,5 +37,8 @@ public class DeclaracionFuncion {
         this._puntoYComa = punto_coma;
     }
 
+    public DeclaracionFuncion(puntoYComa _puntoYComa) {
+        this._puntoYComa = _puntoYComa;
+    }
 
 }

@@ -103,11 +103,11 @@ non terminal ForActualizacionComa;
 non terminal Condicion;
 non terminal CondicionOperadorLogico;
 non terminal InicializacionArreglo inicializacion_arreglo;
-non terminal InicializacionArregloComa;
+non terminal InicializacionArregloComa inicializacion_arreglo_coma;
 non terminal DeclaracionFuncionParametros declaracion_funcion_parametros;
-non terminal DeclaracionFuncionParametrosComa;
+non terminal DeclaracionFuncionParametrosComa declaracion_funcion_parametros_coma;
 non terminal Funciones funciones;
-non terminal FuncionesParametros;
+non terminal FuncionesParametros funciones_parametros;
 non terminal FuncionesParametrosComa;
 non terminal LlamadoAFuncion llamado_funcion;
 non terminal LlamadoAFuncionParametros;
@@ -116,25 +116,24 @@ non terminal Return;
 
 start with programa;
 
-programa ::= declaracion_funcion:df  programa:p {: RESULT = new Programa(df, p); :}
-     | main:m  {:   RESULT = new Programa(m); :};
+programa ::= declaracion_funcion:df  programa:p                                 {: RESULT = new Programa(df, p); :}
+     | main:m                                                                   {:   RESULT = new Programa(m); :};
 
-main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f 
-{: RESULT = new MainClass(t, new MainClass(), new parentesisIzquierdo(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f ); :};
+main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f         {: RESULT = new MainClass(t, new MainClass(), new parentesisIzquierdo(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f ); :};
 
-codigo ::= declaracion_variables:dv codigo:c {: RESULT = new Codigo(dv, c); :} 
-         | asignacion_variable:av codigo:c   {: RESULT = new Codigo(av,c);  :}
+codigo ::= declaracion_variables:dv codigo:c                                                             {: RESULT = new Codigo(dv, c); :} 
+         | asignacion_variable:av codigo:c                                                               {: RESULT = new Codigo(av,c);  :}
          | IncrementarDecrementarVariable codigo
-         | print:p codigo:c {:  RESULT = new Codigo(p,c); /*System.out.print( RESULT.p.cs._constStr);*/ :}
-         | scans:s codigo:c {:  RESULT = new Codigo(s,c);  :}
-         | whil:w codigo:c  {:  RESULT = new Codigo(w,c);  :}
-         | _if:i codigo:c   {:  RESULT = new Codigo(i,c);  :}
-         | _for:f codigo:c  {:  RESULT = new Codigo(f,c);  :}
-         | llamado_funcion:lf puntoYComa codigo:c {:  RESULT = new Codigo(lf,new puntoYComa(), c);  :}   
-         | RETURN operacion_aritmetica:o puntoYComa codigo:c  {: RESULT = new Codigo(new RETURN(), o, new puntoYComa(),   c); :}           
-         | RETURN constChar:csc puntoYComa codigo:c   {: RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa(), c); :}
-         | RETURN constStr:cst puntoYComa codigo:c    {: RESULT = new Codigo(new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa(),  c); :}
-         | error codigo:c {:System.out.println("ERROR"); RESULT = new Codigo(c); :}
+         | print:p codigo:c                                                                              {:  RESULT = new Codigo(p,c); /*System.out.print( RESULT.p.cs._constStr);*/ :}
+         | scans:s codigo:c                                                                              {:  RESULT = new Codigo(s,c);  :}
+         | whil:w codigo:c                                                                               {:  RESULT = new Codigo(w,c);  :}
+         | _if:i codigo:c                                                                                {:  RESULT = new Codigo(i,c);  :}
+         | _for:f codigo:c                                                                               {:  RESULT = new Codigo(f,c);  :}
+         | llamado_funcion:lf puntoYComa codigo:c                                                        {:  RESULT = new Codigo(lf,new puntoYComa(), c);  :}   
+         | RETURN operacion_aritmetica:o puntoYComa codigo:c                                             {:  RESULT = new Codigo(new RETURN(), o, new puntoYComa(),   c); :}           
+         | RETURN constChar:csc puntoYComa codigo:c                                                      {:  RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa(), c); :}
+         | RETURN constStr:cst puntoYComa codigo:c                                                       {:  RESULT = new Codigo(new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa(),  c); :}
+         | error codigo:c                                                                                {:  System.out.println("ERROR"); RESULT = new Codigo(c); :}
          |;
 
 declaracion_variables ::= tipo:t lista_variables:lv puntoYComa {: RESULT = new DeclaracionVariables(t,lv, new puntoYComa() );   :};
@@ -143,46 +142,41 @@ tipo ::= INTEGER {: RESULT = new IntegerTipo(); :}
        | STRING  {: RESULT = new StringTipo();  :}  
        | CHAR    {: RESULT = new CharTipo();   :};
 
-lista_variables ::= variable:v lista_variablesComa:lc                                       {: RESULT = new ListaVariables(v,lc);  :}
-                 | nombreVariable:id igual operacion_aritmetica:o lista_variablesComa:lc    {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable), new igual(), o, lc);  :}
-                 | nombreVariable:id igual constChar:csc lista_variablesComa:lc             {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable), new igual(), new constChar(csc._constChar, csc.linea, csc.columna), lc);   :}
-                 | nombreVariable:id igual constStr:css lista_variablesComa:lc              {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable), new igual(), new constStr(css._constStr, css.linea, css.columna), lc);   :}
-                 | nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho igual llaveIzquierda inicializacion_arreglo:ia llaveDerecha lista_variablesComa:lv
-                    {:  RESULT = new ListaVariables(new nombreVariable(id._nombreVariable), new corcheteIzquierdo(), o, new corcheteDerecho(), new igual(), new llaveIzquierda(), ia, new llaveDerecha(), lv);  :}
-                 | nombreVariable:id corcheteIzquierdo corcheteDerecho igual llaveIzquierda inicializacion_arreglo:iA llaveDerecha lista_variablesComa:lv
-                    {:  RESULT = new ListaVariables(new nombreVariable(id._nombreVariable), new corcheteIzquierdo(), new corcheteDerecho(), new igual(), new llaveIzquierda(), iA, new llaveDerecha(), lv);  :};
+lista_variables ::= variable:v lista_variablesComa:lc                                                                                                                                    {: RESULT = new ListaVariables(v,lc);  :}
+                 | nombreVariable:id igual operacion_aritmetica:o lista_variablesComa:lc                                                                                                 {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), o, lc);  :}
+                 | nombreVariable:id igual constChar:csc lista_variablesComa:lc                                                                                                          {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constChar(csc._constChar, csc.linea, csc.columna), lc);   :}
+                 | nombreVariable:id igual constStr:css lista_variablesComa:lc                                                                                                           {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constStr(css._constStr, css.linea, css.columna), lc);   :}
+                 | nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho igual llaveIzquierda inicializacion_arreglo:ia llaveDerecha lista_variablesComa:lv         {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho(), new igual(), new llaveIzquierda(), ia, new llaveDerecha(), lv);  :}
+                 | nombreVariable:id corcheteIzquierdo corcheteDerecho igual llaveIzquierda inicializacion_arreglo:iA llaveDerecha lista_variablesComa:lv                                {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), new igual(), new llaveIzquierda(), iA, new llaveDerecha(), lv);  :};
 
-lista_variablesComa ::= coma lista_variables:lv {: RESULT = new ListaVariablesComa(lv, new coma()); :}
+lista_variablesComa ::= coma lista_variables:lv                                                                                                                                          {: RESULT = new ListaVariablesComa(lv, new coma()); :}
                      |;
 
 
 
-declaracion_funcion ::= tipo:t nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfp parentesisDerecho puntoYComa 
-                        {:  RESULT = new DeclaracionFuncion(t, new nombreVariable(id._nombreVariable), new parentesisIzquierdo(), dfp, new parentesisDerecho(), new puntoYComa());  :}
-                     | VOID nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfs parentesisDerecho puntoYComa
-                       {:   RESULT = new DeclaracionFuncion(new VOID(), new nombreVariable(id._nombreVariable), new parentesisIzquierdo(), dfs, new parentesisDerecho(), new puntoYComa());  :}
-                     | error puntoYComa;
+declaracion_funcion ::= tipo:t nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfp parentesisDerecho puntoYComa        {:  RESULT = new DeclaracionFuncion(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), dfp, new parentesisDerecho(), new puntoYComa());  :}
+                     | VOID nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfs parentesisDerecho puntoYComa           {:  RESULT = new DeclaracionFuncion(new VOID(), new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), dfs, new parentesisDerecho(), new puntoYComa());  :}
+                     | error puntoYComa                                                                                                     {:  System.out.println("ERROR");  RESULT = new DeclaracionFuncion(new puntoYComa());  :};
 
-declaracion_funcion_parametros ::= tipo DeclaracionFuncionParametrosComa 
-                                {:  RESULT = new DeclaracionFuncionParametros();    :}
-                               | tipo corcheteIzquierdo corcheteDerecho DeclaracionFuncionParametrosComa
-                               | tipo nombreVariable DeclaracionFuncionParametrosComa
-                               | tipo nombreVariable corcheteIzquierdo corcheteDerecho DeclaracionFuncionParametrosComa
+declaracion_funcion_parametros ::= tipo:t declaracion_funcion_parametros_coma:dfp                                                        {:  RESULT = new DeclaracionFuncionParametros(t,dfp);    :}
+                               | tipo:t corcheteIzquierdo corcheteDerecho declaracion_funcion_parametros_coma:dfp                        {:  RESULT = new DeclaracionFuncionParametros(t,new corcheteIzquierdo(), new corcheteDerecho(), dfp);         :}
+                               | tipo:t nombreVariable:id declaracion_funcion_parametros_coma:dfp                                        {:  RESULT = new DeclaracionFuncionParametros(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), dfp);  :}  
+                               | tipo:t nombreVariable:id corcheteIzquierdo corcheteDerecho declaracion_funcion_parametros_coma:dfp      {:  RESULT = new DeclaracionFuncionParametros(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), dfp);    :}
                                |;
-DeclaracionFuncionParametrosComa ::= coma declaracion_funcion_parametros
+declaracion_funcion_parametros_coma ::= coma declaracion_funcion_parametros:dfp                                                           {: RESULT = new DeclaracionFuncionParametrosComa(new coma(), dfp);    :}
                                    |;
 
-funciones ::= tipo nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda codigo llaveDerecha funciones
-            | VOID nombreVariable parentesisIzquierdo FuncionesParametros parentesisDerecho llaveIzquierda codigo llaveDerecha funciones
-            | tipo error parentesisDerecho llaveIzquierda codigo llaveDerecha funciones
-            | VOID error parentesisDerecho llaveIzquierda codigo llaveDerecha funciones
+funciones ::= tipo:t nombreVariable:id parentesisIzquierdo funciones_parametros:fp parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f        {:  RESULT = new Funciones(t,new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), fp, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
+            | VOID nombreVariable:id parentesisIzquierdo funciones_parametros:fp parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f          {:  RESULT = new Funciones(new Void(),new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), fp, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
+            | tipo:t error parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f                                                                {:  System.out.println("ERROR"); RESULT = new Funciones(t, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
+            | VOID error parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f                                                                  {:  System.out.println("ERROR"); RESULT = new Funciones(new Void(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
             |;
 
-FuncionesParametros ::= tipo nombreVariable FuncionesParametrosComa
+funciones_parametros ::= tipo nombreVariable FuncionesParametrosComa
                       | tipo nombreVariable corcheteIzquierdo corcheteDerecho FuncionesParametrosComa
                       |;
 
-FuncionesParametrosComa ::= coma FuncionesParametros
+FuncionesParametrosComa ::= coma funciones_parametros
                          |;
 
 llamado_funcion ::= nombreVariable parentesisIzquierdo LlamadoAFuncionParametros parentesisDerecho
@@ -270,16 +264,16 @@ asignacion_variable_coma ::= coma asignacion_variable:av   {: RESULT = new Asign
 IncrementarDecrementarVariable ::= variable operadorIncrementoDecremento puntoYComa
                                  | operadorIncrementoDecremento variable puntoYComa;
 
-variable ::= nombreVariable    {: RESULT = new Variable(new nombreVariable());   :}
+variable ::= nombreVariable:id    {: RESULT = new Variable(new nombreVariable(id._nombreVariable, id.linea, id.columna));   :}
            | elemento_array:array    {: RESULT = new Variable(array);   :};
 
-elemento_array ::= nombreVariable corcheteIzquierdo operacion_aritmetica:o corcheteDerecho  {: RESULT = new ElementoDeUnArreglo(new nombreVariable(), o); :};
+elemento_array ::= nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho {: RESULT = new ElementoDeUnArreglo(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho()); :} ;
 
-inicializacion_arreglo ::= operacion_aritmetica InicializacionArregloComa
-                        | constChar InicializacionArregloComa
-                        | constStr InicializacionArregloComa;
+inicializacion_arreglo ::= operacion_aritmetica  inicializacion_arreglo_coma
+                        | constChar  inicializacion_arreglo_coma
+                        | constStr  inicializacion_arreglo_coma;
 
-InicializacionArregloComa ::= coma inicializacion_arreglo
+ inicializacion_arreglo_coma ::= coma inicializacion_arreglo
                             |;
 
 

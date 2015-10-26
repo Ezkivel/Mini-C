@@ -79,7 +79,8 @@ PuntoYComa = ;
 {CorcheteDerecho} {return new Symbol(sym.corcheteDerecho, new Token("CorcheteDerecho", yytext(), yyline + 1, yycolumn + 1));}
 {LlaveIzquierda} {return new Symbol(sym.llaveIzquierda, new Token("LlaveIzquierda", yytext(), yyline + 1, yycolumn + 1));}
 {LlaveDerecha} {return new Symbol(sym.llaveDerecha, new Token("LlaveDerecha", yytext(), yyline + 1, yycolumn + 1));}
-{NombreVariable} {return new Symbol(sym.nombreVariable, new nombreVariable(yytext()));}
+
+{NombreVariable} {return new Symbol(sym.nombreVariable, new nombreVariable(yytext(), yyline + 1, yycolumn + 1));}
 
 {ConstChar} {return new Symbol(sym.constChar, new constChar(yytext().charAt(0), yyline + 1, yycolumn + 1));}
 

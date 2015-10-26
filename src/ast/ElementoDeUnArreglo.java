@@ -12,10 +12,15 @@ package ast;
 public class ElementoDeUnArreglo {
 
     public nombreVariable _nombreVariable;
+    public corcheteIzquierdo _corIz;
     public OperacionAritmetica _operacionAritmetica;
+    public corcheteDerecho _corDer;
 
-    public ElementoDeUnArreglo(nombreVariable nv, OperacionAritmetica o) {
-        this._nombreVariable = nv;
-        this._operacionAritmetica = o;
+    public ElementoDeUnArreglo(nombreVariable _nombreVariable, corcheteIzquierdo _corIz, OperacionAritmetica _operacionAritmetica, corcheteDerecho _corDer) {
+        this._nombreVariable = _nombreVariable;
+        this._corIz = _corIz;
+        this._operacionAritmetica = _operacionAritmetica;
+        this._corDer = _corDer;
     }
+
 }

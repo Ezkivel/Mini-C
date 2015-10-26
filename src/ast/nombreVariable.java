@@ -12,12 +12,14 @@ package ast;
 public class nombreVariable {
 
     public String _nombreVariable;
+    public final int linea;
+    public final int columna;
 
-    public nombreVariable(String id) {
-        this._nombreVariable = id;
+    public nombreVariable(String _nombreVariable, int linea, int columna) {
+        this._nombreVariable = _nombreVariable;
+        this.linea = linea;
+        this.columna = columna;
     }
 
-    public nombreVariable() {
-
-    }
+  
 }

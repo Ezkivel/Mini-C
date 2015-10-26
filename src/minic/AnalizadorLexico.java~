@@ -872,7 +872,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 42: break;
           case 4: 
-            { return new Symbol(sym.nombreVariable, new nombreVariable(yytext()));
+            { return new Symbol(sym.nombreVariable, new nombreVariable(yytext(), yyline + 1, yycolumn + 1));
             }
           case 43: break;
           case 5: 

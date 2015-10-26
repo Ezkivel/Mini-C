@@ -13,18 +13,34 @@ public class DeclaracionFuncionParametros {
 
     public Tipo _tipo;
     public nombreVariable _nombreVariable;
+    public corcheteIzquierdo _corIz;
+    public corcheteDerecho _corDer;
+    public DeclaracionFuncionParametrosComa _declaracionFuncionParametrosComa;
 
-    //falta el arreglo
-    public DeclaracionFuncionParametros(Tipo t, nombreVariable i) {
-        this._tipo = t;
-        this._nombreVariable = i;
+    public DeclaracionFuncionParametros(Tipo _tipo, DeclaracionFuncionParametrosComa _declaracionFuncionParametrosComa) {
+        this._tipo = _tipo;
+        this._declaracionFuncionParametrosComa = _declaracionFuncionParametrosComa;
     }
 
-    public DeclaracionFuncionParametros(Tipo t) {
-        this._tipo = t;
+    public DeclaracionFuncionParametros(Tipo _tipo, corcheteIzquierdo _corIz, corcheteDerecho _corDer, DeclaracionFuncionParametrosComa _declaracionFuncionParametrosComa) {
+        this._tipo = _tipo;
+        this._corIz = _corIz;
+        this._corDer = _corDer;
+        this._declaracionFuncionParametrosComa = _declaracionFuncionParametrosComa;
     }
 
-    public DeclaracionFuncionParametros() {
+    public DeclaracionFuncionParametros(Tipo _tipo, nombreVariable _nombreVariable, DeclaracionFuncionParametrosComa _declaracionFuncionParametrosComa) {
+        this._tipo = _tipo;
+        this._nombreVariable = _nombreVariable;
+        this._declaracionFuncionParametrosComa = _declaracionFuncionParametrosComa;
+    }
+
+    public DeclaracionFuncionParametros(Tipo _tipo, nombreVariable _nombreVariable, corcheteIzquierdo _corIz, corcheteDerecho _corDer, DeclaracionFuncionParametrosComa _declaracionFuncionParametrosComa) {
+        this._tipo = _tipo;
+        this._nombreVariable = _nombreVariable;
+        this._corIz = _corIz;
+        this._corDer = _corDer;
+        this._declaracionFuncionParametrosComa = _declaracionFuncionParametrosComa;
     }
 
 }
