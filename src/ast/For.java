@@ -70,10 +70,21 @@ public class For {
         this.llDer = llDer;
     }
 
+    public For(parentesisIzquierdo _parIz, puntoYComa _puntoYComa1, puntoYComa __puntoYComa2, parentesisDerecho _parDer, llaveIzquierda _llIz, Codigo _codigo, llaveDerecha llDer) {
+        this._parIz = _parIz;
+        this._puntoYComa1 = _puntoYComa1;
+        this.__puntoYComa2 = __puntoYComa2;
+        this._parDer = _parDer;
+        this._llIz = _llIz;
+        this._codigo = _codigo;
+        this.llDer = llDer;
+    }
+
+    public For(parentesisDerecho _parDer, llaveIzquierda _llIz, Codigo _codigo, llaveDerecha llDer) {
+        this._parDer = _parDer;
+        this._llIz = _llIz;
+        this._codigo = _codigo;
+        this.llDer = llDer;
+    }
+
 }
-/*
- 
- 
- | FOR parentesisIzquierdo puntoYComa puntoYComa parentesisDerecho llaveIzquierda codigo llaveDerecha
- | FOR error parentesisDerecho llaveIzquierda codigo llaveDerecha;
- */
