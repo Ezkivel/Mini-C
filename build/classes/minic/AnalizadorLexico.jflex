@@ -62,7 +62,8 @@ PuntoYComa = ;
 {String} {return new Symbol(sym.STRING, new Token("String", yytext(), yyline + 1, yycolumn + 1));}
 {Char} {return new Symbol(sym.CHAR, new Token("Char", yytext(), yyline + 1, yycolumn + 1));}
 {AND} {return new Symbol(sym.and, new Token("AND", yytext(), yyline + 1, yycolumn + 1));}
-{ParamentroScanf} {return new Symbol(sym.parametroScanf, new Token("ParamentroScanf", yytext(), yyline + 1, yycolumn + 1));}
+{ParamentroScanf} {return new Symbol(sym.parametroScanf, new parametroScanf(yytext(), yyline + 1, yycolumn + 1));}
+
 {Coma} {return new Symbol(sym.coma, new Token("Coma", yytext(), yyline + 1, yycolumn + 1));}
 {True} {return new Symbol(sym.TRUE, new Token("True", yytext(), yyline + 1, yycolumn + 1));}
 {False} {return new Symbol(sym.FALSE, new Token("False", yytext(), yyline + 1, yycolumn + 1));}

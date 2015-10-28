@@ -9,7 +9,7 @@ package ast;
  *
  * @author Gabriel
  */
-class Condicion {
+public class Condicion {
 
     public OperacionAritmetica _operacionAritmetica;
     public constChar _constChar;

@@ -9,12 +9,6 @@ package ast;
  *
  * @author Gabriel
  */
-public class VOID extends Tipo {
-
-    public String _void;
-
-    public VOID() {
-        this._void = "void";
-    }
-
+public class ForInicializacion {
+    
 }

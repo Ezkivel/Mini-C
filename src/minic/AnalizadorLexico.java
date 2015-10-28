@@ -976,7 +976,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 68: break;
           case 30: 
-            { return new Symbol(sym.parametroScanf, new Token("ParamentroScanf", yytext(), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.parametroScanf, new parametroScanf(yytext(), yyline + 1, yycolumn + 1));
             }
           case 69: break;
           case 31: 

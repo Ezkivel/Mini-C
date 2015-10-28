@@ -11,7 +11,21 @@ package ast;
  */
 public class LlamadoAFuncion {
 
-    public LlamadoAFuncion() {
+    public nombreVariable _nombreVariable;
+    public parentesisIzquierdo _parIz;
+    public LlamadoAFuncionParametros _llamadoAFuncionParametros;
+    public parentesisDerecho _parDer;
+
+    public LlamadoAFuncion(nombreVariable _nombreVariable, parentesisIzquierdo _parIz, LlamadoAFuncionParametros _llamadoAFuncionParametros, parentesisDerecho _parDer) {
+        this._nombreVariable = _nombreVariable;
+        this._parIz = _parIz;
+        this._llamadoAFuncionParametros = _llamadoAFuncionParametros;
+        this._parDer = _parDer;
     }
-    
+
+    public LlamadoAFuncion(nombreVariable _nombreVariable, parentesisDerecho _parDer) {
+        this._nombreVariable = _nombreVariable;
+        this._parDer = _parDer;
+    }
+
 }
