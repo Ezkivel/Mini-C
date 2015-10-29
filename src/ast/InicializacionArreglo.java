@@ -11,7 +11,24 @@ package ast;
  */
 public class InicializacionArreglo {
 
-    public InicializacionArreglo() {
+    public OperacionAritmetica _operacionAritmetica;
+    public constChar _constChar;
+    public constStr _constStr;
+    public InicializacionArregloComa _inicializacionArregloComa;
+
+    public InicializacionArreglo(OperacionAritmetica _operacionAritmetica, InicializacionArregloComa _inicializacionArregloComa) {
+        this._operacionAritmetica = _operacionAritmetica;
+        this._inicializacionArregloComa = _inicializacionArregloComa;
+    }
+
+    public InicializacionArreglo(constChar _constChar, InicializacionArregloComa _inicializacionArregloComa) {
+        this._constChar = _constChar;
+        this._inicializacionArregloComa = _inicializacionArregloComa;
+    }
+
+    public InicializacionArreglo(constStr _constStr, InicializacionArregloComa _inicializacionArregloComa) {
+        this._constStr = _constStr;
+        this._inicializacionArregloComa = _inicializacionArregloComa;
     }
 
 }

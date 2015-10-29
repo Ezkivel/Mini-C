@@ -10,5 +10,13 @@ package ast;
  * @author Gabriel
  */
 public class InicializacionArregloComa {
-    
+
+    public coma _coma;
+    public InicializacionArreglo _inicializacionArreglo;
+
+    public InicializacionArregloComa(coma _coma, InicializacionArreglo _inicializacionArreglo) {
+        this._coma = _coma;
+        this._inicializacionArreglo = _inicializacionArreglo;
+    }
+
 }

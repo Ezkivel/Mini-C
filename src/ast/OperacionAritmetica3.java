@@ -9,25 +9,31 @@ package ast;
  *
  * @author Gabriel
  */
-public abstract class OperacionAritmetica3 extends OperacionAritmetica2 {
+public class OperacionAritmetica3 {
 
     public entero _entero;
     public Variable _variable;
     public LlamadoAFuncion _llamadoAFuncion;
+    public parentesisIzquierdo _parentesisIzquierdo;
+    public OperacionAritmetica _OperacionAritmetica;
+    public parentesisDerecho _parentesisDerecho;
 
-    public OperacionAritmetica3(entero e, Variable v, LlamadoAFuncion llf, OperacionAritmetica o1, OperacionAritmetica2 o2, OperacionAritmetica3 o3) {
-        super(o1, o2, o3);
-        super._operacionAritmetica2 = o3;
-        this._entero = e;
-        this._variable = v;
-        this._llamadoAFuncion = llf;
+    public OperacionAritmetica3(entero _entero) {
+        this._entero = _entero;
     }
 
-    public OperacionAritmetica3(entero e, Variable v, LlamadoAFuncion llf, OperacionAritmetica2 o2, OperacionAritmetica3 o3) {
-        super(o2, o3);
-        this._entero = e;
-        this._variable = v;
-        this._llamadoAFuncion = llf;
+    public OperacionAritmetica3(Variable _variable) {
+        this._variable = _variable;
+    }
+
+    public OperacionAritmetica3(LlamadoAFuncion _llamadoAFuncion) {
+        this._llamadoAFuncion = _llamadoAFuncion;
+    }
+
+    public OperacionAritmetica3(parentesisIzquierdo _parentesisIzquierdo, OperacionAritmetica _OperacionAritmetica, parentesisDerecho _parentesisDerecho) {
+        this._parentesisIzquierdo = _parentesisIzquierdo;
+        this._OperacionAritmetica = _OperacionAritmetica;
+        this._parentesisDerecho = _parentesisDerecho;
     }
 
 }

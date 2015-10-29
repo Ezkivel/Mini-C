@@ -9,6 +9,6 @@ package ast;
  *
  * @author Gabriel
  */
-public class operadorLogico {
-
+public class operadorResta {
+    
 }

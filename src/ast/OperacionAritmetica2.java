@@ -9,19 +9,28 @@ package ast;
  *
  * @author Gabriel
  */
-public abstract class OperacionAritmetica2 extends OperacionAritmetica {
+public class OperacionAritmetica2 {
 
+    public OperacionAritmetica2 _operacionAritmetica2;
+    public operadorMultiplicacion _operadorMultiplicacion;
+    public operadorDivision _operadorDivision;
     public OperacionAritmetica3 _operacionAritmetica3;
 
-    public OperacionAritmetica2(OperacionAritmetica o1, OperacionAritmetica2 o2, OperacionAritmetica3 o3) {
-        super(o1, o2);
-        super._operacionAritmetica2 = o2;
-        this._operacionAritmetica3 = o3;
+    public OperacionAritmetica2(OperacionAritmetica2 _operacionAritmetica2, operadorMultiplicacion _operadorMultiplicacion, OperacionAritmetica3 _operacionAritmetica3) {
+
+        this._operacionAritmetica2 = _operacionAritmetica2;
+        this._operadorMultiplicacion = _operadorMultiplicacion;
+        this._operacionAritmetica3 = _operacionAritmetica3;
     }
 
-    public OperacionAritmetica2(OperacionAritmetica2 o2, OperacionAritmetica3 o3) {
-        super(o2);
-        this._operacionAritmetica3 = o3;
+    public OperacionAritmetica2(OperacionAritmetica2 _operacionAritmetica2, operadorDivision _operadorDivision, OperacionAritmetica3 _operacionAritmetica3) {
+        this._operacionAritmetica2 = _operacionAritmetica2;
+        this._operadorDivision = _operadorDivision;
+        this._operacionAritmetica3 = _operacionAritmetica3;
+    }
+
+    public OperacionAritmetica2(OperacionAritmetica3 _operacionAritmetica3) {
+        this._operacionAritmetica3 = _operacionAritmetica3;
     }
 
 }

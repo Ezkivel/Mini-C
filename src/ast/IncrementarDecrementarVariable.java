@@ -9,9 +9,22 @@ package ast;
  *
  * @author Gabriel
  */
-class IncrementarDecrementarVariable {
+public class IncrementarDecrementarVariable {
 
-    public IncrementarDecrementarVariable() {
+    public Variable _variable;
+    public operadorIncrementoDecremento _operadorIncrementoDecremento;
+    public puntoYComa _puntoYComa;
+
+    public IncrementarDecrementarVariable(Variable _variable, operadorIncrementoDecremento _operadorIncrementoDecremento, puntoYComa _puntoYComa) {
+        this._variable = _variable;
+        this._operadorIncrementoDecremento = _operadorIncrementoDecremento;
+        this._puntoYComa = _puntoYComa;
     }
-    
+
+    public IncrementarDecrementarVariable(operadorIncrementoDecremento _operadorIncrementoDecremento, Variable _variable, puntoYComa _puntoYComa) {
+        this._variable = _variable;
+        this._operadorIncrementoDecremento = _operadorIncrementoDecremento;
+        this._puntoYComa = _puntoYComa;
+    }
+
 }

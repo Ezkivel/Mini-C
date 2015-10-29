@@ -12,38 +12,44 @@ package ast;
 public class AsignacionVariable {
 
     public Variable _variable;
-    public OperacionAritmetica _operacionAritmetica;
-    public AsignacionVariableComa _asignacionVariableComa;
+    public igual _igual;
     public operadorAritmeticoIgual _operadorAritmeticoIgual;
+    public OperacionAritmetica _operacionAritmetica;
     public constChar _constChar;
     public constStr _constStr;
+    public AsignacionVariableComa _asignacionVariableComa;
+    public puntoYComa _puntoYComa;
 
-    public AsignacionVariable(Variable v, OperacionAritmetica oa, AsignacionVariableComa avc) {
-        this._variable = v;
-        this._operacionAritmetica = oa;
-        this._asignacionVariableComa = avc;
+    public AsignacionVariable(Variable _variable, igual _igual, OperacionAritmetica _operacionAritmetica, AsignacionVariableComa _asignacionVariableComa) {
+        this._variable = _variable;
+        this._igual = _igual;
+        this._operacionAritmetica = _operacionAritmetica;
+        this._asignacionVariableComa = _asignacionVariableComa;
     }
 
-    public AsignacionVariable(Variable v, OperacionAritmetica oa, AsignacionVariableComa avc, operadorAritmeticoIgual oi) {
-        this._variable = v;
-        this._operacionAritmetica = oa;
-        this._asignacionVariableComa = avc;
-        this._operadorAritmeticoIgual = oi;
+    public AsignacionVariable(Variable _variable, operadorAritmeticoIgual _operadorAritmeticoIgual, OperacionAritmetica _operacionAritmetica, AsignacionVariableComa _asignacionVariableComa) {
+        this._variable = _variable;
+        this._operadorAritmeticoIgual = _operadorAritmeticoIgual;
+        this._operacionAritmetica = _operacionAritmetica;
+        this._asignacionVariableComa = _asignacionVariableComa;
     }
 
-    public AsignacionVariable(Variable v, AsignacionVariableComa avc, constChar cstC) {
-        this._variable = v;
-        this._asignacionVariableComa = avc;
-        this._constChar = cstC;
+    public AsignacionVariable(Variable _variable, igual _igual, constChar _constChar, AsignacionVariableComa _asignacionVariableComa) {
+        this._variable = _variable;
+        this._igual = _igual;
+        this._constChar = _constChar;
+        this._asignacionVariableComa = _asignacionVariableComa;
     }
 
-    public AsignacionVariable(Variable v, AsignacionVariableComa avc, constStr cstS) {
-        this._variable = v;
-        this._asignacionVariableComa = avc;
-        this._constStr = cstS;
+    public AsignacionVariable(Variable _variable, igual _igual, constStr _constStr, AsignacionVariableComa _asignacionVariableComa) {
+        this._variable = _variable;
+        this._igual = _igual;
+        this._constStr = _constStr;
+        this._asignacionVariableComa = _asignacionVariableComa;
     }
 
-    public AsignacionVariable() {
+    public AsignacionVariable(puntoYComa _puntoYComa) {
+        this._puntoYComa = _puntoYComa;
     }
 
 }

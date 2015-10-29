@@ -55,7 +55,7 @@ terminal operadorMultiplicacion;
 terminal operadorDivision; 
 terminal operadorIncrementoDecremento operadorIncrementoDecremento;
 terminal operadorRelacional;
-terminal operadorLogico;
+terminal operadorLogico operadorLogico;
 terminal puntoYComa;
 terminal coma;
 terminal parametroScanf parametroScanf;
@@ -78,7 +78,7 @@ non terminal Variable variable;
 non terminal ElementoDeUnArreglo elemento_array;
 non terminal AsignacionVariableComa asignacion_variable_coma;
 non terminal AsignacionVariable asignacion_variable;
-non terminal IncrementarDecrementarVariable;
+non terminal IncrementarDecrementarVariable incrementarDecrementarVariable;
 non terminal Scanf scans;
 non terminal Printf print;
 non terminal If _if;
@@ -108,24 +108,24 @@ non terminal Return;
 
 start with programa;
 
-programa ::= declaracion_funcion:df  programa:p                                 {: RESULT = new Programa(df, p); :}
+programa ::= declaracion_funcion:df  programa:p                                 {:   RESULT = new Programa(df, p); :}
      | main:m                                                                   {:   RESULT = new Programa(m); :};
 
 main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f         {: RESULT = new MainClass(t, new MainClass(), new parentesisIzquierdo(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f ); :};
 
 codigo ::= declaracion_variables:dv codigo:c                                                             {: RESULT = new Codigo(dv, c); :} 
          | asignacion_variable:av codigo:c                                                               {: RESULT = new Codigo(av,c);  :}
-         | IncrementarDecrementarVariable codigo
-         | print:p codigo:c                                                                              {:  RESULT = new Codigo(p,c); /*System.out.print( RESULT.p.cs._constStr);*/ :}
-         | scans:s codigo:c                                                                              {:  RESULT = new Codigo(s,c);  :}
-         | _while:w codigo:c                                                                             {:  RESULT = new Codigo(w,c);  :}
-         | _if:i codigo:c                                                                                {:  RESULT = new Codigo(i,c);  :}
-         | _for:f codigo:c                                                                               {:  RESULT = new Codigo(f,c);  :}
-         | llamado_funcion:lf puntoYComa codigo:c                                                        {:  RESULT = new Codigo(lf,new puntoYComa(), c);  :}   
-         | RETURN operacion_aritmetica:o puntoYComa codigo:c                                             {:  RESULT = new Codigo(new RETURN(), o, new puntoYComa(),   c); :}           
-         | RETURN constChar:csc puntoYComa codigo:c                                                      {:  RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa(), c); :}
-         | RETURN constStr:cst puntoYComa codigo:c                                                       {:  RESULT = new Codigo(new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa(),  c); :}
-         | error codigo:c                                                                                {:  System.out.println("ERROR"); RESULT = new Codigo(c); :}
+         | incrementarDecrementarVariable:i codigo:c                                                     {: RESULT = new Codigo(i, c);  :}
+         | print:p codigo:c                                                                              {: RESULT = new Codigo(p,c); /*System.out.print( RESULT.p.cs._constStr);*/ :}
+         | scans:s codigo:c                                                                              {: RESULT = new Codigo(s,c);  :}
+         | _while:w codigo:c                                                                             {: RESULT = new Codigo(w,c);  :}
+         | _if:i codigo:c                                                                                {: RESULT = new Codigo(i,c);  :}
+         | _for:f codigo:c                                                                               {: RESULT = new Codigo(f,c);  :}
+         | llamado_funcion:lf puntoYComa codigo:c                                                        {: RESULT = new Codigo(lf,new puntoYComa(), c);  :}   
+         | RETURN operacion_aritmetica:o puntoYComa codigo:c                                             {: RESULT = new Codigo(new RETURN(), o, new puntoYComa(),   c); :}           
+         | RETURN constChar:csc puntoYComa codigo:c                                                      {: RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa(), c); :}
+         | RETURN constStr:cst puntoYComa codigo:c                                                       {: RESULT = new Codigo(new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa(),  c); :}
+         | error codigo:c                                                                                {: System.out.println("ERROR"); RESULT = new Codigo(c); :}
          |;
 
 declaracion_variables ::= tipo:t lista_variables:lv puntoYComa {: RESULT = new DeclaracionVariables(t,lv, new puntoYComa() );   :};
@@ -201,23 +201,12 @@ else ::= ELSE IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierd
 _while ::= WHILE parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigo:cg llaveDerecha           {: RESULT = new While(new parentesisIzquierdo(), c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
         | WHILE error parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                                      {: System.out.println("ERROR");RESULT = new While(new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :};
 
-_for ::= FOR parentesisIzquierdo for_inicializacion:fi puntoYComa condicion:c puntoYComa for_actualizacion:fa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha   
-      {:     RESULT = new For( new parentesisIzquierdo(), fi, new puntoYComa(), c, new puntoYComa(), fa, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha() ); :}
-      
-      | FOR parentesisIzquierdo puntoYComa condicion:c puntoYComa for_actualizacion:fa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha
-      {:    RESULT = new For( new parentesisIzquierdo(), new puntoYComa(), c, new puntoYComa(), fa, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha());    :}
-
-      | FOR parentesisIzquierdo for_inicializacion:fi puntoYComa condicion:c puntoYComa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha
-      {:    RESULT = new For( new parentesisIzquierdo(), fi, new puntoYComa(), c, new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
-
-      | FOR parentesisIzquierdo puntoYComa condicion:c puntoYComa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha
-      {:    RESULT = new For(new parentesisIzquierdo(), new puntoYComa(), c, new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
-
-      | FOR parentesisIzquierdo puntoYComa puntoYComa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha
-      {:    RESULT = new For(new parentesisIzquierdo(), new puntoYComa(), new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
-
-      | FOR error parentesisDerecho llaveIzquierda codigo:cg llaveDerecha
-       {: System.out.println("ERROR");RESULT = new For(new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha());   :};
+_for ::= FOR parentesisIzquierdo for_inicializacion:fi puntoYComa condicion:c puntoYComa for_actualizacion:fa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha    {:   RESULT = new For( new parentesisIzquierdo(), fi, new puntoYComa(), c, new puntoYComa(), fa, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha() ); :}
+      | FOR parentesisIzquierdo puntoYComa condicion:c puntoYComa for_actualizacion:fa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                           {:   RESULT = new For( new parentesisIzquierdo(), new puntoYComa(), c, new puntoYComa(), fa, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha());    :}
+      | FOR parentesisIzquierdo for_inicializacion:fi puntoYComa condicion:c puntoYComa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                          {:   RESULT = new For( new parentesisIzquierdo(), fi, new puntoYComa(), c, new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
+      | FOR parentesisIzquierdo puntoYComa condicion:c puntoYComa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                                                {:   RESULT = new For(new parentesisIzquierdo(), new puntoYComa(), c, new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
+      | FOR parentesisIzquierdo puntoYComa puntoYComa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                                                            {:   RESULT = new For(new parentesisIzquierdo(), new puntoYComa(), new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
+      | FOR error parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                                                                                                {:   System.out.println("ERROR");RESULT = new For(new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha());   :};
 
 
 for_inicializacion ::= tipo:t variable:v for_inicializacion_coma:fi                                                {:  RESULT = new ForInicializacion(t,v,fi);   :}
@@ -247,50 +236,50 @@ for_actualizacion ::= variable:v igual operacion_aritmetica:o for_actualizacion_
 for_actualizacion_coma ::= coma for_actualizacion:fa                                                         {: RESULT = new ForActualizacionComa(new coma(), fa ); :}
                        |;
 
-condicion ::= operacion_aritmetica operadorRelacional operacion_aritmetica condicion_operador_logico
-            | operacion_aritmetica operadorRelacional constChar condicion_operador_logico
-            | operacion_aritmetica operadorRelacional constStr condicion_operador_logico
-            | constChar operadorRelacional operacion_aritmetica condicion_operador_logico
-            | constStr operadorRelacional operacion_aritmetica condicion_operador_logico
-            | parentesisIzquierdo condicion parentesisDerecho condicion_operador_logico;
+condicion ::= operacion_aritmetica:o1 operadorRelacional operacion_aritmetica:o2 condicion_operador_logico:col         {: RESULT = new Condicion(o1, new operadorRelacional(), o2, col);  :}
+            | operacion_aritmetica:o1 operadorRelacional constChar:csc condicion_operador_logico:col                   {: RESULT = new Condicion(o1, new operadorRelacional(), new constChar(csc._constChar, csc.linea, csc.columna), col); :}
+            | operacion_aritmetica:o1 operadorRelacional constStr:css condicion_operador_logico:col                    {: RESULT = new Condicion(o1, new operadorRelacional(), new constStr(css._constStr, css.linea, css.columna), col); :}
+            | constChar:csc operadorRelacional operacion_aritmetica:o1 condicion_operador_logico:col                   {: RESULT = new Condicion(new constChar(csc._constChar, csc.linea, csc.columna), new operadorRelacional(), o1, col); :}
+            | constStr:css operadorRelacional operacion_aritmetica:o1 condicion_operador_logico:col                    {: RESULT = new Condicion(new constStr(css._constStr, css.linea, css.columna), new operadorRelacional(), o1, col); :}
+            | parentesisIzquierdo condicion:c parentesisDerecho condicion_operador_logico:col                          {: RESULT = new Condicion(new parentesisIzquierdo(), c, new parentesisDerecho(), col); :};
 
-condicion_operador_logico ::= operadorLogico condicion
+condicion_operador_logico ::= operadorLogico condicion:c                                                               {:  RESULT = new CondicionOperadorLogico( new operadorLogico(), c);  :}
                       |;
 
-asignacion_variable ::= variable:v igual operacion_aritmetica:oa asignacion_variable_coma:av {: RESULT = new AsignacionVariable(v,oa,av);  :}
-                     | variable:v operadorAritmeticoIgual operacion_aritmetica:o asignacion_variable_coma:av {:  RESULT = new AsignacionVariable(v,o,av, new operadorAritmeticoIgual());  :}
-                     | variable:v igual constChar asignacion_variable_coma:ac /*{: RESULT = new AsignacionVariable(v,ac,new constChar()); :}*/
-                     | variable:v igual constStr asignacion_variable_coma:ac /*{:  RESULT = new AsignacionVariable(v,ac, new constStr());:}*/
-                     | error puntoYComa;
+asignacion_variable ::= variable:v igual operacion_aritmetica:oa asignacion_variable_coma:av                           {: RESULT = new AsignacionVariable(v, new igual(), oa,av);  :}
+                     | variable:v operadorAritmeticoIgual operacion_aritmetica:o asignacion_variable_coma:av           {: RESULT = new AsignacionVariable(v, new operadorAritmeticoIgual(), o, av);  :}
+                     | variable:v igual constChar:csc asignacion_variable_coma:ac                                      {: RESULT = new AsignacionVariable(v, new igual(), new constChar(csc._constChar, csc.linea, csc.columna) , ac); :}
+                     | variable:v igual constStr:css asignacion_variable_coma:ac                                       {: RESULT = new AsignacionVariable(v, new igual(), new constStr(css._constStr, css.linea, css.columna) , ac); :} 
+                     | error puntoYComa                                                                                {: RESULT = new AsignacionVariable(new puntoYComa()); :};
 
-asignacion_variable_coma ::= coma asignacion_variable:av   {: RESULT = new AsignacionVariableComa(av);  :}
+asignacion_variable_coma ::= coma asignacion_variable:av                                                               {: RESULT = new AsignacionVariableComa( new coma(), av);  :}
                         | puntoYComa;
 
-IncrementarDecrementarVariable ::= variable operadorIncrementoDecremento puntoYComa
-                                 | operadorIncrementoDecremento variable puntoYComa;
+incrementarDecrementarVariable ::= variable:v operadorIncrementoDecremento puntoYComa                     {:  RESULT = new IncrementarDecrementarVariable(v, new operadorIncrementoDecremento(), new puntoYComa());  :}
+                                 | operadorIncrementoDecremento variable:v puntoYComa                     {:  RESULT = new IncrementarDecrementarVariable(new operadorIncrementoDecremento(), v, new puntoYComa());  :};
 
-variable ::= nombreVariable:id    {: RESULT = new Variable(new nombreVariable(id._nombreVariable, id.linea, id.columna));   :}
-           | elemento_array:array    {: RESULT = new Variable(array);   :};
+variable ::= nombreVariable:id                                                                            {: RESULT = new Variable(new nombreVariable(id._nombreVariable, id.linea, id.columna));   :}
+           | elemento_array:array                                                                         {: RESULT = new Variable(array);   :};
 
-elemento_array ::= nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho {: RESULT = new ElementoDeUnArreglo(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho()); :} ;
+elemento_array ::= nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho             {: RESULT = new ElementoDeUnArreglo(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho()); :} ;
 
-inicializacion_arreglo ::= operacion_aritmetica  inicializacion_arreglo_coma
-                        | constChar  inicializacion_arreglo_coma
-                        | constStr  inicializacion_arreglo_coma;
+inicializacion_arreglo ::= operacion_aritmetica:o  inicializacion_arreglo_coma:i                          {:  RESULT = new InicializacionArreglo(o,i);   :}
+                        | constChar:csc  inicializacion_arreglo_coma:i                                    {:  RESULT = new InicializacionArreglo(new constChar(csc._constChar, csc.linea, csc.columna),i);   :}
+                        | constStr:css  inicializacion_arreglo_coma:i                                     {:  RESULT = new InicializacionArreglo(new constStr(css._constStr, css.linea, css.columna),i);   :};
 
- inicializacion_arreglo_coma ::= coma inicializacion_arreglo
+ inicializacion_arreglo_coma ::= coma inicializacion_arreglo:i                                            {:  RESULT = new InicializacionArregloComa( new coma(), i); :}
                             |;
 
 
-operacion_aritmetica ::= operacion_aritmetica operadorSuma operacion_aritmetica2
-                      | operacion_aritmetica operadorResta operacion_aritmetica2
-                      | operacion_aritmetica2;
+operacion_aritmetica ::= operacion_aritmetica:o1 operadorSuma operacion_aritmetica2:o2                   {: RESULT = new OperacionAritmetica(o1, new operadorSuma(), o2); :}
+                      | operacion_aritmetica:o1 operadorResta operacion_aritmetica2:o2                   {: RESULT = new OperacionAritmetica(o1, new operadorResta(), o2); :}
+                      | operacion_aritmetica2:o2                                                         {: RESULT = new OperacionAritmetica(o2); :}  ;
 
-operacion_aritmetica2 ::= operacion_aritmetica2 operadorMultiplicacion operacion_aritmetica3
-                       | operacion_aritmetica2 operadorDivision operacion_aritmetica3
-                       | operacion_aritmetica3;
+operacion_aritmetica2 ::= operacion_aritmetica2:o2 operadorMultiplicacion operacion_aritmetica3:o3       {: RESULT = new OperacionAritmetica2(o2, new operadorMultiplicacion(), o3); :}
+                       | operacion_aritmetica2:o2 operadorDivision operacion_aritmetica3:o3              {: RESULT = new OperacionAritmetica2(o2, new operadorDivision(), o3); :}
+                       | operacion_aritmetica3:o3                                                        {: RESULT = new OperacionAritmetica2(o3); :} ;
 
-operacion_aritmetica3 ::= entero
-                       | variable
-                       | llamado_funcion
-                       | parentesisIzquierdo operacion_aritmetica parentesisDerecho;
+operacion_aritmetica3 ::= entero:e                                                                       {: RESULT = new OperacionAritmetica3(new entero(e._entero, e.linea, e.columna));   :}                                                                     
+                       | variable:v                                                                      {: RESULT = new OperacionAritmetica3(v);    :} 
+                       | llamado_funcion:lf                                                              {: RESULT = new OperacionAritmetica3(lf);    :} 
+                       | parentesisIzquierdo operacion_aritmetica:o parentesisDerecho                    {: RESULT = new OperacionAritmetica3(new parentesisIzquierdo(), o, new parentesisDerecho());    :} ;
