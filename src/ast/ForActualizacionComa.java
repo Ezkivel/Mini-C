@@ -9,14 +9,14 @@ package ast;
  *
  * @author Gabriel
  */
-public class ForInicializacionComa {
+public class ForActualizacionComa {
 
     public coma _coma;
-    public ForInicializacion2 _Forinicializacion2;
+    public ForActualizacion _forActualizacion;
 
-    public ForInicializacionComa(coma _coma, ForInicializacion2 _Forinicializacion2) {
+    public ForActualizacionComa(coma _coma, ForActualizacion _forActualizacion) {
         this._coma = _coma;
-        this._Forinicializacion2 = _Forinicializacion2;
+        this._forActualizacion = _forActualizacion;
     }
 
 }

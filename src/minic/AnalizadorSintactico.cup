@@ -53,7 +53,7 @@ terminal operadorSuma;
 terminal operadorResta; 
 terminal operadorMultiplicacion; 
 terminal operadorDivision; 
-terminal operadorIncrementoDecremento;
+terminal operadorIncrementoDecremento operadorIncrementoDecremento;
 terminal operadorRelacional;
 terminal operadorLogico;
 terminal puntoYComa;
@@ -86,14 +86,14 @@ non terminal Else else;
 non terminal While _while;
 non terminal For _for;
 non terminal ForInicializacion for_inicializacion;
-non terminal ForInicializacion2;
+non terminal ForInicializacion2 for_inicializacion2;
 non terminal ForActualizacion for_actualizacion;
-non terminal ForActualizacionComa; 
+non terminal ForActualizacionComa for_actualizacion_coma; 
 non terminal ListaVariables lista_variables;
 non terminal ListaVariablesComa lista_variablesComa;
 non terminal ForInicializacionComa for_inicializacion_coma;
 non terminal Condicion condicion;
-non terminal CondicionOperadorLogico;
+non terminal CondicionOperadorLogico condicion_operador_logico;
 non terminal InicializacionArreglo inicializacion_arreglo;
 non terminal InicializacionArregloComa inicializacion_arreglo_coma;
 non terminal DeclaracionFuncionParametros declaracion_funcion_parametros;
@@ -227,34 +227,34 @@ for_inicializacion ::= tipo:t variable:v for_inicializacion_coma:fi             
                     | variable:v igual operacion_aritmetica:o for_inicializacion_coma:fic                          {:  RESULT = new ForInicializacion(v, new igual(), o, fic);   :}
                     | variable:v operadorAritmeticoIgual operacion_aritmetica:o for_inicializacion_coma:fic        {:  RESULT = new ForInicializacion(v, new operadorAritmeticoIgual(), o, fic);:}
                     | variable:v igual constChar:csc for_inicializacion_coma:fic                                   {:  RESULT = new ForInicializacion(v, new igual(), new constChar(csc._constChar, csc.linea, csc.columna), fic);:}
-                    | variable igual constStr for_inicializacion_coma;
+                    | variable:v igual constStr:css for_inicializacion_coma:fic                                    {:  RESULT = new ForInicializacion(v, new igual(), new constStr(css._constStr, css.linea, css.columna), fic);    :};
 
-ForInicializacion2 ::= variable igual operacion_aritmetica for_inicializacion_coma
-                     | variable operadorAritmeticoIgual operacion_aritmetica for_inicializacion_coma
-                     | variable igual constChar for_inicializacion_coma
-                     | variable igual constStr for_inicializacion_coma;
+for_inicializacion2 ::= variable:v igual operacion_aritmetica:o for_inicializacion_coma:fic                     {:  RESULT = new ForInicializacion2(v, new igual(), o, fic);  :}
+                     | variable:v operadorAritmeticoIgual operacion_aritmetica:o for_inicializacion_coma:fic    {:  RESULT = new ForInicializacion2(v, new operadorAritmeticoIgual(), o, fic);   :}
+                     | variable:v igual constChar:csc for_inicializacion_coma:fic                               {:  RESULT = new ForInicializacion2(v, new igual(), new constChar(csc._constChar, csc.linea, csc.columna), fic);  :}
+                     | variable:v igual constStr:css for_inicializacion_coma:fic                                {:  RESULT = new ForInicializacion2(v, new igual(), new constStr(css._constStr, css.linea, css.columna), fic);  :};
 
-for_inicializacion_coma ::= coma ForInicializacion2
+for_inicializacion_coma ::= coma for_inicializacion2:fic2                                                       {:  RESULT= new ForInicializacionComa(new coma(), fic2);  :}
                         |;
 
-for_actualizacion ::= variable igual operacion_aritmetica ForActualizacionComa
-                   | variable operadorAritmeticoIgual operacion_aritmetica ForActualizacionComa
-                   | variable igual constChar ForActualizacionComa
-                   | variable igual constStr ForActualizacionComa
-                   | variable operadorIncrementoDecremento ForActualizacionComa
-                   | operadorIncrementoDecremento variable ForActualizacionComa;
+for_actualizacion ::= variable:v igual operacion_aritmetica:o for_actualizacion_coma:fac                     {:   RESULT = new ForActualizacion(v, new igual(), o, fac);    :}
+                   | variable:v operadorAritmeticoIgual operacion_aritmetica:o for_actualizacion_coma:fac    {:   RESULT = new ForActualizacion(v, new operadorAritmeticoIgual(), o, fac);    :}
+                   | variable:v igual constChar:csc for_actualizacion_coma:fac                               {:   RESULT = new ForActualizacion(v, new igual(), new constChar(csc._constChar, csc.linea, csc.columna), fac);    :}
+                   | variable:v igual constStr:css for_actualizacion_coma:fac                                {:   RESULT = new ForActualizacion(v, new igual(), new constStr(css._constStr, css.linea, css.columna), fac);    :}
+                   | variable:v operadorIncrementoDecremento for_actualizacion_coma:fac                      {:   RESULT = new ForActualizacion(v, new operadorIncrementoDecremento(), fac); :}
+                   | operadorIncrementoDecremento variable:v for_actualizacion_coma:fac                      {:   RESULT = new ForActualizacion(new operadorIncrementoDecremento(), v, fac); :};
 
-ForActualizacionComa ::= coma for_actualizacion
+for_actualizacion_coma ::= coma for_actualizacion:fa                                                         {: RESULT = new ForActualizacionComa(new coma(), fa ); :}
                        |;
 
-condicion ::= operacion_aritmetica operadorRelacional operacion_aritmetica CondicionOperadorLogico
-            | operacion_aritmetica operadorRelacional constChar CondicionOperadorLogico
-            | operacion_aritmetica operadorRelacional constStr CondicionOperadorLogico
-            | constChar operadorRelacional operacion_aritmetica CondicionOperadorLogico
-            | constStr operadorRelacional operacion_aritmetica CondicionOperadorLogico
-            | parentesisIzquierdo condicion parentesisDerecho CondicionOperadorLogico;
+condicion ::= operacion_aritmetica operadorRelacional operacion_aritmetica condicion_operador_logico
+            | operacion_aritmetica operadorRelacional constChar condicion_operador_logico
+            | operacion_aritmetica operadorRelacional constStr condicion_operador_logico
+            | constChar operadorRelacional operacion_aritmetica condicion_operador_logico
+            | constStr operadorRelacional operacion_aritmetica condicion_operador_logico
+            | parentesisIzquierdo condicion parentesisDerecho condicion_operador_logico;
 
-CondicionOperadorLogico ::= operadorLogico condicion
+condicion_operador_logico ::= operadorLogico condicion
                       |;
 
 asignacion_variable ::= variable:v igual operacion_aritmetica:oa asignacion_variable_coma:av {: RESULT = new AsignacionVariable(v,oa,av);  :}

@@ -22,3 +22,11 @@ public class Condicion {
     }
 
 }
+/*
+cion ::= operacion_aritmetica operadorRelacional operacion_aritmetica CondicionOperadorLogico
+            | operacion_aritmetica operadorRelacional constChar CondicionOperadorLogico
+            | operacion_aritmetica operadorRelacional constStr CondicionOperadorLogico
+            | constChar operadorRelacional operacion_aritmetica CondicionOperadorLogico
+            | constStr operadorRelacional operacion_aritmetica CondicionOperadorLogico
+            | parentesisIzquierdo condicion parentesisDerecho CondicionOperadorLogico;
+*/
