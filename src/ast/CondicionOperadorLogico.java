@@ -9,6 +9,6 @@ package ast;
  *
  * @author Gabriel
  */
-class CondicionOperadorLogico {
+public class CondicionOperadorLogico {
     
 }
