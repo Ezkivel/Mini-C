@@ -2,16 +2,32 @@ package minic;
 
 import java_cup.runtime.*;
 import ast.*;
-
-action code{:
-:};
+import java.util.*;
+import java.io.*;
 
 parser code{:
+
+    AnalizadorLexico lexer;
+    
+    public Programa generarPrograma;
+
+    public Programa getGenerarPrograma() {
+        return this.generarPrograma;
+    }
+    
+    public AnalizadorSintactico(AnalizadorLexico lex) {
+      super(lex);
+      lexer = lex;
+    }
+
     public void syntax_error(Symbol s)
     {
+     
+
         Token t = (Token)s.value;
         report_error("Se ha encontrado un error sintactico en linea " + t.getLinea() + ", columna " + t.getColumna() + " -> No se esperaba un < " + t.getContenido() + " >", null);
     }
+
 
     public void unrecovered_syntax_error(Symbol s) throws java.lang.Exception 
     {
@@ -19,7 +35,6 @@ parser code{:
     } 
 
 :};
-
 
 /* Terminals Tokens */
 
@@ -106,10 +121,9 @@ non terminal LlamadoAFuncionParametros llamado_funcion_parametros;
 non terminal LlamadoAFuncionParametrosComa llamado_funcion_parametros_coma;
 non terminal Return;
 
-start with programa;
 
-programa ::= declaracion_funcion:df  programa:p                                 {:   RESULT = new Programa(df, p); :}
-     | main:m                                                                   {:   RESULT = new Programa(m); :};
+programa ::= declaracion_funcion:df  programa:p                                 {:   RESULT = new Programa(df, p);  :}
+     | main:m                                                                   {:   RESULT = new Programa(m);  parser.generarPrograma = RESULT; :};
 
 main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f         {: RESULT = new MainClass(t, new MainClass(), new parentesisIzquierdo(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f ); :};
 
@@ -125,7 +139,7 @@ codigo ::= declaracion_variables:dv codigo:c                                    
          | RETURN operacion_aritmetica:o puntoYComa codigo:c                                             {: RESULT = new Codigo(new RETURN(), o, new puntoYComa(),   c); :}           
          | RETURN constChar:csc puntoYComa codigo:c                                                      {: RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa(), c); :}
          | RETURN constStr:cst puntoYComa codigo:c                                                       {: RESULT = new Codigo(new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa(),  c); :}
-         | error codigo:c                                                                                {: System.out.println("ERROR"); RESULT = new Codigo(c); :}
+         | error codigo:c                                                                                {: System.out.println("ERROR"); RESULT = c; :}
          |;
 
 declaracion_variables ::= tipo:t lista_variables:lv puntoYComa {: RESULT = new DeclaracionVariables(t,lv, new puntoYComa() );   :};

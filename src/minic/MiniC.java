@@ -18,7 +18,7 @@ public class MiniC {
         //Ejecutar luego de hacer algun cambio en el archivo .jflex
         try {
             generarClases();
-            
+
             MoverArchivosCAP();
             //Archivo fuente
             JFileChooser fc = new JFileChooser();
@@ -53,6 +53,11 @@ public class MiniC {
 
             AnalizadorSintactico as = new AnalizadorSintactico(al);
             as.parse();
+            Programa generarPrograma = as.getGenerarPrograma();
+          // Testing
+           /* System.out.println(generarPrograma._mainClass._codigo._prinft._constStr._constStr);
+              System.out.println(generarPrograma._mainClass._codigo._codigo._prinft._constStr._constStr);
+           */
         } catch (Exception e) {
             System.err.println("ERROR Analizador: " + e.getMessage());
         }
