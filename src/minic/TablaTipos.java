@@ -5,34 +5,68 @@
  */
 package minic;
 
+import ast.Codigos;
+import ast.DeclaracionVariable;
+import ast.DeclaracionVariables;
+import ast.For;
+import ast.If;
+import ast.ListaVariables;
+import ast.Programa;
+import ast.While;
+import java.util.Vector;
+
 /**
  *
  * @author Gabriel
  */
 public class TablaTipos {
 
-    protected String _nombre;
-    protected String _ambito;
+    private Vector<ListaTipos> listaTipos;
 
-    public TablaTipos(String _nombre, String _ambito) {
-        this._nombre = _nombre;
-        this._ambito = _ambito;
+    private Programa programa;
+
+    public TablaTipos(Programa p) {
+        this.programa = p;
+        this.listaTipos = new Vector();
+        llenar_tabla_variables();
     }
 
-    public String getNombre() {
-        return _nombre;
+    public Vector<ListaTipos> getLista() {
+        return listaTipos;
     }
 
-    public void setNombre(String _nombre) {
-        this._nombre = _nombre;
+    public Programa getPrograma() {
+        return programa;
     }
 
-    public String getAmbito() {
-        return _ambito;
+    public void llenar_tabla_variables() {
+
+        Codigos c = getPrograma()._mainClass._codigos;
+        for (int i = 0; i < c.size(); i++) {
+           try {
+                DeclaracionVariables in = ((DeclaracionVariable) c.elementAt(i))._declaracionVariables;
+                for (int l = 0; l < in.size(); l++) {
+
+                    System.out.println(" " + ((ListaVariables)in.elementAt(l))._nombreVariable._nombreVariable );
+                }
+           }catch(Exception e)
+           {
+               
+           }
+            
+        }
     }
 
-    public void setAmbito(String _ambito) {
-        this._ambito = _ambito;
+    public void llenar_tabla_funciones() {
+
+    }
+
+    public void print() {
+        System.out.println(listaTipos.size());
+        for (int i = 0; i < listaTipos.size(); i++) {
+            ListaTipos_Variable s = ((ListaTipos_Variable) listaTipos.elementAt(i));
+            System.out.println(s._nombre + " " + s.getTipo().getClass().getName() + " " + s._ambito);
+        }
     }
 
 }

@@ -11,23 +11,24 @@ import java.util.Vector;
  *
  * @author Gabriel
  */
-public class DeclaracionVariables {
+public class Codigos {
 
     private Vector list;
 
-    public DeclaracionVariables() {
-        this.list = new Vector();
+    public Codigos() {
+        list = new Vector();
     }
 
-    public void add(ListaVariables n) {
+    public void add(Codigo n) {
         list.add(0, n);
     }
 
-    public ListaVariables elementAt(int i) {
-        return (ListaVariables) list.elementAt(i);
+    public Codigo elementAt(int i) {
+        return (Codigo) list.elementAt(i);
     }
 
     public int size() {
         return list.size();
     }
+
 }

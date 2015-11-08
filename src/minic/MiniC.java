@@ -54,6 +54,8 @@ public class MiniC {
             AnalizadorSintactico as = new AnalizadorSintactico(al);
             as.parse();
             Programa generarPrograma = as.getGenerarPrograma();
+            TablaTipos tabla = new TablaTipos(generarPrograma);
+            //tabla.print();
           // Testing
            /* System.out.println(generarPrograma._mainClass._codigo._prinft._constStr._constStr);
               System.out.println(generarPrograma._mainClass._codigo._codigo._prinft._constStr._constStr);

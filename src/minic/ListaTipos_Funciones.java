@@ -12,12 +12,12 @@ import java.util.Vector;
  *
  * @author Gabriel
  */
-public class TablaTipos_Funciones extends TablaTipos {
+public class ListaTipos_Funciones extends ListaTipos {
 
     private Tipo _tipo_retorno;
     private Vector<Tipo> _parametros;
 
-    public TablaTipos_Funciones(Tipo _tipo_retorno, Vector<Tipo> _parametros, String _nombre, String _ambito) {
+    public ListaTipos_Funciones(Tipo _tipo_retorno, Vector<Tipo> _parametros, String _nombre, int _ambito) {
         super(_nombre, _ambito);
         this._tipo_retorno = _tipo_retorno;
         this._parametros = _parametros;

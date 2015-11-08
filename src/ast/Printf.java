@@ -9,7 +9,7 @@ package ast;
  *
  * @author Gabriel
  */
-public class Printf {
+public class Printf extends Codigo{
 
     public parentesisIzquierdo _parIz;
     public constStr _constStr;

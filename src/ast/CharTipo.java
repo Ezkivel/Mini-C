@@ -9,9 +9,11 @@ package ast;
  *
  * @author Gabriel
  */
-public class CharTipo extends Tipo{
+public class CharTipo extends Tipo {
+
+    public String _charTipo = "char";
 
     public CharTipo() {
     }
-    
+
 }

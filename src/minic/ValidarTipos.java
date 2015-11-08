@@ -3,17 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package ast;
+package minic;
 
 /**
  *
  * @author Gabriel
  */
-public class IntegerTipo extends Tipo {
-
-    public String _integetTipo = "int";
-
-    public IntegerTipo() {
-    }
-
+public class ValidarTipos {
+    ///validar los tipos
+    
 }

@@ -9,7 +9,7 @@ package ast;
  *
  * @author Gabriel
  */
-public class IncrementarDecrementarVariable {
+public class IncrementarDecrementarVariable extends Codigo{
 
     public Variable _variable;
     public operadorIncrementoDecremento _operadorIncrementoDecremento;

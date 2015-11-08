@@ -9,7 +9,7 @@ package ast;
  *
  * @author Gabriel
  */
-public class AsignacionVariable {
+public class AsignacionVariable extends Codigo {
 
     public Variable _variable;
     public igual _igual;

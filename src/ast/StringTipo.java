@@ -9,9 +9,11 @@ package ast;
  *
  * @author Gabriel
  */
-public class StringTipo extends Tipo{
+public class StringTipo extends Tipo {
+
+    public String stringTipo = "string";
 
     public StringTipo() {
     }
-    
+
 }

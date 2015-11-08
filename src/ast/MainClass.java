@@ -16,7 +16,7 @@ public class MainClass {
     public parentesisIzquierdo _parIz;
     public parentesisDerecho _parDer;
     public llaveIzquierda _llIz;
-    public Codigo _codigo;
+    public Codigos _codigos;
     public llaveDerecha _llDer;
     public Funciones _funciones;
     public String Main;
@@ -25,13 +25,13 @@ public class MainClass {
         this.Main = "Main";
     }
 
-    public MainClass(Tipo p, MainClass main, parentesisIzquierdo parIz, parentesisDerecho parDer, llaveIzquierda llIz, Codigo cs, llaveDerecha llDer, Funciones fun) {
+    public MainClass(Tipo p, MainClass main, parentesisIzquierdo parIz, parentesisDerecho parDer, llaveIzquierda llIz, Codigos cs, llaveDerecha llDer, Funciones fun) {
         this._tipo = p;
         this._main = main;
         this._parIz = parIz;
         this._parDer = parDer;
         this._llIz = llIz;
-        this._codigo = cs;
+        this._codigos = cs;
         this._llDer = llDer;
         this._funciones = fun;
     }

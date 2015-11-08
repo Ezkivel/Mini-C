@@ -9,7 +9,7 @@ package ast;
  *
  * @author Gabriel
  */
-public class Scanf {
+public class Scanf extends Codigo{
 
     public parentesisIzquierdo _parIz;
     public parametroScanf _parametroScanf;

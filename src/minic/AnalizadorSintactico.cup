@@ -87,7 +87,7 @@ non terminal DeclaracionFuncion declaracion_funcion;
 non terminal OperacionAritmetica operacion_aritmetica;
 non terminal OperacionAritmetica2 operacion_aritmetica2;
 non terminal OperacionAritmetica3 operacion_aritmetica3;
-non terminal DeclaracionVariables declaracion_variables;
+non terminal DeclaracionVariable declaracion_variable;
 non terminal Tipo tipo;
 non terminal Variable variable;
 non terminal ElementoDeUnArreglo elemento_array;
@@ -105,7 +105,6 @@ non terminal ForInicializacion2 for_inicializacion2;
 non terminal ForActualizacion for_actualizacion;
 non terminal ForActualizacionComa for_actualizacion_coma; 
 non terminal ListaVariables lista_variables;
-non terminal ListaVariablesComa lista_variablesComa;
 non terminal ForInicializacionComa for_inicializacion_coma;
 non terminal Condicion condicion;
 non terminal CondicionOperadorLogico condicion_operador_logico;
@@ -120,44 +119,53 @@ non terminal LlamadoAFuncion llamado_funcion;
 non terminal LlamadoAFuncionParametros llamado_funcion_parametros;
 non terminal LlamadoAFuncionParametrosComa llamado_funcion_parametros_coma;
 non terminal Return;
+non terminal Codigos codigos;
+non terminal DeclaracionVariables declaracion_variables;
 
 
-programa ::= declaracion_funcion:df  programa:p                                 {:   RESULT = new Programa(df, p);  :}
+programa ::= declaracion_funcion:df  programa:p                                 {:   RESULT = new Programa(df, p);   :}
      | main:m                                                                   {:   RESULT = new Programa(m);  parser.generarPrograma = RESULT; :};
 
-main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f         {: RESULT = new MainClass(t, new MainClass(), new parentesisIzquierdo(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f ); :};
+main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigos:c llaveDerecha funciones:f         {: RESULT = new MainClass(t, new MainClass(), new parentesisIzquierdo(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f ); :};
 
-codigo ::= declaracion_variables:dv codigo:c                                                             {: RESULT = new Codigo(dv, c); :} 
-         | asignacion_variable:av codigo:c                                                               {: RESULT = new Codigo(av,c);  :}
-         | incrementarDecrementarVariable:i codigo:c                                                     {: RESULT = new Codigo(i, c);  :}
-         | print:p codigo:c                                                                              {: RESULT = new Codigo(p,c); /*System.out.print( RESULT.p.cs._constStr);*/ :}
-         | scans:s codigo:c                                                                              {: RESULT = new Codigo(s,c);  :}
-         | _while:w codigo:c                                                                             {: RESULT = new Codigo(w,c);  :}
-         | _if:i codigo:c                                                                                {: RESULT = new Codigo(i,c);  :}
-         | _for:f codigo:c                                                                               {: RESULT = new Codigo(f,c);  :}
-         | llamado_funcion:lf puntoYComa codigo:c                                                        {: RESULT = new Codigo(lf,new puntoYComa(), c);  :}   
-         | RETURN operacion_aritmetica:o puntoYComa codigo:c                                             {: RESULT = new Codigo(new RETURN(), o, new puntoYComa(),   c); :}           
-         | RETURN constChar:csc puntoYComa codigo:c                                                      {: RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa(), c); :}
-         | RETURN constStr:cst puntoYComa codigo:c                                                       {: RESULT = new Codigo(new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa(),  c); :}
-         | error codigo:c                                                                                {: System.out.println("ERROR"); RESULT = c; :}
-         |;
+codigos ::= codigo:c codigos:cs             {:  cs.add(c); RESULT = cs; :}
+            |                               {:   RESULT = new Codigos();  :};
 
-declaracion_variables ::= tipo:t lista_variables:lv puntoYComa {: RESULT = new DeclaracionVariables(t,lv, new puntoYComa() );   :};
+
+
+codigo ::= declaracion_variable:dv                                                            {: RESULT = dv; :} 
+         | asignacion_variable:av                                                             {: RESULT = av;  :}
+         | incrementarDecrementarVariable:i                                                   {: RESULT = i;  :}
+         | print:p                                                                            {: RESULT = p; :}
+         | scans:s                                                                            {: RESULT = s; :}
+         | _while:w                                                                           {: RESULT = w;  :}
+         | _if:i                                                                              {: RESULT = i;  :}
+         | _for:f                                                                             {: RESULT = f;  :}
+         | llamado_funcion:lf puntoYComa                                                      {: RESULT = new Codigo(lf,new puntoYComa());  :}   
+         | RETURN operacion_aritmetica:o puntoYComa                                           {: RESULT = new Codigo(new RETURN(), o, new puntoYComa()); :}           
+         | RETURN constChar:csc puntoYComa                                                    {: RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa()); :}
+         | RETURN constStr:cst puntoYComa                                                     {: RESULT = new Codigo( new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa() ); :}
+         | error codigo:c                                                                     {: System.out.println("ERROR"); :};
+
+
 
 tipo ::= INTEGER {: RESULT = new IntegerTipo(); :}
        | STRING  {: RESULT = new StringTipo();  :}  
        | CHAR    {: RESULT = new CharTipo();   :};
 
-lista_variables ::= variable:v lista_variablesComa:lc                                                                                                                                    {: RESULT = new ListaVariables(v,lc);  :}
-                 | nombreVariable:id igual operacion_aritmetica:o lista_variablesComa:lc                                                                                                 {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), o, lc);  :}
-                 | nombreVariable:id igual constChar:csc lista_variablesComa:lc                                                                                                          {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constChar(csc._constChar, csc.linea, csc.columna), lc);   :}
-                 | nombreVariable:id igual constStr:css lista_variablesComa:lc                                                                                                           {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constStr(css._constStr, css.linea, css.columna), lc);   :}
-                 | nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho igual llaveIzquierda inicializacion_arreglo:ia llaveDerecha lista_variablesComa:lv         {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho(), new igual(), new llaveIzquierda(), ia, new llaveDerecha(), lv);  :}
-                 | nombreVariable:id corcheteIzquierdo corcheteDerecho igual llaveIzquierda inicializacion_arreglo:iA llaveDerecha lista_variablesComa:lv                                {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), new igual(), new llaveIzquierda(), iA, new llaveDerecha(), lv);  :};
+declaracion_variable ::= tipo:t declaracion_variables:dv puntoYComa {: RESULT = new DeclaracionVariable(t,dv, new puntoYComa() );   :};
 
-lista_variablesComa ::= coma lista_variables:lv                                                                                                                                          {: RESULT = new ListaVariablesComa(lv, new coma()); :}
-                     |;
+declaracion_variables ::= lista_variables:lvs coma declaracion_variables:dvs    {: dvs.add(lvs); RESULT = dvs; :}
+                          | lista_variables:lvs                                 {: RESULT = new DeclaracionVariables(); RESULT.add( lvs); :};
 
+lista_variables ::= variable:v                                     {: RESULT = new ListaVariables(v);  :}
+                 | nombreVariable:id igual operacion_aritmetica:o  {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), o);  :}
+                 | nombreVariable:id igual constChar:csc           {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constChar(csc._constChar, csc.linea, csc.columna)); :}
+                 | nombreVariable:id igual constStr:css            {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constStr(css._constStr, css.linea, css.columna));   :}
+                  | nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho igual llaveIzquierda inicializacion_arreglo:ia llaveDerecha         
+                {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho(), new igual(), new llaveIzquierda(), ia, new llaveDerecha());  :}
+                 | nombreVariable:id corcheteIzquierdo corcheteDerecho igual llaveIzquierda inicializacion_arreglo:iA llaveDerecha     
+                {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), new igual(), new llaveIzquierda(), iA, new llaveDerecha());  :};
 
 
 declaracion_funcion ::= tipo:t nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfp parentesisDerecho puntoYComa     {:  RESULT = new DeclaracionFuncion(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), dfp, new parentesisDerecho(), new puntoYComa());  :}
@@ -172,10 +180,10 @@ declaracion_funcion_parametros ::= tipo:t declaracion_funcion_parametros_coma:df
 declaracion_funcion_parametros_coma ::= coma declaracion_funcion_parametros:dfp                                                           {: RESULT = new DeclaracionFuncionParametrosComa(new coma(), dfp);    :}
                                    |;
 
-funciones ::= tipo:t nombreVariable:id parentesisIzquierdo funciones_parametros:fp parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f        {:  RESULT = new Funciones(t,new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), fp, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
-            | VOID nombreVariable:id parentesisIzquierdo funciones_parametros:fp parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f          {:  RESULT = new Funciones(new VOID(),new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), fp, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
-            | tipo:t error parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f                                                                {:  System.out.println("ERROR"); RESULT = new Funciones(t, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
-            | VOID error parentesisDerecho llaveIzquierda codigo:c llaveDerecha funciones:f                                                                  {:  System.out.println("ERROR"); RESULT = new Funciones(new VOID(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
+funciones ::= tipo:t nombreVariable:id parentesisIzquierdo funciones_parametros:fp parentesisDerecho llaveIzquierda codigos:c llaveDerecha funciones:f        {:  RESULT = new Funciones(t,new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), fp, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
+            | VOID nombreVariable:id parentesisIzquierdo funciones_parametros:fp parentesisDerecho llaveIzquierda codigos:c llaveDerecha funciones:f          {:  RESULT = new Funciones(new VOID(),new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), fp, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
+            | tipo:t error parentesisDerecho llaveIzquierda codigos:c llaveDerecha funciones:f                                                                {:  System.out.println("ERROR"); RESULT = new Funciones(t, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
+            | VOID error parentesisDerecho llaveIzquierda codigos:c llaveDerecha funciones:f                                                                  {:  System.out.println("ERROR"); RESULT = new Funciones(new VOID(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
             |;
 
 funciones_parametros ::= tipo:t nombreVariable:id funciones_parametros_coma:fpc                                                {: RESULT = new FuncionesParametros(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), fpc); :}
@@ -204,23 +212,23 @@ print ::= printf parentesisIzquierdo constStr:csts parentesisDerecho puntoYComa 
          | printf parentesisIzquierdo constStr:csts coma operacion_aritmetica:o parentesisDerecho puntoYComa     {: RESULT = new Printf(new parentesisIzquierdo(), new constStr(csts._constStr, csts.linea, csts.columna), new coma(), o, new parentesisDerecho(), new puntoYComa()); :}
         ;
 
-_if ::= IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigo:cg llaveDerecha else:e   {: RESULT = new If(new parentesisIzquierdo() , c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha(), e);  :}
-     | IF error parentesisDerecho llaveIzquierda codigo:c llaveDerecha else:e                               {: RESULT = new If(new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), e);  :};
+_if ::= IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigos:cg llaveDerecha else:e   {: RESULT = new If(new parentesisIzquierdo() , c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha(), e);  :}
+     | IF error parentesisDerecho llaveIzquierda codigos:c llaveDerecha else:e                               {: RESULT = new If(new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), e);  :};
 
-else ::= ELSE IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigo:cg llaveDerecha else:e    {: RESULT = new Else(new parentesisIzquierdo(), c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha(), e); :}
-       | ELSE llaveIzquierda codigo:c llaveDerecha                                                                 {: RESULT = new Else(new llaveIzquierda(), c, new llaveDerecha()); :}
-       | ELSE IF error parentesisDerecho llaveIzquierda codigo:c llaveDerecha else:e                               {: System.out.println("ERROR"); RESULT = new Else( new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), e);  :}
+else ::= ELSE IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigos:cg llaveDerecha else:e    {: RESULT = new Else(new parentesisIzquierdo(), c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha(), e); :}
+       | ELSE llaveIzquierda codigos:c llaveDerecha                                                                 {: RESULT = new Else(new llaveIzquierda(), c, new llaveDerecha()); :}
+       | ELSE IF error parentesisDerecho llaveIzquierda codigos:c llaveDerecha else:e                               {: System.out.println("ERROR"); RESULT = new Else( new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), e);  :}
        |;
 
-_while ::= WHILE parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigo:cg llaveDerecha           {: RESULT = new While(new parentesisIzquierdo(), c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
-        | WHILE error parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                                      {: System.out.println("ERROR");RESULT = new While(new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :};
+_while ::= WHILE parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigos:cg llaveDerecha           {: RESULT = new While(new parentesisIzquierdo(), c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
+        | WHILE error parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                                      {: System.out.println("ERROR");RESULT = new While(new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :};
 
-_for ::= FOR parentesisIzquierdo for_inicializacion:fi puntoYComa condicion:c puntoYComa for_actualizacion:fa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha    {:   RESULT = new For( new parentesisIzquierdo(), fi, new puntoYComa(), c, new puntoYComa(), fa, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha() ); :}
-      | FOR parentesisIzquierdo puntoYComa condicion:c puntoYComa for_actualizacion:fa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                           {:   RESULT = new For( new parentesisIzquierdo(), new puntoYComa(), c, new puntoYComa(), fa, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha());    :}
-      | FOR parentesisIzquierdo for_inicializacion:fi puntoYComa condicion:c puntoYComa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                          {:   RESULT = new For( new parentesisIzquierdo(), fi, new puntoYComa(), c, new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
-      | FOR parentesisIzquierdo puntoYComa condicion:c puntoYComa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                                                {:   RESULT = new For(new parentesisIzquierdo(), new puntoYComa(), c, new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
-      | FOR parentesisIzquierdo puntoYComa puntoYComa parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                                                            {:   RESULT = new For(new parentesisIzquierdo(), new puntoYComa(), new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
-      | FOR error parentesisDerecho llaveIzquierda codigo:cg llaveDerecha                                                                                                {:   System.out.println("ERROR");RESULT = new For(new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha());   :};
+_for ::= FOR parentesisIzquierdo for_inicializacion:fi puntoYComa condicion:c puntoYComa for_actualizacion:fa parentesisDerecho llaveIzquierda codigos:cg llaveDerecha    {:   RESULT = new For( new parentesisIzquierdo(), fi, new puntoYComa(), c, new puntoYComa(), fa, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha() ); :}
+      | FOR parentesisIzquierdo puntoYComa condicion:c puntoYComa for_actualizacion:fa parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                           {:   RESULT = new For( new parentesisIzquierdo(), new puntoYComa(), c, new puntoYComa(), fa, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha());    :}
+      | FOR parentesisIzquierdo for_inicializacion:fi puntoYComa condicion:c puntoYComa parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                          {:   RESULT = new For( new parentesisIzquierdo(), fi, new puntoYComa(), c, new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
+      | FOR parentesisIzquierdo puntoYComa condicion:c puntoYComa parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                                                {:   RESULT = new For(new parentesisIzquierdo(), new puntoYComa(), c, new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
+      | FOR parentesisIzquierdo puntoYComa puntoYComa parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                                                            {:   RESULT = new For(new parentesisIzquierdo(), new puntoYComa(), new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
+      | FOR error parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                                                                                                {:   System.out.println("ERROR");RESULT = new For(new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha());   :};
 
 
 for_inicializacion ::= tipo:t variable:v for_inicializacion_coma:fi                                                {:  RESULT = new ForInicializacion(t,v,fi);   :}

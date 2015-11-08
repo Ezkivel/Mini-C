@@ -9,11 +9,6 @@ package ast;
  *
  * @author Gabriel
  */
-public class IntegerTipo extends Tipo {
-
-    public String _integetTipo = "int";
-
-    public IntegerTipo() {
-    }
+public class ArrayTipoInteger extends ArrayTipo {
 
 }
