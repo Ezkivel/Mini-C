@@ -56,6 +56,7 @@ public class MiniC {
             Programa generarPrograma = as.getGenerarPrograma();
             TablaTipos tabla = new TablaTipos(as.getListaVariables());
             tabla.print();
+            ValidarTipos validar = new ValidarTipos(tabla.getLista_varibles());
           // Testing
            /* System.out.println(generarPrograma._mainClass._codigo._prinft._constStr._constStr);
               System.out.println(generarPrograma._mainClass._codigo._codigo._prinft._constStr._constStr);

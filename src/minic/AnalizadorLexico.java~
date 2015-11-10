@@ -960,7 +960,7 @@ class AnalizadorLexico implements java_cup.runtime.Scanner {
             }
           case 64: break;
           case 26: 
-            { return new Symbol(sym.constChar, new constChar(yytext().charAt(0), yyline + 1, yycolumn + 1));
+            { return new Symbol(sym.constChar, new constChar(yytext(), yyline + 1, yycolumn + 1));
             }
           case 65: break;
           case 27: 

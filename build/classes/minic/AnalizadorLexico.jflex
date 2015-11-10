@@ -82,7 +82,7 @@ PuntoYComa = ;
 {LlaveIzquierda} {return new Symbol(sym.llaveIzquierda, new Token("LlaveIzquierda", yytext(), yyline + 1, yycolumn + 1));}
 {LlaveDerecha} {return new Symbol(sym.llaveDerecha, new Token("LlaveDerecha", yytext(), yyline + 1, yycolumn + 1));}
 {NombreVariable} {return new Symbol(sym.nombreVariable, new nombreVariable(yytext(), yyline + 1, yycolumn + 1));}
-{ConstChar} {return new Symbol(sym.constChar, new constChar(yytext().charAt(0), yyline + 1, yycolumn + 1));}
+{ConstChar} {return new Symbol(sym.constChar, new constChar(yytext(), yyline + 1, yycolumn + 1));}
 {ConstStr} {return new Symbol(sym.constStr, new constStr(yytext(), yyline + 1, yycolumn + 1));}
 {ParentesisIzquierdo} {return new Symbol(sym.parentesisIzquierdo, new Token("ParentesisIzquierdo", yytext(), yyline + 1, yycolumn + 1));}
 {ParentesisDerecho} {return new Symbol(sym.parentesisDerecho, new Token("ParentesisDerecho", yytext(), yyline + 1, yycolumn + 1));}

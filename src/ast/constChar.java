@@ -11,11 +11,11 @@ package ast;
  */
 public class constChar {
 
-    public char _constChar;
+    public String _constChar;
     public final int linea;
     public final int columna;
 
-    public constChar(char c, int linea, int columna) {
+    public constChar(String c, int linea, int columna) {
         this._constChar = c;
         this.linea = linea;
         this.columna = columna;

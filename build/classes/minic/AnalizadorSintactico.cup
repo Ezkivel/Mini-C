@@ -138,8 +138,6 @@ main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigo
 codigos ::= codigo:c codigos:cs             {:  cs.add(c); RESULT = cs; :}
             |                               {:   RESULT = new Codigos();  :};
 
-
-
 codigo ::= declaracion_variable:dv                                                            {: RESULT = dv;  parser.lista.add(dv); :} 
          | asignacion_variable:av                                                             {: RESULT = av;  :}
          | incrementarDecrementarVariable:i                                                   {: RESULT = i;  :}
@@ -153,8 +151,6 @@ codigo ::= declaracion_variable:dv                                              
          | RETURN constChar:csc puntoYComa                                                    {: RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa()); :}
          | RETURN constStr:cst puntoYComa                                                     {: RESULT = new Codigo( new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa() ); :}
          | error codigo:c                                                                     {: System.out.println("ERROR"); :};
-
-
 
 tipo ::= INTEGER {: RESULT = new IntegerTipo(); :}
        | STRING  {: RESULT = new StringTipo();  :}  
@@ -172,7 +168,17 @@ lista_variables ::= variable:v                                     {: RESULT = n
                  | nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho igual llaveIzquierda inicializacion_arreglo:ia llaveDerecha         
                 {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho(), new igual(), new llaveIzquierda(), ia, new llaveDerecha());  :}
                  | nombreVariable:id corcheteIzquierdo corcheteDerecho igual llaveIzquierda inicializacion_arreglo:iA llaveDerecha     
-                {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), new igual(), new llaveIzquierda(), iA, new llaveDerecha());  :};
+                {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), new igual(), new llaveIzquierda(), iA, new llaveDerecha());  :}
+                  ;
+
+/* mejor este inicializacion_arreglo_coma ocupas hacer una lista como declaracion_variable */
+ inicializacion_arreglo_coma ::= coma inicializacion_arreglo:i                                            {:  RESULT = new InicializacionArregloComa( new coma(), i); :}
+                            |;
+
+inicializacion_arreglo ::= operacion_aritmetica:o  inicializacion_arreglo_coma:i                          {:  RESULT = new InicializacionArreglo(o,i);   :}
+                        | constChar:csc  inicializacion_arreglo_coma:i                                    {:  RESULT = new InicializacionArreglo(new constChar(csc._constChar, csc.linea, csc.columna),i);   :}
+                        | constStr:css  inicializacion_arreglo_coma:i                                     {:  RESULT = new InicializacionArreglo(new constStr(css._constStr, css.linea, css.columna),i);   :};
+
 
 
 declaracion_funcion ::= tipo:t nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfp parentesisDerecho puntoYComa     {:  RESULT = new DeclaracionFuncion(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), dfp, new parentesisDerecho(), new puntoYComa());  :}
@@ -291,14 +297,6 @@ variable ::= nombreVariable:id                                                  
            | elemento_array:array                                                                         {: RESULT = new Variable(array);   :};
 
 elemento_array ::= nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho             {: RESULT = new ElementoDeUnArreglo(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho()); :} ;
-
-inicializacion_arreglo ::= operacion_aritmetica:o  inicializacion_arreglo_coma:i                          {:  RESULT = new InicializacionArreglo(o,i);   :}
-                        | constChar:csc  inicializacion_arreglo_coma:i                                    {:  RESULT = new InicializacionArreglo(new constChar(csc._constChar, csc.linea, csc.columna),i);   :}
-                        | constStr:css  inicializacion_arreglo_coma:i                                     {:  RESULT = new InicializacionArreglo(new constStr(css._constStr, css.linea, css.columna),i);   :};
-
- inicializacion_arreglo_coma ::= coma inicializacion_arreglo:i                                            {:  RESULT = new InicializacionArregloComa( new coma(), i); :}
-                            |;
-
 
 operacion_aritmetica ::= operacion_aritmetica:o1 operadorSuma operacion_aritmetica2:o2                   {: RESULT = new OperacionAritmetica(o1, new operadorSuma(), o2); :}
                       | operacion_aritmetica:o1 operadorResta operacion_aritmetica2:o2                   {: RESULT = new OperacionAritmetica(o1, new operadorResta(), o2); :}
