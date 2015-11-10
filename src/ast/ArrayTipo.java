@@ -11,4 +11,12 @@ package ast;
  */
 public class ArrayTipo extends Tipo {
 
+    public Tipo tipo;
+    public int tamano;
+
+    public ArrayTipo(int tamano, Tipo tipo) {
+        this.tipo = tipo;
+        this.tamano = tamano;
+    }
+
 }

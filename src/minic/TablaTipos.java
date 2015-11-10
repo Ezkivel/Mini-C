@@ -5,6 +5,7 @@
  */
 package minic;
 
+import ast.ArrayTipo;
 import ast.Codigos;
 import ast.DeclaracionVariable;
 import ast.DeclaracionVariables;
@@ -40,12 +41,14 @@ public class TablaTipos {
                 int in = d._declaracionVariables.size();
 
                 for (int j = 0; j < in; j++) {
-                    if(d._declaracionVariables.elementAt(j)._inicializacionArreglo != null )
+                    if( true )
                     {
                         //el arreglo no se que pedos
                         System.out.println("fack");
                     }
                     listaTipos.add(new ListaTipos_Variable(d._tipo, d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0));
+                    
+                     //tipo array listaTipos.add(new ListaTipos_Variable( new ArrayTipo(100, d._tipo), d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0));
                 }
 
             }
