@@ -5,35 +5,33 @@
  */
 package minic;
 
+import ast.Codigo;
+import ast.DeclaracionVariable;
+import java.util.Vector;
+
 /**
  *
  * @author Gabriel
  */
 public class ListaTipos {
 
-    protected String _nombre;
-    protected int _ambito;
+    protected DeclaracionVariable _declaracionVariable;
+    protected Vector<DeclaracionVariable> list;
 
-    public ListaTipos(String _nombre, int _ambito) {
-        this._nombre = _nombre;
-        this._ambito = _ambito;
+    public ListaTipos() {
+        this.list = new Vector();
     }
 
-    public String getNombre() {
-        return _nombre;
+    public void add(DeclaracionVariable n) {
+        list.add(0, n);
     }
 
-    public void setNombre(String _nombre) {
-        this._nombre = _nombre;
+    public DeclaracionVariable elementAt(int i) {
+        return (DeclaracionVariable) list.elementAt(i);
     }
 
-    public int getAmbito() {
-        return _ambito;
-
-    }
-
-    public void setAmbito(int _ambito) {
-        this._ambito = _ambito;
+    public int size() {
+        return list.size();
     }
 
 }

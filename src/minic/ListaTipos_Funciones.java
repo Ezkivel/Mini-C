@@ -15,20 +15,26 @@ import java.util.Vector;
 public class ListaTipos_Funciones extends ListaTipos {
 
     private Tipo _tipo_retorno;
+    private String nombre;
     private Vector<Tipo> _parametros;
+    private RETURN _return;
 
-    public ListaTipos_Funciones(Tipo _tipo_retorno, Vector<Tipo> _parametros, String _nombre, int _ambito) {
-        super(_nombre, _ambito);
+    public ListaTipos_Funciones(Tipo _tipo_retorno, String nombre, Vector<Tipo> _parametros) {
         this._tipo_retorno = _tipo_retorno;
+        this.nombre = nombre;
         this._parametros = _parametros;
     }
 
-    public Tipo getTipo_retorno() {
-        return _tipo_retorno;
+    public void setTipo_retorno(Tipo _tipo_retorno) {
+        this._tipo_retorno = _tipo_retorno;
     }
 
-    public Vector<Tipo> getParametros() {
-        return _parametros;
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public void setParametros(Vector<Tipo> _parametros) {
+        this._parametros = _parametros;
     }
 
 }

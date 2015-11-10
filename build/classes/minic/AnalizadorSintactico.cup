@@ -4,16 +4,23 @@ import java_cup.runtime.*;
 import ast.*;
 import java.util.*;
 import java.io.*;
+import java.util.Vector;
 
 parser code{:
 
     AnalizadorLexico lexer;
     
     public Programa generarPrograma;
+    public  ListaTipos lista = new ListaTipos();
 
     public Programa getGenerarPrograma() {
         return this.generarPrograma;
     }
+    
+    public ListaTipos getListaVariables(){
+        return this.lista;
+    }
+
     
     public AnalizadorSintactico(AnalizadorLexico lex) {
       super(lex);
@@ -133,7 +140,7 @@ codigos ::= codigo:c codigos:cs             {:  cs.add(c); RESULT = cs; :}
 
 
 
-codigo ::= declaracion_variable:dv                                                            {: RESULT = dv; :} 
+codigo ::= declaracion_variable:dv                                                            {: RESULT = dv;  parser.lista.add(dv); :} 
          | asignacion_variable:av                                                             {: RESULT = av;  :}
          | incrementarDecrementarVariable:i                                                   {: RESULT = i;  :}
          | print:p                                                                            {: RESULT = p; :}
@@ -162,7 +169,7 @@ lista_variables ::= variable:v                                     {: RESULT = n
                  | nombreVariable:id igual operacion_aritmetica:o  {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), o);  :}
                  | nombreVariable:id igual constChar:csc           {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constChar(csc._constChar, csc.linea, csc.columna)); :}
                  | nombreVariable:id igual constStr:css            {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constStr(css._constStr, css.linea, css.columna));   :}
-                  | nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho igual llaveIzquierda inicializacion_arreglo:ia llaveDerecha         
+                 | nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho igual llaveIzquierda inicializacion_arreglo:ia llaveDerecha         
                 {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho(), new igual(), new llaveIzquierda(), ia, new llaveDerecha());  :}
                  | nombreVariable:id corcheteIzquierdo corcheteDerecho igual llaveIzquierda inicializacion_arreglo:iA llaveDerecha     
                 {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), new igual(), new llaveIzquierda(), iA, new llaveDerecha());  :};

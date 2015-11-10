@@ -21,39 +21,36 @@ import java.util.Vector;
  */
 public class TablaTipos {
 
-    private Vector<ListaTipos> listaTipos;
-
+    private Vector<ListaTipos_Variable> listaTipos;
     private Programa programa;
+    private ListaTipos lista;
 
-    public TablaTipos(Programa p) {
-        this.programa = p;
+    public TablaTipos(ListaTipos lista) {
         this.listaTipos = new Vector();
+        this.lista = lista;
         llenar_tabla_variables();
     }
 
-    public Vector<ListaTipos> getLista() {
-        return listaTipos;
-    }
-
-    public Programa getPrograma() {
-        return programa;
-    }
-
     public void llenar_tabla_variables() {
+        try {
 
-        Codigos c = getPrograma()._mainClass._codigos;
-        for (int i = 0; i < c.size(); i++) {
-           try {
-                DeclaracionVariables in = ((DeclaracionVariable) c.elementAt(i))._declaracionVariables;
-                for (int l = 0; l < in.size(); l++) {
+            int n = lista.list.size();
+            for (int i = 0; i < n; i++) {
+                DeclaracionVariable d = lista.list.elementAt(i);
+                int in = d._declaracionVariables.size();
 
-                    System.out.println(" " + ((ListaVariables)in.elementAt(l))._nombreVariable._nombreVariable );
+                for (int j = 0; j < in; j++) {
+                    if(d._declaracionVariables.elementAt(j)._inicializacionArreglo != null )
+                    {
+                        //el arreglo no se que pedos
+                        System.out.println("fack");
+                    }
+                    listaTipos.add(new ListaTipos_Variable(d._tipo, d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0));
                 }
-           }catch(Exception e)
-           {
-               
-           }
-            
+
+            }
+        } catch (Exception e) {
+
         }
     }
 
@@ -62,10 +59,10 @@ public class TablaTipos {
     }
 
     public void print() {
-        System.out.println(listaTipos.size());
-        for (int i = 0; i < listaTipos.size(); i++) {
-            ListaTipos_Variable s = ((ListaTipos_Variable) listaTipos.elementAt(i));
-            System.out.println(s._nombre + " " + s.getTipo().getClass().getName() + " " + s._ambito);
+        int n = listaTipos.size();
+        System.out.println(n);
+        for (int i = 0; i < n; i++) {
+            System.out.println(listaTipos.elementAt(i).getTipo().getClass().getName() + " " + listaTipos.elementAt(i).getNombre() + " " + listaTipos.elementAt(i).getAmbito());
         }
     }
 
