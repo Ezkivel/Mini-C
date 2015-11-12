@@ -14,13 +14,15 @@ import java.util.Vector;
 public class DeclaracionVariables {
 
     private Vector list;
+    private Tipo tipo;
+    private nombreVariable _nombreVariable;
 
     public DeclaracionVariables() {
-        this.list = new Vector();
+        list = new Vector();
     }
 
     public void add(ListaVariables n) {
-        list.add(0, n);
+        list.add(n);
     }
 
     public ListaVariables elementAt(int i) {
@@ -30,4 +32,21 @@ public class DeclaracionVariables {
     public int size() {
         return list.size();
     }
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
+
+    public nombreVariable getNombreVariable() {
+        return _nombreVariable;
+    }
+
+    public void setNombreVariable(nombreVariable _nombreVariable) {
+        this._nombreVariable = _nombreVariable;
+    }
+
 }

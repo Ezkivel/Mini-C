@@ -22,9 +22,9 @@ import java.util.Vector;
 public class ValidarTipos {
     ///validar los tipos
 
-    private Vector<ListaTipos_Variable> lista;
+    private Vector<_ListaTipos> lista;
 
-    public ValidarTipos(Vector<ListaTipos_Variable> lista) {
+    public ValidarTipos(Vector<_ListaTipos> lista) {
         this.lista = lista;
         validar_funciones();
     }

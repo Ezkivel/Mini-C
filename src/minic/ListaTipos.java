@@ -5,8 +5,6 @@
  */
 package minic;
 
-import ast.Codigo;
-import ast.DeclaracionVariable;
 import java.util.Vector;
 
 /**
@@ -15,19 +13,18 @@ import java.util.Vector;
  */
 public class ListaTipos {
 
-    protected DeclaracionVariable _declaracionVariable;
-    protected Vector<DeclaracionVariable> list;
+    protected Vector list;
 
     public ListaTipos() {
         this.list = new Vector();
     }
 
-    public void add(DeclaracionVariable n) {
+    public void add(_ListaTipos n) {
         list.add(0, n);
     }
 
-    public DeclaracionVariable elementAt(int i) {
-        return (DeclaracionVariable) list.elementAt(i);
+    public _ListaTipos elementAt(int i) {
+        return (_ListaTipos) list.elementAt(i);
     }
 
     public int size() {

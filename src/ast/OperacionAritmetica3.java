@@ -17,6 +17,7 @@ public class OperacionAritmetica3 {
     public parentesisIzquierdo _parentesisIzquierdo;
     public OperacionAritmetica _OperacionAritmetica;
     public parentesisDerecho _parentesisDerecho;
+    private Tipo _tipo;
 
     public OperacionAritmetica3(entero _entero) {
         this._entero = _entero;
@@ -34,6 +35,14 @@ public class OperacionAritmetica3 {
         this._parentesisIzquierdo = _parentesisIzquierdo;
         this._OperacionAritmetica = _OperacionAritmetica;
         this._parentesisDerecho = _parentesisDerecho;
+    }
+
+    public Tipo getTipo() {
+        return _tipo;
+    }
+
+    public void setTipo(Tipo _tipo) {
+        this._tipo = _tipo;
     }
 
 }

@@ -12,14 +12,29 @@ package ast;
 public class DeclaracionVariable extends Codigo {
 
     public Tipo _tipo;
+    //public ListaVariables _listaVariables;
     public DeclaracionVariables _declaracionVariables;
     public puntoYComa _puntoYComa;
+    private Tipo tipo;
 
-    public DeclaracionVariable(Tipo t, DeclaracionVariables lv, puntoYComa pyc) {
+  /*  public DeclaracionVariable(Tipo t, ListaVariables _listaVariables, puntoYComa pyc) {
         this._tipo = t;
-        this._declaracionVariables = lv;
+        this._listaVariables = _listaVariables;
+        this._puntoYComa = pyc;
+    }*/
+
+    public DeclaracionVariable(Tipo t, DeclaracionVariables _declaracionVariables, puntoYComa pyc) {
+        this._tipo = t;
+        this._declaracionVariables = _declaracionVariables;
         this._puntoYComa = pyc;
     }
-    
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
+    }
 
 }

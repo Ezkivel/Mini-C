@@ -15,6 +15,7 @@ public class OperacionAritmetica2 {
     public operadorMultiplicacion _operadorMultiplicacion;
     public operadorDivision _operadorDivision;
     public OperacionAritmetica3 _operacionAritmetica3;
+    public Tipo _tipo;
 
     public OperacionAritmetica2(OperacionAritmetica2 _operacionAritmetica2, operadorMultiplicacion _operadorMultiplicacion, OperacionAritmetica3 _operacionAritmetica3) {
 
@@ -31,6 +32,14 @@ public class OperacionAritmetica2 {
 
     public OperacionAritmetica2(OperacionAritmetica3 _operacionAritmetica3) {
         this._operacionAritmetica3 = _operacionAritmetica3;
+    }
+
+    public Tipo getTipo() {
+        return _tipo;
+    }
+
+    public void setTipo(Tipo _tipo) {
+        this._tipo = _tipo;
     }
 
 }

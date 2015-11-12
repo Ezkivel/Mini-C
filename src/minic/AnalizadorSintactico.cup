@@ -12,12 +12,13 @@ parser code{:
     
     public Programa generarPrograma;
     public  ListaTipos lista = new ListaTipos();
+    public Ambito ambito = new Ambito();
 
     public Programa getGenerarPrograma() {
         return this.generarPrograma;
     }
     
-    public ListaTipos getListaVariables(){
+    public ListaTipos GetTabla_Tipos(){
         return this.lista;
     }
 
@@ -71,7 +72,7 @@ terminal igual;
 terminal printf;
 terminal scanf;
 terminal operadorAritmeticoIgual;
-terminal operadorSuma;
+terminal  Token operadorSuma;
 terminal operadorResta; 
 terminal operadorMultiplicacion; 
 terminal operadorDivision; 
@@ -130,6 +131,7 @@ non terminal Codigos codigos;
 non terminal DeclaracionVariables declaracion_variables;
 
 
+
 programa ::= declaracion_funcion:df  programa:p                                 {:   RESULT = new Programa(df, p);   :}
      | main:m                                                                   {:   RESULT = new Programa(m);  parser.generarPrograma = RESULT; :};
 
@@ -138,7 +140,7 @@ main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigo
 codigos ::= codigo:c codigos:cs             {:  cs.add(c); RESULT = cs; :}
             |                               {:   RESULT = new Codigos();  :};
 
-codigo ::= declaracion_variable:dv                                                            {: RESULT = dv;  parser.lista.add(dv); :} 
+codigo ::= declaracion_variable:dv                                                            {: RESULT = dv;  :} 
          | asignacion_variable:av                                                             {: RESULT = av;  :}
          | incrementarDecrementarVariable:i                                                   {: RESULT = i;  :}
          | print:p                                                                            {: RESULT = p; :}
@@ -156,29 +158,62 @@ tipo ::= INTEGER {: RESULT = new IntegerTipo(); :}
        | STRING  {: RESULT = new StringTipo();  :}  
        | CHAR    {: RESULT = new CharTipo();   :};
 
-declaracion_variable ::= tipo:t declaracion_variables:dv puntoYComa {: RESULT = new DeclaracionVariable(t,dv, new puntoYComa() );   :};
+declaracion_variable ::= tipo:t declaracion_variables:dvs puntoYComa             {: RESULT = new DeclaracionVariable(t,dvs, new puntoYComa() );
+                                                                                  
+                                                                                   :} ;
 
-declaracion_variables ::= lista_variables:lvs coma declaracion_variables:dvs    {: dvs.add(lvs); RESULT = dvs; :}
-                          | lista_variables:lvs                                 {: RESULT = new DeclaracionVariables(); RESULT.add( lvs); :};
+declaracion_variables ::= lista_variables:lvs coma declaracion_variables:dvs                {: dvs.add( lvs); RESULT = dvs; 
+                                                                                            /* pasa algo raro */
+                                                                                              RESULT.setTipo( lvs.getTipo());
+                                                                                              RESULT.setNombreVariable( lvs.getNombreVariable()); 
+                                                                                              System.out.println(RESULT.getTipo()+ " " + RESULT.getNombreVariable()._nombreVariable);  :}
+                                                                                              
+                         | lista_variables:lvs                                              {: RESULT = new DeclaracionVariables(); RESULT.add( lvs); 
+                                                                                               RESULT.setTipo(lvs.getTipo()); 
+                                                                                               RESULT.setNombreVariable(lvs.getNombreVariable());
+                                                                                               System.out.println(RESULT.getTipo()+ " " + RESULT.getNombreVariable()._nombreVariable);
+                                                                                             :};
 
-lista_variables ::= variable:v                                     {: RESULT = new ListaVariables(v);  :}
-                 | nombreVariable:id igual operacion_aritmetica:o  {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), o);  :}
-                 | nombreVariable:id igual constChar:csc           {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constChar(csc._constChar, csc.linea, csc.columna)); :}
-                 | nombreVariable:id igual constStr:css            {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constStr(css._constStr, css.linea, css.columna));   :}
-                 | nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho igual llaveIzquierda inicializacion_arreglo:ia llaveDerecha         
-                {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho(), new igual(), new llaveIzquierda(), ia, new llaveDerecha());  :}
-                 | nombreVariable:id corcheteIzquierdo corcheteDerecho igual llaveIzquierda inicializacion_arreglo:iA llaveDerecha     
-                {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), new igual(), new llaveIzquierda(), iA, new llaveDerecha());  :}
-                  ;
 
-/* mejor este inicializacion_arreglo_coma ocupas hacer una lista como declaracion_variable */
- inicializacion_arreglo_coma ::= coma inicializacion_arreglo:i                                            {:  RESULT = new InicializacionArregloComa( new coma(), i); :}
+
+
+lista_variables ::= variable:v                                                              {: RESULT = new ListaVariables(v);  
+                                                                                               RESULT.setTipo(null);  RESULT.setNombreVariable(v._nombreVariable); :}
+                   
+                    | nombreVariable:id igual operacion_aritmetica:o                        {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), o);  
+                                                                                              RESULT.setTipo(o.getTipo());  RESULT.setNombreVariable(id);   :}
+
+                   | nombreVariable:id igual constChar:csc                                  {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constChar(csc._constChar, csc.linea, csc.columna)); 
+                                                                                              RESULT.setTipo(new CharTipo());  RESULT.setNombreVariable(id); :}
+                                                        
+                   | nombreVariable:id igual constStr:css                                   {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constStr(css._constStr, css.linea, css.columna));   
+                                                                                               RESULT.setTipo(new StringTipo());  RESULT.setNombreVariable(id); :}
+               
+                   | nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho igual llaveIzquierda inicializacion_arreglo:ia llaveDerecha   {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho(), new igual(), new llaveIzquierda(), ia, new llaveDerecha());  
+                                                                                                                                                                 RESULT.setTipo( new ArrayTipo(o,ia.getTipo()));   RESULT.setNombreVariable(id);  :}
+               
+                   | nombreVariable:id corcheteIzquierdo corcheteDerecho igual llaveIzquierda inicializacion_arreglo:iA llaveDerecha                          {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), new igual(), new llaveIzquierda(), iA, new llaveDerecha());  
+                                                                                                                                                                 RESULT.setTipo( new ArrayTipo(null,iA.getTipo()));  RESULT.setNombreVariable(id); :};
+
+inicializacion_arreglo_coma ::= coma inicializacion_arreglo:i                                            {:  RESULT = new InicializacionArregloComa( new coma(), i); :}
                             |;
 
-inicializacion_arreglo ::= operacion_aritmetica:o  inicializacion_arreglo_coma:i                          {:  RESULT = new InicializacionArreglo(o,i);   :}
-                        | constChar:csc  inicializacion_arreglo_coma:i                                    {:  RESULT = new InicializacionArreglo(new constChar(csc._constChar, csc.linea, csc.columna),i);   :}
-                        | constStr:css  inicializacion_arreglo_coma:i                                     {:  RESULT = new InicializacionArreglo(new constStr(css._constStr, css.linea, css.columna),i);   :};
+inicializacion_arreglo ::= operacion_aritmetica:o  inicializacion_arreglo_coma:i                          {:  RESULT = new InicializacionArreglo(o,i);   
+                                                                                                              RESULT.setTipo( o.getTipo());      :}
 
+                        | constChar:csc  inicializacion_arreglo_coma:i                                    {:  RESULT = new InicializacionArreglo(new constChar(csc._constChar, csc.linea, csc.columna),i);   
+                                                                                                              RESULT.setTipo( new CharTipo());  :}
+
+                        | constStr:css  inicializacion_arreglo_coma:i                                     {:  RESULT = new InicializacionArreglo(new constStr(css._constStr, css.linea, css.columna),i);   
+                                                                                                              RESULT.setTipo( new StringTipo());   :};
+
+variable ::= nombreVariable:id                                                                            {: RESULT = new Variable(new nombreVariable(id._nombreVariable, id.linea, id.columna));  
+                                                                                                            :}
+
+           | elemento_array:array                                                                         {: RESULT = new Variable(array);   :};
+
+elemento_array ::= nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho             {: RESULT = new ElementoDeUnArreglo(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho()); 
+                                                                                                               :};
 
 
 declaracion_funcion ::= tipo:t nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfp parentesisDerecho puntoYComa     {:  RESULT = new DeclaracionFuncion(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), dfp, new parentesisDerecho(), new puntoYComa());  :}
@@ -225,7 +260,8 @@ print ::= printf parentesisIzquierdo constStr:csts parentesisDerecho puntoYComa 
          | printf parentesisIzquierdo constStr:csts coma operacion_aritmetica:o parentesisDerecho puntoYComa     {: RESULT = new Printf(new parentesisIzquierdo(), new constStr(csts._constStr, csts.linea, csts.columna), new coma(), o, new parentesisDerecho(), new puntoYComa()); :}
         ;
 
-_if ::= IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigos:cg llaveDerecha else:e   {: RESULT = new If(new parentesisIzquierdo() , c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha(), e);  :}
+_if ::= IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigos:cg llaveDerecha else:e   {: RESULT = new If(new parentesisIzquierdo() , c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha(), e);  
+                                                                                                                    parser.ambito.generarAmbito(); :}
      | IF error parentesisDerecho llaveIzquierda codigos:c llaveDerecha else:e                               {: RESULT = new If(new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), e);  :};
 
 else ::= ELSE IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigos:cg llaveDerecha else:e    {: RESULT = new Else(new parentesisIzquierdo(), c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha(), e); :}
@@ -293,20 +329,53 @@ asignacion_variable_coma ::= coma asignacion_variable:av                        
 incrementarDecrementarVariable ::= variable:v operadorIncrementoDecremento puntoYComa                     {:  RESULT = new IncrementarDecrementarVariable(v, new operadorIncrementoDecremento(), new puntoYComa());  :}
                                  | operadorIncrementoDecremento variable:v puntoYComa                     {:  RESULT = new IncrementarDecrementarVariable(new operadorIncrementoDecremento(), v, new puntoYComa());  :};
 
-variable ::= nombreVariable:id                                                                            {: RESULT = new Variable(new nombreVariable(id._nombreVariable, id.linea, id.columna));   :}
-           | elemento_array:array                                                                         {: RESULT = new Variable(array);   :};
+            
+operacion_aritmetica ::= operacion_aritmetica:o1 operadorSuma:s operacion_aritmetica2:o2                   {: RESULT = new OperacionAritmetica(o1, new operadorSuma(), o2); 
+                                                                                                            if (o1.getTipo() instanceof IntegerTipo && o2.getTipo() instanceof IntegerTipo){
+                                                                                                                    RESULT.setTipo( new IntegerTipo());
+                                                                                                            }else{
+                                                                                                                System.err.println("Error de tipos se esperaba un Entero");
+                                                                                                                System.err.println("Linea: " + s.getLinea() );
+                                                                                                                System.err.println("Columna: " + s.getColumna() );
+                                                                                                            } :}
 
-elemento_array ::= nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho             {: RESULT = new ElementoDeUnArreglo(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho()); :} ;
+                      | operacion_aritmetica:o1 operadorResta operacion_aritmetica2:o2                   {: RESULT = new OperacionAritmetica(o1, new operadorResta(), o2); 
+                                                                                                            if (o1.getTipo() instanceof IntegerTipo && o2.getTipo() instanceof IntegerTipo){
+                                                                                                                    RESULT.setTipo( new IntegerTipo());
+                                                                                                            }else{
+                                                                                                                System.err.println("Error de tipos se esperaba un Entero");
+                                                                                                                System.err.println("Linea: " );
+                                                                                                            } :}
 
-operacion_aritmetica ::= operacion_aritmetica:o1 operadorSuma operacion_aritmetica2:o2                   {: RESULT = new OperacionAritmetica(o1, new operadorSuma(), o2); :}
-                      | operacion_aritmetica:o1 operadorResta operacion_aritmetica2:o2                   {: RESULT = new OperacionAritmetica(o1, new operadorResta(), o2); :}
-                      | operacion_aritmetica2:o2                                                         {: RESULT = new OperacionAritmetica(o2); :}  ;
+                      | operacion_aritmetica2:o2                                                         {: RESULT = new OperacionAritmetica(o2); 
+                                                                                                            RESULT.setTipo( RESULT._operacionAritmetica2.getTipo());     :};
 
-operacion_aritmetica2 ::= operacion_aritmetica2:o2 operadorMultiplicacion operacion_aritmetica3:o3       {: RESULT = new OperacionAritmetica2(o2, new operadorMultiplicacion(), o3); :}
-                       | operacion_aritmetica2:o2 operadorDivision operacion_aritmetica3:o3              {: RESULT = new OperacionAritmetica2(o2, new operadorDivision(), o3); :}
-                       | operacion_aritmetica3:o3                                                        {: RESULT = new OperacionAritmetica2(o3); :} ;
+operacion_aritmetica2 ::= operacion_aritmetica2:o2 operadorMultiplicacion operacion_aritmetica3:o3    {: RESULT = new OperacionAritmetica2(o2, new operadorMultiplicacion(), o3);                                                                                                         
+                                                                                                         if (o2.getTipo() instanceof IntegerTipo && o3.getTipo() instanceof IntegerTipo){
+                                                                                                                RESULT.setTipo( new IntegerTipo());
+                                                                                                            }else{
+                                                                                                                System.err.println("Error de tipos se esperaba un Entero");
+                                                                                                                System.err.println("Linea: " );
+                                                                                                            } :}
 
-operacion_aritmetica3 ::= entero:e                                                                       {: RESULT = new OperacionAritmetica3(new entero(e._entero, e.linea, e.columna));   :}                                                                     
-                       | variable:v                                                                      {: RESULT = new OperacionAritmetica3(v);    :} 
+                       | operacion_aritmetica2:o2 operadorDivision operacion_aritmetica3:o3           {: RESULT = new OperacionAritmetica2(o2, new operadorDivision(), o3); 
+                                                                                                          if (o2.getTipo() instanceof IntegerTipo && o3.getTipo() instanceof IntegerTipo){
+                                                                                                                RESULT.setTipo( new IntegerTipo());
+                                                                                                            }else{
+                                                                                                                System.err.println("Error de tipos se esperaba un Entero");
+                                                                                                                System.err.println("Linea: " );
+                                                                                                            } :}
+                      
+                       | operacion_aritmetica3:o3                                                     {: RESULT = new OperacionAritmetica2(o3); 
+                                                                                                         RESULT.setTipo(RESULT._operacionAritmetica3.getTipo()); :} ;
+
+operacion_aritmetica3 ::= entero:e                                                                       {: RESULT = new OperacionAritmetica3(new entero(e._entero, e.linea, e.columna));   
+                                                                                                            RESULT.setTipo(new IntegerTipo());  :}     
+                                                                
+                       | variable:v                                                                      {: RESULT = new OperacionAritmetica3(v);    
+                                                                                                            RESULT.setTipo(v.getTipo());        :}
+ 
                        | llamado_funcion:lf                                                              {: RESULT = new OperacionAritmetica3(lf);    :} 
-                       | parentesisIzquierdo operacion_aritmetica:o parentesisDerecho                    {: RESULT = new OperacionAritmetica3(new parentesisIzquierdo(), o, new parentesisDerecho());    :} ;
+
+                       | parentesisIzquierdo operacion_aritmetica:o parentesisDerecho                    {: RESULT = new OperacionAritmetica3(new parentesisIzquierdo(), o, new parentesisDerecho());    
+                                                                                                            RESULT.setTipo( o.getTipo()); :} ;

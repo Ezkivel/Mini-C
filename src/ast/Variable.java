@@ -13,6 +13,7 @@ public class Variable {
 
     public nombreVariable _nombreVariable;
     public ElementoDeUnArreglo _elementoDeUnArreglo;
+    private Tipo _tipo;
 
     public Variable(nombreVariable i) {
         this._nombreVariable = i;
@@ -20,6 +21,14 @@ public class Variable {
 
     public Variable(ElementoDeUnArreglo ea) {
         this._elementoDeUnArreglo = ea;
+    }
+
+    public Tipo getTipo() {
+        return _tipo;
+    }
+
+    public void setTipo(Tipo _tipo) {
+        this._tipo = _tipo;
     }
 
 }

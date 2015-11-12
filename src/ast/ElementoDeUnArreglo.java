@@ -15,12 +15,21 @@ public class ElementoDeUnArreglo {
     public corcheteIzquierdo _corIz;
     public OperacionAritmetica _operacionAritmetica;
     public corcheteDerecho _corDer;
+    private Tipo tipo;
 
     public ElementoDeUnArreglo(nombreVariable _nombreVariable, corcheteIzquierdo _corIz, OperacionAritmetica _operacionAritmetica, corcheteDerecho _corDer) {
         this._nombreVariable = _nombreVariable;
         this._corIz = _corIz;
         this._operacionAritmetica = _operacionAritmetica;
         this._corDer = _corDer;
+    }
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
     }
 
 }

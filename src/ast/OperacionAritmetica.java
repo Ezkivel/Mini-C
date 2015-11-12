@@ -15,6 +15,7 @@ public class OperacionAritmetica {
     public operadorSuma _operadorSuma;
     public operadorResta _operadorResta;
     public OperacionAritmetica2 _operacionAritmetica2;
+    private Tipo _tipo;
 
     public OperacionAritmetica(OperacionAritmetica _operacionAritmetica, operadorSuma _operadorSuma, OperacionAritmetica2 _operacionAritmetica2) {
         this._operacionAritmetica = _operacionAritmetica;
@@ -30,6 +31,14 @@ public class OperacionAritmetica {
 
     public OperacionAritmetica(OperacionAritmetica2 _operacionAritmetica2) {
         this._operacionAritmetica2 = _operacionAritmetica2;
+    }
+
+    public Tipo getTipo() {
+        return _tipo;
+    }
+
+    public void setTipo(Tipo _tipo) {
+        this._tipo = _tipo;
     }
 
 }

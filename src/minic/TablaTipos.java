@@ -8,6 +8,7 @@ package minic;
 import ast.ArrayTipo;
 
 import ast.DeclaracionVariable;
+import ast.If;
 import ast.InicializacionArreglo;
 import ast.OperacionAritmetica;
 import ast.Programa;
@@ -21,20 +22,36 @@ import java.util.Vector;
  */
 public class TablaTipos {
 
-    private Vector<ListaTipos_Variable> lista_varibles;
+    private Vector<_ListaTipos> lista_varibles;
     private Vector<ListaTipos_Funciones> lista_funcones;
     private Programa programa;
     private ListaTipos lista;
 
-    public TablaTipos(ListaTipos lista) {
+    public TablaTipos(ListaTipos lista, Programa programa) {
         this.lista_varibles = new Vector();
         this.lista = lista;
+        this.programa = programa;
         llenar_tabla_variables();
+    }
+
+    public Programa getPrograma() {
+        return programa;
     }
 
     public void llenar_tabla_variables() {
 
-        // falta hacer el ambito
+        Programa pro = getPrograma();
+
+        for (int i = 0; i < getPrograma()._mainClass._codigos.size(); i++) {
+            System.out.println(getPrograma()._mainClass._codigos.elementAt(i));
+            if(getPrograma()._mainClass._codigos.elementAt(i) instanceof If){
+                for ( int j = 0; j < ((If)getPrograma()._mainClass._codigos.elementAt(i))._codigos.size(); j++)
+                {
+                   // System.out.println(((If)getPrograma()._mainClass._codigos.elementAt(i))._codigos.elementAt(j));
+                }
+            }
+        }
+
         try {
 
             int n = lista.list.size();
@@ -45,20 +62,20 @@ public class TablaTipos {
                 for (int j = 0; j < in; j++) {
                     if (d._declaracionVariables.elementAt(j)._inicializacionArreglo instanceof InicializacionArreglo) {
                         if (d._declaracionVariables.elementAt(j)._constChar instanceof constChar) {
-                            lista_varibles.add(new ListaTipos_Variable(new ArrayTipo(100, d._tipo), d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._constChar));
+                            lista_varibles.add(new _ListaTipos(new ArrayTipo(100, d._tipo), d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._constChar));
                         } else if (d._declaracionVariables.elementAt(j)._constStr instanceof constStr) {
-                            lista_varibles.add(new ListaTipos_Variable(new ArrayTipo(100, d._tipo), d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._constStr));
+                            lista_varibles.add(new _ListaTipos(new ArrayTipo(100, d._tipo), d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._constStr));
                         } else if (d._declaracionVariables.elementAt(j)._operacionAritmetica instanceof OperacionAritmetica) {
-                            lista_varibles.add(new ListaTipos_Variable(new ArrayTipo(100, d._tipo), d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._operacionAritmetica));
+                            lista_varibles.add(new _ListaTipos(new ArrayTipo(100, d._tipo), d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._operacionAritmetica));
                         }
 
                     } else {
                         if (d._declaracionVariables.elementAt(j)._constChar instanceof constChar) {
-                            lista_varibles.add(new ListaTipos_Variable(d._tipo, d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._constChar));
+                            lista_varibles.add(new _ListaTipos(d._tipo, d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._constChar));
                         } else if (d._declaracionVariables.elementAt(j)._constStr instanceof constStr) {
-                            lista_varibles.add(new ListaTipos_Variable(d._tipo, d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._constStr));
+                            lista_varibles.add(new _ListaTipos(d._tipo, d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._constStr));
                         } else if (d._declaracionVariables.elementAt(j)._operacionAritmetica instanceof OperacionAritmetica) {
-                            lista_varibles.add(new ListaTipos_Variable(d._tipo, d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._operacionAritmetica));
+                            lista_varibles.add(new _ListaTipos(d._tipo, d._declaracionVariables.elementAt(j)._nombreVariable._nombreVariable, 0, d._declaracionVariables.elementAt(j)._operacionAritmetica));
                         }
                     }
 
@@ -70,7 +87,7 @@ public class TablaTipos {
         }
     }
 
-    public Vector<ListaTipos_Variable> getLista_varibles() {
+    public Vector<_ListaTipos> getLista_varibles() {
         return lista_varibles;
     }
 
@@ -90,7 +107,7 @@ public class TablaTipos {
             } else if (lista_varibles.elementAt(i).getContenidoStr() instanceof constStr) {
                 System.out.println(lista_varibles.elementAt(i).getTipo().getClass().getName() + " " + lista_varibles.elementAt(i).getNombre() + " " + lista_varibles.elementAt(i).getAmbito() + " " + lista_varibles.elementAt(i).getContenidoStr()._constStr);
             } else if (lista_varibles.elementAt(i).getContenidoArit() instanceof OperacionAritmetica) {
-                   System.out.println(lista_varibles.elementAt(i).getTipo().getClass().getName() + " " + lista_varibles.elementAt(i).getNombre() + " " + lista_varibles.elementAt(i).getAmbito() + " " + lista_varibles.elementAt(i).getContenidoArit());
+                System.out.println(lista_varibles.elementAt(i).getTipo().getClass().getName() + " " + lista_varibles.elementAt(i).getNombre() + " " + lista_varibles.elementAt(i).getAmbito() + " " + lista_varibles.elementAt(i).getContenidoArit());
             }
         }
     }
