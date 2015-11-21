@@ -3,16 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/ValidarTipos.java</file>
-            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/ListaVariablesComa.java</file>
-            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/ListaVariables.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/LlamadoAFuncion.java</file>
             <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/ListaTipos.java</file>
             <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/AnalizadorSintactico.cup</file>
             <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/AnalizadorSintactico.java</file>
-            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/DeclaracionVariables.java</file>
-            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/Codigos.java</file>
-            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/ast/DeclaracionVariable.java</file>
-            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/_ListaTipos.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/GitHub/MiniC/src/minic/MiniC.java</file>
         </group>
     </open-files>
 </project-private>

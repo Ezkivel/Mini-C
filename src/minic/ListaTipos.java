@@ -40,8 +40,8 @@ public class ListaTipos {
                 _ListaTipos temp = elementAt(i);
                 if (temp.getNombre().equals(id)) {
                     resultado = temp.getTipo();
-
-                }
+                    break;
+                } 
             }
         }
         return resultado;

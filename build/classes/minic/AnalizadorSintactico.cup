@@ -237,7 +237,7 @@ inicializacion_arreglo ::= operacion_aritmetica:o  inicializacion_arreglo_coma:i
                                                                                                               RESULT.setTipo( new StringTipo());   :};
 
 variable ::= nombreVariable:id                                                                            {: RESULT = new Variable(new nombreVariable(id._nombreVariable, id.linea, id.columna));  
-                                                                                                             RESULT.setNombreVariable(id);  RESULT.setTipo(null); :}
+                                                                                                             RESULT.setNombreVariable(id);   RESULT.setTipo(parser.lista.buscarId(id._nombreVariable)); :}
 
            | elemento_array:array                                                                         {: RESULT = new Variable(array);   
                                                                                                              RESULT.setNombreVariable(array.getNombreVariable());  RESULT.setTipo(array.getTipo());  :};
@@ -272,7 +272,7 @@ funciones_parametros_coma ::= coma funciones_parametros:fp                      
                          |;
 
 llamado_funcion ::= nombreVariable:id parentesisIzquierdo llamado_funcion_parametros:llfp parentesisDerecho      {:  RESULT = new LlamadoAFuncion(new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), llfp, new parentesisDerecho()); 
-                                                                                                                     RESULT.setTipo(parser.lista.buscarId(id._nombreVariable));       :}                
+                                                                                                                           :}                
                   
                     | nombreVariable:id error parentesisDerecho                                                  {:  System.out.println("ERROR");  RESULT = new LlamadoAFuncion(new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisDerecho());    :};
 
