@@ -54,13 +54,12 @@ public class MiniC {
             AnalizadorSintactico as = new AnalizadorSintactico(al);
             as.parse();
             Programa generarPrograma = as.getGenerarPrograma();
-          //  TablaTipos tabla = new TablaTipos(as.getListaVariables(), as.getGenerarPrograma());
-           // tabla.print();
-           // ValidarTipos validar = new ValidarTipos(tabla.getLista_varibles());
-          // Testing
-           /* System.out.println(generarPrograma._mainClass._codigo._prinft._constStr._constStr);
-              System.out.println(generarPrograma._mainClass._codigo._codigo._prinft._constStr._constStr);
-           */
+            
+            for( int i = 0; i < as.lista.size(); i++ )
+            {
+                System.out.println(as.lista.elementAt(i).toString());
+            }
+
         } catch (Exception e) {
             System.err.println("ERROR Analizador: " + e.getMessage());
         }

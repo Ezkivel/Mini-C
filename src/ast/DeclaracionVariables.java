@@ -14,8 +14,15 @@ import java.util.Vector;
 public class DeclaracionVariables {
 
     private Vector list;
+    public DeclaracionVariables _declaracionVariables;
+    public ListaVariables _listaVariables;
     private Tipo tipo;
     private nombreVariable _nombreVariable;
+
+    public DeclaracionVariables(DeclaracionVariables _declaracionVariables, ListaVariables _listaVariables) {
+        this._declaracionVariables = _declaracionVariables;
+        this._listaVariables = _listaVariables;
+    }
 
     public DeclaracionVariables() {
         list = new Vector();

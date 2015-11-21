@@ -32,4 +32,12 @@ public class ElementoDeUnArreglo {
         this.tipo = tipo;
     }
 
+    public nombreVariable getNombreVariable() {
+        return _nombreVariable;
+    }
+
+    public void setNombreVariable(nombreVariable _nombreVariable) {
+        this._nombreVariable = _nombreVariable;
+    }
+
 }

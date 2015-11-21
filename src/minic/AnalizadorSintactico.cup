@@ -79,7 +79,7 @@ terminal operadorDivision;
 terminal operadorIncrementoDecremento operadorIncrementoDecremento;
 terminal operadorRelacional;
 terminal operadorLogico operadorLogico;
-terminal puntoYComa;
+terminal Token puntoYComa;
 terminal coma;
 terminal parametroScanf parametroScanf;
 terminal entero entero;
@@ -158,27 +158,56 @@ tipo ::= INTEGER {: RESULT = new IntegerTipo(); :}
        | STRING  {: RESULT = new StringTipo();  :}  
        | CHAR    {: RESULT = new CharTipo();   :};
 
-declaracion_variable ::= tipo:t declaracion_variables:dvs puntoYComa             {: RESULT = new DeclaracionVariable(t,dvs, new puntoYComa() );
-                                                                                  
-                                                                                   :} ;
+declaracion_variable ::= tipo:t declaracion_variables:dvs puntoYComa:s             {: RESULT = new DeclaracionVariable(t,dvs, new puntoYComa() );
+                                                                                    for (int i = 0; i < dvs.size(); i++) {
+                                                                                        //System.out.println(dvs.elementAt(i).getTipo() + " " + dvs.elementAt(i).getNombreVariable()._nombreVariable + " " + t);
+                                                                                        if (dvs.elementAt(i).getTipo() instanceof IntegerTipo && t instanceof IntegerTipo) {
+                                                                                            parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
+                                                                                        } else if (dvs.elementAt(i).getTipo() instanceof StringTipo && t instanceof StringTipo) {
+                                                                                            parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
+                                                                                        } else if (dvs.elementAt(i).getTipo() instanceof CharTipo && t instanceof CharTipo) {
+                                                                                            parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
+                                                                                        } else if (dvs.elementAt(i).getTipo() instanceof ArrayTipo && t instanceof CharTipo) {
+                                                                                            if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo instanceof CharTipo) {
+                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
+                                                                                            } else if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo == null) {
+                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
+                                                                                            }
+                                                                                        } else if (dvs.elementAt(i).getTipo() instanceof ArrayTipo && t instanceof StringTipo) {
+                                                                                            if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo instanceof StringTipo) {
+                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
+                                                                                            } else if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo == null) {
+                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
+                                                                                            }
+                                                                                        } else if (dvs.elementAt(i).getTipo() instanceof ArrayTipo && t instanceof IntegerTipo) {
+                                                                                            if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo instanceof IntegerTipo) {
+                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
+                                                                                            } else if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo == null) {
+                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
+                                                                                            }
+                                                                                        } else if (dvs.elementAt(i).getTipo() == null) {
+                                                                                            parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
+                                                                                        }else {
+                                                                                             System.err.println("Error de tipos si esperaba un " + t.getClass().getSimpleName() + " no se puede pasar a "+ dvs.elementAt(i).getTipo().getClass().getSimpleName());
+                                                                                             System.err.println("Linea: " + s.getLinea() );
+                                                                                             System.err.println("Columna: " + s.getColumna() );
+                                                                                        }
+                                                                                    }:} ;
 
 declaracion_variables ::= lista_variables:lvs coma declaracion_variables:dvs                {: dvs.add( lvs); RESULT = dvs; 
-                                                                                            /* pasa algo raro */
                                                                                               RESULT.setTipo( lvs.getTipo());
-                                                                                              RESULT.setNombreVariable( lvs.getNombreVariable()); 
-                                                                                              System.out.println(RESULT.getTipo()+ " " + RESULT.getNombreVariable()._nombreVariable);  :}
+                                                                                              RESULT.setNombreVariable( lvs.getNombreVariable());  :}
                                                                                               
                          | lista_variables:lvs                                              {: RESULT = new DeclaracionVariables(); RESULT.add( lvs); 
                                                                                                RESULT.setTipo(lvs.getTipo()); 
-                                                                                               RESULT.setNombreVariable(lvs.getNombreVariable());
-                                                                                               System.out.println(RESULT.getTipo()+ " " + RESULT.getNombreVariable()._nombreVariable);
+                                                                                               RESULT.setNombreVariable(lvs.getNombreVariable());                                                                                             
                                                                                              :};
 
 
 
 
 lista_variables ::= variable:v                                                              {: RESULT = new ListaVariables(v);  
-                                                                                               RESULT.setTipo(null);  RESULT.setNombreVariable(v._nombreVariable); :}
+                                                                                               RESULT.setTipo(v.getTipo());  RESULT.setNombreVariable(v.getNombreVariable()); :}
                    
                     | nombreVariable:id igual operacion_aritmetica:o                        {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), o);  
                                                                                               RESULT.setTipo(o.getTipo());  RESULT.setNombreVariable(id);   :}
@@ -208,12 +237,13 @@ inicializacion_arreglo ::= operacion_aritmetica:o  inicializacion_arreglo_coma:i
                                                                                                               RESULT.setTipo( new StringTipo());   :};
 
 variable ::= nombreVariable:id                                                                            {: RESULT = new Variable(new nombreVariable(id._nombreVariable, id.linea, id.columna));  
-                                                                                                            :}
+                                                                                                             RESULT.setNombreVariable(id);  RESULT.setTipo(null); :}
 
-           | elemento_array:array                                                                         {: RESULT = new Variable(array);   :};
+           | elemento_array:array                                                                         {: RESULT = new Variable(array);   
+                                                                                                             RESULT.setNombreVariable(array.getNombreVariable());  RESULT.setTipo(array.getTipo());  :};
 
 elemento_array ::= nombreVariable:id corcheteIzquierdo operacion_aritmetica:o corcheteDerecho             {: RESULT = new ElementoDeUnArreglo(new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), o, new corcheteDerecho()); 
-                                                                                                               :};
+                                                                                                             RESULT.setNombreVariable(id);  RESULT.setTipo(new ArrayTipo(o,null));  :};
 
 
 declaracion_funcion ::= tipo:t nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfp parentesisDerecho puntoYComa     {:  RESULT = new DeclaracionFuncion(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), dfp, new parentesisDerecho(), new puntoYComa());  :}
@@ -241,8 +271,10 @@ funciones_parametros ::= tipo:t nombreVariable:id funciones_parametros_coma:fpc 
 funciones_parametros_coma ::= coma funciones_parametros:fp                                                                     {:  RESULT = new FuncionesParametrosComa(new coma(), fp); :}
                          |;
 
-llamado_funcion ::= nombreVariable:id parentesisIzquierdo llamado_funcion_parametros:llfp parentesisDerecho      {:  RESULT = new LlamadoAFuncion(new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), llfp, new parentesisDerecho()); :}                
-                  | nombreVariable:id error parentesisDerecho                                                    {:  System.out.println("ERROR");  RESULT = new LlamadoAFuncion(new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisDerecho());    :};
+llamado_funcion ::= nombreVariable:id parentesisIzquierdo llamado_funcion_parametros:llfp parentesisDerecho      {:  RESULT = new LlamadoAFuncion(new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), llfp, new parentesisDerecho()); 
+                                                                                                                     RESULT.setTipo(parser.lista.buscarId(id._nombreVariable));       :}                
+                  
+                    | nombreVariable:id error parentesisDerecho                                                  {:  System.out.println("ERROR");  RESULT = new LlamadoAFuncion(new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisDerecho());    :};
 
 llamado_funcion_parametros ::= operacion_aritmetica:o llamado_funcion_parametros_coma:fpc                        {:  RESULT = new LlamadoAFuncionParametros(o,fpc); :}
                             | constChar:csc llamado_funcion_parametros_coma:fpc                                  {:  RESULT = new LlamadoAFuncionParametros(new constChar(csc._constChar, csc.linea, csc.columna),fpc); :}
@@ -375,7 +407,8 @@ operacion_aritmetica3 ::= entero:e                                              
                        | variable:v                                                                      {: RESULT = new OperacionAritmetica3(v);    
                                                                                                             RESULT.setTipo(v.getTipo());        :}
  
-                       | llamado_funcion:lf                                                              {: RESULT = new OperacionAritmetica3(lf);    :} 
+                       | llamado_funcion:lf                                                              {: RESULT = new OperacionAritmetica3(lf);    
+                                                                                                            RESULT.setTipo(lf.getTipo());             :} 
 
                        | parentesisIzquierdo operacion_aritmetica:o parentesisDerecho                    {: RESULT = new OperacionAritmetica3(new parentesisIzquierdo(), o, new parentesisDerecho());    
                                                                                                             RESULT.setTipo( o.getTipo()); :} ;

@@ -15,6 +15,7 @@ public class LlamadoAFuncion {
     public parentesisIzquierdo _parIz;
     public LlamadoAFuncionParametros _llamadoAFuncionParametros;
     public parentesisDerecho _parDer;
+    public Tipo tipo;
 
     public LlamadoAFuncion(nombreVariable _nombreVariable, parentesisIzquierdo _parIz, LlamadoAFuncionParametros _llamadoAFuncionParametros, parentesisDerecho _parDer) {
         this._nombreVariable = _nombreVariable;
@@ -26,6 +27,14 @@ public class LlamadoAFuncion {
     public LlamadoAFuncion(nombreVariable _nombreVariable, parentesisDerecho _parDer) {
         this._nombreVariable = _nombreVariable;
         this._parDer = _parDer;
+    }
+
+    public Tipo getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(Tipo tipo) {
+        this.tipo = tipo;
     }
 
 }

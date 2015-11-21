@@ -5,6 +5,8 @@
  */
 package minic;
 
+import ast.*;
+import ast.Tipo;
 import java.util.Vector;
 
 /**
@@ -29,6 +31,20 @@ public class ListaTipos {
 
     public int size() {
         return list.size();
+    }
+
+    public Tipo buscarId(String id) {
+        Tipo resultado = null;
+        if (size() >= 0) {
+            for (int i = 0; i < size(); i++) {
+                _ListaTipos temp = elementAt(i);
+                if (temp.getNombre().equals(id)) {
+                    resultado = temp.getTipo();
+
+                }
+            }
+        }
+        return resultado;
     }
 
 }

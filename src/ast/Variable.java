@@ -31,4 +31,12 @@ public class Variable {
         this._tipo = _tipo;
     }
 
+    public nombreVariable getNombreVariable() {
+        return _nombreVariable;
+    }
+
+    public void setNombreVariable(nombreVariable _nombreVariable) {
+        this._nombreVariable = _nombreVariable;
+    }
+
 }
