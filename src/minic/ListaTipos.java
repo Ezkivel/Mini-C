@@ -46,5 +46,9 @@ public class ListaTipos {
         }
         return resultado;
     }
+    
+    public void clear() {
+        this.list.clear();
+    }
 
 }

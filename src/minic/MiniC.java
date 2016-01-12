@@ -55,7 +55,7 @@ public class MiniC {
             as.parse();
             Programa generarPrograma = as.getGenerarPrograma();
             
-            for( int i = 0; i < as.lista.size(); i++ )
+            for( int i = as.lista.size() - 1; i >= 0; i--)
             {
                 System.out.println(as.lista.elementAt(i).toString());
             }

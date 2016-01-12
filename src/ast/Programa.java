@@ -12,6 +12,7 @@ package ast;
 public class Programa {
 
     public DeclaracionFuncion _declaracionFuncion;
+    public DeclaracionVariable _declaracionVariable;
     public MainClass _mainClass;
     public Programa _programa;
 
@@ -25,6 +26,11 @@ public class Programa {
 
     public Programa(DeclaracionFuncion df, Programa p) {
         this._declaracionFuncion = df;
+        this._programa = p;
+    }
+    
+    public Programa(DeclaracionVariable dv, Programa p) {
+        this._declaracionVariable = dv;
         this._programa = p;
     }
 

@@ -11,18 +11,17 @@ package minic;
  */
 public class Ambito {
 
-    public int ambito;
+    public String ambito;
 
     public Ambito() {
-        this.ambito = 0;
+        this.ambito = "";
     }
 
-    public void generarAmbito() {
-        this.ambito = ambito + 1;
-    }
-
-    public int getAmbito() {
+    public String getAmbito() {
         return ambito;
     }
     
+    public void setAmbito(String _ambito) {
+        this.ambito = _ambito;
+    }    
 }

@@ -12,7 +12,10 @@ parser code{:
     
     public Programa generarPrograma;
     public  ListaTipos lista = new ListaTipos();
-    public Ambito ambito = new Ambito();
+    public  ListaTipos listaTemp = new ListaTipos();
+    public Ambito ambitoActual = new Ambito();
+    public Vector<Tipo> listaParametros = new Vector();
+    public Tipo tipoRetorno = new Tipo();
 
     public Programa getGenerarPrograma() {
         return this.generarPrograma;
@@ -26,6 +29,80 @@ parser code{:
     public AnalizadorSintactico(AnalizadorLexico lex) {
       super(lex);
       lexer = lex;
+    }
+
+    public boolean verificarSiLaFuncionYaFueDeclarada(String nombreFuncion) {
+        if (nombreFuncion.equals("print") || nombreFuncion.equals("scanf")) {
+            return true;
+        }
+
+        for(int i = 0; i < lista.size(); i++) {
+            if (lista.elementAt(i).getNombre().equals(nombreFuncion) && lista.elementAt(i).isFuncion()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean verificarParametrosDeLlamadaAFuncion(String nombreFuncion, Vector<Tipo> parametros) {
+        if (nombreFuncion.equals("print") || nombreFuncion.equals("scanf")) {
+            return true;
+        }
+
+        boolean parametrosIguales = false;
+
+        for(int i = 0; i < lista.size(); i++) {
+            if (lista.elementAt(i).getNombre().equals(nombreFuncion) && lista.elementAt(i).isFuncion()) {
+                if (lista.elementAt(i).getParametros().size() == parametros.size()) {
+                    int contadorParametrosIguales = 0;
+                    int b = 0;
+
+                    for (int a = parametros.size() - 1; a >= 0; a--) {
+                        if (lista.elementAt(i).getParametros().elementAt(b).getClass() == parametros.elementAt(a).getClass()) {
+                            contadorParametrosIguales++;
+                        }
+
+                        b++;
+                    }
+
+                    if (contadorParametrosIguales == parametros.size()) {
+                        parametrosIguales = true;
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        if (parametrosIguales) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean verificarSiLaVariableYaFueDeclarada(Tipo tipoVariable, String nombreVariable, String ambito) {
+        for(int i = 0; i < lista.size(); i++) {
+            if (lista.elementAt(i).getNombre().equals(nombreVariable) && lista.elementAt(i).getTipo().getClass() == tipoVariable.getClass() && lista.elementAt(i).getAmbito().equals(ambito)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean verificarSiLaVariableYaFueDeclarada(String nombreVariable, String ambito) {
+        for(int i = 0; i < lista.size(); i++) {
+            //Ambito actual
+            if (lista.elementAt(i).getNombre().equals(nombreVariable) && lista.elementAt(i).getAmbito().equals(ambito)) {
+                return true;
+            } else if (lista.elementAt(i).getNombre().equals(nombreVariable) && lista.elementAt(i).getAmbito().equals("")) { //Global
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void syntax_error(Symbol s)
@@ -72,7 +149,7 @@ terminal igual;
 terminal printf;
 terminal scanf;
 terminal operadorAritmeticoIgual;
-terminal  Token operadorSuma;
+terminal Token operadorSuma;
 terminal operadorResta; 
 terminal operadorMultiplicacion; 
 terminal operadorDivision; 
@@ -133,12 +210,14 @@ non terminal DeclaracionVariables declaracion_variables;
 
 
 programa ::= declaracion_funcion:df  programa:p                                 {:   RESULT = new Programa(df, p);   :}
-     | main:m                                                                   {:   RESULT = new Programa(m);  parser.generarPrograma = RESULT; :};
+     | declaracion_variable:dv programa:p                                       {:   RESULT = new Programa(dv, p);   :}
+     | main:m                                                                   {:   RESULT = new Programa(m);
+                                                                                     parser.generarPrograma = RESULT; :};
 
-main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda codigos:c llaveDerecha funciones:f         {: RESULT = new MainClass(t, new MainClass(), new parentesisIzquierdo(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f ); :};
+main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda {: parser.ambitoActual.setAmbito("main"); :} codigos:c llaveDerecha funciones:f         {: RESULT = new MainClass(t, new MainClass(), new parentesisIzquierdo(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f ); :};
 
 codigos ::= codigo:c codigos:cs             {:  cs.add(c); RESULT = cs; :}
-            |                               {:   RESULT = new Codigos();  :};
+            |                               {:  RESULT = new Codigos(); :};
 
 codigo ::= declaracion_variable:dv                                                            {: RESULT = dv;  :} 
          | asignacion_variable:av                                                             {: RESULT = av;  :}
@@ -149,50 +228,58 @@ codigo ::= declaracion_variable:dv                                              
          | _if:i                                                                              {: RESULT = i;  :}
          | _for:f                                                                             {: RESULT = f;  :}
          | llamado_funcion:lf puntoYComa                                                      {: RESULT = new Codigo(lf,new puntoYComa());  :}   
-         | RETURN operacion_aritmetica:o puntoYComa                                           {: RESULT = new Codigo(new RETURN(), o, new puntoYComa()); :}           
-         | RETURN constChar:csc puntoYComa                                                    {: RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa()); :}
-         | RETURN constStr:cst puntoYComa                                                     {: RESULT = new Codigo( new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa() ); :}
+         | RETURN operacion_aritmetica:o puntoYComa                                           {: RESULT = new Codigo(new RETURN(), o, new puntoYComa());
+                                                                                                 parser.tipoRetorno = new IntegerTipo(); :}           
+         | RETURN constChar:csc puntoYComa                                                    {: RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa());
+                                                                                                 parser.tipoRetorno = new CharTipo(); :}
+         | RETURN constStr:cst puntoYComa                                                     {: RESULT = new Codigo( new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa() );
+                                                                                                 parser.tipoRetorno = new StringTipo(); :}
          | error codigo:c                                                                     {: System.out.println("ERROR"); :};
 
 tipo ::= INTEGER {: RESULT = new IntegerTipo(); :}
        | STRING  {: RESULT = new StringTipo();  :}  
        | CHAR    {: RESULT = new CharTipo();   :};
 
-declaracion_variable ::= tipo:t declaracion_variables:dvs puntoYComa:s             {: RESULT = new DeclaracionVariable(t,dvs, new puntoYComa() );
-                                                                                    for (int i = 0; i < dvs.size(); i++) {
-                                                                                        //System.out.println(dvs.elementAt(i).getTipo() + " " + dvs.elementAt(i).getNombreVariable()._nombreVariable + " " + t);
-                                                                                        if (dvs.elementAt(i).getTipo() instanceof IntegerTipo && t instanceof IntegerTipo) {
-                                                                                            parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
-                                                                                        } else if (dvs.elementAt(i).getTipo() instanceof StringTipo && t instanceof StringTipo) {
-                                                                                            parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
-                                                                                        } else if (dvs.elementAt(i).getTipo() instanceof CharTipo && t instanceof CharTipo) {
-                                                                                            parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
-                                                                                        } else if (dvs.elementAt(i).getTipo() instanceof ArrayTipo && t instanceof CharTipo) {
-                                                                                            if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo instanceof CharTipo) {
-                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
-                                                                                            } else if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo == null) {
-                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
+declaracion_variable ::= tipo:t declaracion_variables:dvs puntoYComa:s             {: RESULT = new DeclaracionVariable(t, dvs, new puntoYComa() );
+                                                                                    for (int i = dvs.size() - 1; i >= 0 ; i--) {
+                                                                                        if (!parser.verificarSiLaVariableYaFueDeclarada(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito())) {
+                                                                                            //System.out.println(dvs.elementAt(i).getTipo() + " " + dvs.elementAt(i).getNombreVariable()._nombreVariable + " " + t);
+                                                                                            if (dvs.elementAt(i).getTipo() instanceof IntegerTipo && t instanceof IntegerTipo) {
+                                                                                                parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito()));
+                                                                                            } else if (dvs.elementAt(i).getTipo() instanceof StringTipo && t instanceof StringTipo) {
+                                                                                                parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito()));
+                                                                                            } else if (dvs.elementAt(i).getTipo() instanceof CharTipo && t instanceof CharTipo) {
+                                                                                                parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito()));
+                                                                                            } else if (dvs.elementAt(i).getTipo() instanceof ArrayTipo && t instanceof CharTipo) {
+                                                                                                if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo instanceof CharTipo) {
+                                                                                                    parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito()));
+                                                                                                } else if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo == null) {
+                                                                                                    parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito()));
+                                                                                                }
+                                                                                            } else if (dvs.elementAt(i).getTipo() instanceof ArrayTipo && t instanceof StringTipo) {
+                                                                                                if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo instanceof StringTipo) {
+                                                                                                    parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito()));
+                                                                                                } else if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo == null) {
+                                                                                                    parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito()));
+                                                                                                }
+                                                                                            } else if (dvs.elementAt(i).getTipo() instanceof ArrayTipo && t instanceof IntegerTipo) {
+                                                                                                if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo instanceof IntegerTipo) {
+                                                                                                    parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito()));
+                                                                                                } else if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo == null) {
+                                                                                                    parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito()));
+                                                                                                }
+                                                                                            } else if (dvs.elementAt(i).getTipo() == null) {
+                                                                                                parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito()));
+                                                                                            }else {
+                                                                                                 System.err.println("Error de tipos se esperaba un " + t.getClass().getSimpleName() + " no se puede pasar a "+ dvs.elementAt(i).getTipo().getClass().getSimpleName());
+                                                                                                 System.err.println("Linea: " + s.getLinea() );
+                                                                                                 System.err.println("Columna: " + s.getColumna() );
                                                                                             }
-                                                                                        } else if (dvs.elementAt(i).getTipo() instanceof ArrayTipo && t instanceof StringTipo) {
-                                                                                            if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo instanceof StringTipo) {
-                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
-                                                                                            } else if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo == null) {
-                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
-                                                                                            }
-                                                                                        } else if (dvs.elementAt(i).getTipo() instanceof ArrayTipo && t instanceof IntegerTipo) {
-                                                                                            if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo instanceof IntegerTipo) {
-                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
-                                                                                            } else if (((ArrayTipo) dvs.elementAt(i).getTipo()).tipo == null) {
-                                                                                                parser.lista.add(new _ListaTipos(new ArrayTipo(((ArrayTipo) dvs.elementAt(i).getTipo()).tamano, t), dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
-                                                                                            }
-                                                                                        } else if (dvs.elementAt(i).getTipo() == null) {
-                                                                                            parser.lista.add(new _ListaTipos(t, dvs.elementAt(i).getNombreVariable()._nombreVariable, parser.ambito.getAmbito()));
-                                                                                        }else {
-                                                                                             System.err.println("Error de tipos si esperaba un " + t.getClass().getSimpleName() + " no se puede pasar a "+ dvs.elementAt(i).getTipo().getClass().getSimpleName());
-                                                                                             System.err.println("Linea: " + s.getLinea() );
-                                                                                             System.err.println("Columna: " + s.getColumna() );
-                                                                                        }
-                                                                                    }:} ;
+                                                                                        } else {
+                                                                                            System.err.println("Error: la variable < " + dvs.elementAt(i).getNombreVariable()._nombreVariable + " > ya fue declarada");
+                                                                                            System.err.println("Linea: " + s.getLinea() );
+                                                                                          }
+                                                                                    } :} ;
 
 declaracion_variables ::= lista_variables:lvs coma declaracion_variables:dvs                {: dvs.add( lvs); RESULT = dvs; 
                                                                                               RESULT.setTipo( lvs.getTipo());
@@ -210,10 +297,10 @@ lista_variables ::= variable:v                                                  
                                                                                                RESULT.setTipo(v.getTipo());  RESULT.setNombreVariable(v.getNombreVariable()); :}
                    
                     | nombreVariable:id igual operacion_aritmetica:o                        {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), o);  
-                                                                                              RESULT.setTipo(o.getTipo());  RESULT.setNombreVariable(id);   :}
+                                                                                               RESULT.setTipo(o.getTipo());  RESULT.setNombreVariable(id); :}
 
                    | nombreVariable:id igual constChar:csc                                  {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constChar(csc._constChar, csc.linea, csc.columna)); 
-                                                                                              RESULT.setTipo(new CharTipo());  RESULT.setNombreVariable(id); :}
+                                                                                               RESULT.setTipo(new CharTipo());  RESULT.setNombreVariable(id); :}
                                                         
                    | nombreVariable:id igual constStr:css                                   {: RESULT = new ListaVariables(new nombreVariable(id._nombreVariable, id.linea, id.columna), new igual(), new constStr(css._constStr, css.linea, css.columna));   
                                                                                                RESULT.setTipo(new StringTipo());  RESULT.setNombreVariable(id); :}
@@ -246,42 +333,119 @@ elemento_array ::= nombreVariable:id corcheteIzquierdo operacion_aritmetica:o co
                                                                                                              RESULT.setNombreVariable(id);  RESULT.setTipo(new ArrayTipo(o,null));  :};
 
 
-declaracion_funcion ::= tipo:t nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfp parentesisDerecho puntoYComa     {:  RESULT = new DeclaracionFuncion(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), dfp, new parentesisDerecho(), new puntoYComa());  :}
-                     | VOID nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfs parentesisDerecho puntoYComa        {:  RESULT = new DeclaracionFuncion(new VOID(), new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), dfs, new parentesisDerecho(), new puntoYComa());  :}
-                     | error puntoYComa                                                                                                  {:  System.out.println("ERROR");  RESULT = new DeclaracionFuncion(new puntoYComa());  :};
+declaracion_funcion ::= tipo:t nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfp parentesisDerecho puntoYComa:pc     {:  RESULT = new DeclaracionFuncion(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), dfp, new parentesisDerecho(), new puntoYComa());
+                                                                                                                                                if (!parser.verificarSiLaFuncionYaFueDeclarada(id._nombreVariable)) {
+                                                                                                                                                   parser.lista.add(new _ListaTipos(t, id._nombreVariable, "", (Vector)parser.listaParametros.clone(), true));
+                                                                                                                                                } else {
+                                                                                                                                                   System.err.println("Error: la funcion < " + id._nombreVariable + " > ya fue declarada");
+                                                                                                                                                   System.err.println("Linea: " + pc.getLinea());
+                                                                                                                                                } 
+                                                                                                                                                parser.listaParametros.clear(); :}
+                     | VOID:v nombreVariable:id parentesisIzquierdo declaracion_funcion_parametros:dfs parentesisDerecho puntoYComa:pc       {: RESULT = new DeclaracionFuncion(new VOID(), new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), dfs, new parentesisDerecho(), new puntoYComa());
+                                                                                                                                                if (!parser.verificarSiLaFuncionYaFueDeclarada(id._nombreVariable)) {
+                                                                                                                                                   parser.lista.add(new _ListaTipos(new VOID(), id._nombreVariable, "", (Vector)parser.listaParametros.clone(), true));
+                                                                                                                                                } else {
+                                                                                                                                                   System.err.println("Error: la funcion < " + id._nombreVariable + " > ya fue declarada");
+                                                                                                                                                   System.err.println("Linea: " + pc.getLinea());
+                                                                                                                                                } 
+                                                                                                                                                parser.listaParametros.clear(); :}
+                     | error puntoYComa                                                                                                  {:  System.out.println("ERROR");  RESULT = new DeclaracionFuncion(new puntoYComa());
+                                                                                                                                             parser.listaParametros.clear(); :};
 
-declaracion_funcion_parametros ::= tipo:t declaracion_funcion_parametros_coma:dfp                                                        {:  RESULT = new DeclaracionFuncionParametros(t,dfp);    :}
-                               | tipo:t corcheteIzquierdo corcheteDerecho declaracion_funcion_parametros_coma:dfp                        {:  RESULT = new DeclaracionFuncionParametros(t,new corcheteIzquierdo(), new corcheteDerecho(), dfp);         :}
-                               | tipo:t nombreVariable:id declaracion_funcion_parametros_coma:dfp                                        {:  RESULT = new DeclaracionFuncionParametros(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), dfp);  :}  
-                               | tipo:t nombreVariable:id corcheteIzquierdo corcheteDerecho declaracion_funcion_parametros_coma:dfp      {:  RESULT = new DeclaracionFuncionParametros(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), dfp);    :}
+declaracion_funcion_parametros ::= tipo:t declaracion_funcion_parametros_coma:dfp                                                        {:  RESULT = new DeclaracionFuncionParametros(t, dfp);
+                                                                                                                                             parser.listaParametros.add(t); :}
+                               | tipo:t corcheteIzquierdo corcheteDerecho declaracion_funcion_parametros_coma:dfp                        {:  RESULT = new DeclaracionFuncionParametros(t, new corcheteIzquierdo(), new corcheteDerecho(), dfp);
+                                                                                                                                             parser.listaParametros.add(t); :}
+                               | tipo:t nombreVariable:id declaracion_funcion_parametros_coma:dfp                                        {:  RESULT = new DeclaracionFuncionParametros(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), dfp);
+                                                                                                                                             parser.listaParametros.add(t);  :}  
+                               | tipo:t nombreVariable:id corcheteIzquierdo corcheteDerecho declaracion_funcion_parametros_coma:dfp      {:  RESULT = new DeclaracionFuncionParametros(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), dfp);
+                                                                                                                                             parser.listaParametros.add(t); :}
                                |;
-declaracion_funcion_parametros_coma ::= coma declaracion_funcion_parametros:dfp                                                           {: RESULT = new DeclaracionFuncionParametrosComa(new coma(), dfp);    :}
+declaracion_funcion_parametros_coma ::= coma declaracion_funcion_parametros:dfp                                                           {: RESULT = new DeclaracionFuncionParametrosComa(new coma(), dfp); :}
                                    |;
 
-funciones ::= tipo:t nombreVariable:id parentesisIzquierdo funciones_parametros:fp parentesisDerecho llaveIzquierda codigos:c llaveDerecha funciones:f        {:  RESULT = new Funciones(t,new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), fp, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
-            | VOID nombreVariable:id parentesisIzquierdo funciones_parametros:fp parentesisDerecho llaveIzquierda codigos:c llaveDerecha funciones:f          {:  RESULT = new Funciones(new VOID(),new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), fp, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
+funciones ::= tipo:t nombreVariable:id parentesisIzquierdo funciones_parametros:fp {: if (!parser.verificarSiLaFuncionYaFueDeclarada(id._nombreVariable)) {
+                                                                                        System.err.println("Error: La funcion < " + id._nombreVariable + " > no existe");
+                                                                                      } else if (!parser.verificarParametrosDeLlamadaAFuncion(id._nombreVariable, (Vector)parser.listaParametros.clone())) {
+                                                                                          System.err.println("Error: Parametros invalidos para la funcion < " + id._nombreVariable + " >");
+                                                                                      } else {
+                                                                                          for(int i = 0; i < parser.listaTemp.size(); i++) {
+                                                                                            parser.lista.add(new _ListaTipos(parser.listaTemp.elementAt(i).getTipo(), parser.listaTemp.elementAt(i).getNombre(), id._nombreVariable));
+                                                                                          }
+                                                                                      }
+                                                                                      parser.listaParametros.clear();
+                                                                                      parser.listaTemp.clear();
+                                                                                   :}
+
+                                                                                   parentesisDerecho llaveIzquierda {: parser.ambitoActual.setAmbito(id._nombreVariable); :}
+ 
+                                                                                   codigos:c {: if (t.getClass() != parser.tipoRetorno.getClass()) {
+                                                                                                  System.err.println("Error: retorno invalido para la funcion < " + id._nombreVariable + " >" );
+                                                                                                } 
+                                                                                                parser.tipoRetorno = new Tipo(); 
+                                                                                             :}
+
+                                                                                    llaveDerecha funciones:f {: RESULT = new Funciones(t,new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), fp, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f); :}
+            
+            | VOID nombreVariable:id parentesisIzquierdo funciones_parametros:fp {: if (!parser.verificarSiLaFuncionYaFueDeclarada(id._nombreVariable)) {
+                                                                                      System.err.println("Error: La funcion < " + id._nombreVariable + " > no existe");
+                                                                                    } else if (!parser.verificarParametrosDeLlamadaAFuncion(id._nombreVariable, (Vector)parser.listaParametros.clone())) {
+                                                                                        System.err.println("Error: Parametros invalidos para la funcion < " + id._nombreVariable + " >");
+                                                                                    } else {
+                                                                                        for(int i = 0; i < parser.listaTemp.size(); i++) {
+                                                                                          parser.lista.add(new _ListaTipos(parser.listaTemp.elementAt(i).getTipo(), parser.listaTemp.elementAt(i).getNombre(), id._nombreVariable));
+                                                                                        }
+                                                                                    }
+                                                                                    parser.listaParametros.clear();
+                                                                                    parser.listaTemp.clear();
+                                                                                 :} 
+
+                                                                                 parentesisDerecho llaveIzquierda {: parser.ambitoActual.setAmbito(id._nombreVariable); :}
+
+                                                                                 codigos:c {: if (!parser.tipoRetorno.getClass().getSimpleName().equals("Tipo")) {
+                                                                                                System.err.println("Error: retorno invalido para la funcion < " + id._nombreVariable + " >" );
+                                                                                              }
+                                                                                           :} 
+
+                                                                                 llaveDerecha funciones:f {:  RESULT = new Funciones(new VOID(),new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), fp, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f); :}
+
             | tipo:t error parentesisDerecho llaveIzquierda codigos:c llaveDerecha funciones:f                                                                {:  System.out.println("ERROR"); RESULT = new Funciones(t, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
             | VOID error parentesisDerecho llaveIzquierda codigos:c llaveDerecha funciones:f                                                                  {:  System.out.println("ERROR"); RESULT = new Funciones(new VOID(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f);   :}
             |;
 
-funciones_parametros ::= tipo:t nombreVariable:id funciones_parametros_coma:fpc                                                {: RESULT = new FuncionesParametros(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), fpc); :}
-                      | tipo:t nombreVariable:id corcheteIzquierdo corcheteDerecho funciones_parametros_coma:fpc               {: RESULT = new FuncionesParametros(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), fpc); :}
+funciones_parametros ::= tipo:t nombreVariable:id funciones_parametros_coma:fpc                                                {: RESULT = new FuncionesParametros(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), fpc);
+                                                                                                                                  parser.listaParametros.add(t);
+                                                                                                                                  parser.listaTemp.add(new _ListaTipos(t, id._nombreVariable, "")); :}
+                      | tipo:t nombreVariable:id corcheteIzquierdo corcheteDerecho funciones_parametros_coma:fpc               {: RESULT = new FuncionesParametros(t, new nombreVariable(id._nombreVariable, id.linea, id.columna), new corcheteIzquierdo(), new corcheteDerecho(), fpc);
+                                                                                                                                  parser.listaParametros.add(t);
+                                                                                                                                  parser.listaTemp.add(new _ListaTipos(t, id._nombreVariable, "")); :}
                       |;
 
 funciones_parametros_coma ::= coma funciones_parametros:fp                                                                     {:  RESULT = new FuncionesParametrosComa(new coma(), fp); :}
                          |;
 
 llamado_funcion ::= nombreVariable:id parentesisIzquierdo llamado_funcion_parametros:llfp parentesisDerecho      {:  RESULT = new LlamadoAFuncion(new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), llfp, new parentesisDerecho()); 
-                                                                                                                           :}                
+                                                                                                                     if (parser.verificarSiLaFuncionYaFueDeclarada(id._nombreVariable)) {
+                                                                                                                        if (!parser.verificarParametrosDeLlamadaAFuncion(id._nombreVariable, (Vector)parser.listaParametros.clone())) {
+                                                                                                                           System.err.println("Error: parametros de la funcion < " + id._nombreVariable + " > incorrectos");
+                                                                                                                        }
+                                                                                                                     } else {
+                                                                                                                        System.err.println("Error: la funcion < " + id._nombreVariable + " > no ha sido declarada");
+                                                                                                                     }
+                                                                                                                     parser.listaParametros.clear(); :}                
                   
-                    | nombreVariable:id error parentesisDerecho                                                  {:  System.out.println("ERROR");  RESULT = new LlamadoAFuncion(new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisDerecho());    :};
+                    | nombreVariable:id error parentesisDerecho                                                  {:  System.out.println("ERROR");  RESULT = new LlamadoAFuncion(new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisDerecho());
+                                                                                                                     parser.listaParametros.clear(); :};
 
-llamado_funcion_parametros ::= operacion_aritmetica:o llamado_funcion_parametros_coma:fpc                        {:  RESULT = new LlamadoAFuncionParametros(o,fpc); :}
-                            | constChar:csc llamado_funcion_parametros_coma:fpc                                  {:  RESULT = new LlamadoAFuncionParametros(new constChar(csc._constChar, csc.linea, csc.columna),fpc); :}
-                            | constStr:css llamado_funcion_parametros_coma:fpc                                   {:  RESULT = new LlamadoAFuncionParametros(new constStr(css._constStr, css.linea, css.columna),fpc); :}
+llamado_funcion_parametros ::= operacion_aritmetica:o llamado_funcion_parametros_coma:fpc                        {:  RESULT = new LlamadoAFuncionParametros(o,fpc);
+                                                                                                                     parser.listaParametros.add(o.getTipo()); :}
+                            | constChar:csc llamado_funcion_parametros_coma:fpc                                  {:  RESULT = new LlamadoAFuncionParametros(new constChar(csc._constChar, csc.linea, csc.columna),fpc); 
+                                                                                                                     parser.listaParametros.add(new CharTipo()); :}
+                            | constStr:css llamado_funcion_parametros_coma:fpc                                   {:  RESULT = new LlamadoAFuncionParametros(new constStr(css._constStr, css.linea, css.columna),fpc);
+                                                                                                                     parser.listaParametros.add(new StringTipo()); :}
                             |;
 
-llamado_funcion_parametros_coma ::= coma llamado_funcion_parametros:lp                                           {: RESULT = new LlamadoAFuncionParametrosComa(new coma(), lp);   :}
+llamado_funcion_parametros_coma ::= coma llamado_funcion_parametros:lp                                           {: RESULT = new LlamadoAFuncionParametrosComa(new coma(), lp); :}
                                 |;
 
 scans ::= scanf parentesisIzquierdo parametroScanf:p coma nombreVariable:id parentesisDerecho puntoYComa         {:    RESULT = new Scanf(new parentesisIzquierdo(), new parametroScanf(p._parametroScanf, p.linea, p.columna), new coma(), new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisDerecho(), new puntoYComa());   :}
@@ -292,8 +456,7 @@ print ::= printf parentesisIzquierdo constStr:csts parentesisDerecho puntoYComa 
          | printf parentesisIzquierdo constStr:csts coma operacion_aritmetica:o parentesisDerecho puntoYComa     {: RESULT = new Printf(new parentesisIzquierdo(), new constStr(csts._constStr, csts.linea, csts.columna), new coma(), o, new parentesisDerecho(), new puntoYComa()); :}
         ;
 
-_if ::= IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigos:cg llaveDerecha else:e   {: RESULT = new If(new parentesisIzquierdo() , c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha(), e);  
-                                                                                                                    parser.ambito.generarAmbito(); :}
+_if ::= IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigos:cg llaveDerecha else:e   {: RESULT = new If(new parentesisIzquierdo() , c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha(), e); :}
      | IF error parentesisDerecho llaveIzquierda codigos:c llaveDerecha else:e                               {: RESULT = new If(new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), e);  :};
 
 else ::= ELSE IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda codigos:cg llaveDerecha else:e    {: RESULT = new Else(new parentesisIzquierdo(), c, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha(), e); :}
@@ -349,10 +512,22 @@ condicion ::= operacion_aritmetica:o1 operadorRelacional operacion_aritmetica:o2
 condicion_operador_logico ::= operadorLogico condicion:c                                                               {:  RESULT = new CondicionOperadorLogico( new operadorLogico(), c);  :}
                       |;
 
-asignacion_variable ::= variable:v igual operacion_aritmetica:oa asignacion_variable_coma:av                           {: RESULT = new AsignacionVariable(v, new igual(), oa,av);  :}
-                     | variable:v operadorAritmeticoIgual operacion_aritmetica:o asignacion_variable_coma:av           {: RESULT = new AsignacionVariable(v, new operadorAritmeticoIgual(), o, av);  :}
-                     | variable:v igual constChar:csc asignacion_variable_coma:ac                                      {: RESULT = new AsignacionVariable(v, new igual(), new constChar(csc._constChar, csc.linea, csc.columna) , ac); :}
-                     | variable:v igual constStr:css asignacion_variable_coma:ac                                       {: RESULT = new AsignacionVariable(v, new igual(), new constStr(css._constStr, css.linea, css.columna) , ac); :} 
+asignacion_variable ::= variable:v igual operacion_aritmetica:oa asignacion_variable_coma:av                           {: RESULT = new AsignacionVariable(v, new igual(), oa, av);
+                                                                                                                          if (!parser.verificarSiLaVariableYaFueDeclarada(v.getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito())) {
+                                                                                                                            System.err.println("Error: la variable < " + v.getNombreVariable()._nombreVariable + " > no ha sido declarada");
+                                                                                                                          } :}
+                     | variable:v operadorAritmeticoIgual operacion_aritmetica:o asignacion_variable_coma:av           {: RESULT = new AsignacionVariable(v, new operadorAritmeticoIgual(), o, av);
+                                                                                                                          if (!parser.verificarSiLaVariableYaFueDeclarada(v.getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito())) {
+                                                                                                                            System.err.println("Error: la variable < " + v.getNombreVariable()._nombreVariable + " > no ha sido declarada");
+                                                                                                                          } :}
+                     | variable:v igual constChar:csc asignacion_variable_coma:ac                                      {: RESULT = new AsignacionVariable(v, new igual(), new constChar(csc._constChar, csc.linea, csc.columna) , ac);
+                                                                                                                          if (!parser.verificarSiLaVariableYaFueDeclarada(v.getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito())) {
+                                                                                                                            System.err.println("Error: la variable < " + v.getNombreVariable()._nombreVariable + " > no ha sido declarada");
+                                                                                                                          } :}
+                     | variable:v igual constStr:css asignacion_variable_coma:ac                                       {: RESULT = new AsignacionVariable(v, new igual(), new constStr(css._constStr, css.linea, css.columna) , ac);
+                                                                                                                          if (!parser.verificarSiLaVariableYaFueDeclarada(v.getNombreVariable()._nombreVariable, parser.ambitoActual.getAmbito())) {
+                                                                                                                            System.err.println("Error: la variable < " + v.getNombreVariable()._nombreVariable + " > no ha sido declarada");
+                                                                                                                          } :} 
                      | error puntoYComa                                                                                {: RESULT = new AsignacionVariable(new puntoYComa()); :};
 
 asignacion_variable_coma ::= coma asignacion_variable:av                                                               {: RESULT = new AsignacionVariableComa( new coma(), av);  :}
