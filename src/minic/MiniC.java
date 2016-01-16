@@ -59,6 +59,8 @@ public class MiniC {
             {
                 System.out.println(as.lista.elementAt(i).toString());
             }
+            
+            as.codigoIntermedio_generar();
 
         } catch (Exception e) {
             System.err.println("ERROR Analizador: " + e.getMessage());

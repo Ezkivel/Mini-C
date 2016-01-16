@@ -5,10 +5,24 @@
  */
 package ast;
 
+import minic.Token;
+
 /**
  *
  * @author Gabriel
  */
 public class operadorRelacional {
+    public Token operador;
+
+    public operadorRelacional(Token operador) {
+        this.operador = operador;
+    }
     
+    public String getOperador() {
+        return operador.getContenido();
+    }
+
+    public void setOperador(Token operador) {
+        this.operador = operador;
+    }
 }
