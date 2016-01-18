@@ -17,7 +17,6 @@ parser code{:
     public Vector<Tipo> listaParametros = new Vector();
     public Vector<String> listaParametrosVariables = new Vector();
     public Tipo tipoRetorno = new Tipo();
-    public String valorRetorno = "";
     public boolean generar = false;
     public Vector<String> operacionAritmetica = new Vector();
     public Vector<String> operacionAritmeticaTemp = new Vector();
@@ -125,6 +124,30 @@ parser code{:
         return false;
     }
 
+    public boolean verificarTipo_variableYFuncion(String nombreVariable, String funcion, String ambito) {
+        String variableTipo = "";
+        String funcionTipoRetorno = " ";
+
+        for(int i = 0; i < lista.size(); i++) {
+            //Ambito actual
+            if (lista.elementAt(i).getNombre().equals(nombreVariable) && lista.elementAt(i).getAmbito().equals(ambito)) {
+                variableTipo = lista.elementAt(i).getTipo().getClass().getSimpleName();
+            } else if (lista.elementAt(i).getNombre().equals(nombreVariable) && lista.elementAt(i).getAmbito().equals("")) { //Global
+                variableTipo = lista.elementAt(i).getTipo().getClass().getSimpleName();
+            }
+
+            if (lista.elementAt(i).getNombre().equals(funcion) && lista.elementAt(i).isFuncion()) {
+                funcionTipoRetorno = lista.elementAt(i).getTipo().getClass().getSimpleName();
+            }
+        }
+
+        if (variableTipo.equals(funcionTipoRetorno)) {
+            return true;
+        }
+
+        return false;
+    }
+
     public void codigoIntermedio_generar() {
         if (codigoFuenteValido()) {
             for (int i = 0; i < codigoIntermedio.size(); i++) {
@@ -135,22 +158,17 @@ parser code{:
         }
     }
 
-    public boolean esFuncion(String nombre) {
-        for(int i = 0; i < lista.size(); i++) {
-            if (lista.elementAt(i).getNombre().equals(nombre) && lista.elementAt(i).isFuncion()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public void codigoIntermedio_asignacionAritmetica(String variable, Vector<String> operacionAritmetica) {
         if (codigoFuenteValido()) {
             if (operacionAritmetica.size() > 0) {
                 if (!llamadoAFuncionDerecha.equals("") || operacionAritmetica.size() == 1) {
                     if (!llamadoAFuncionDerecha.equals("")) {
-                        codigoIntermedio.add(variable + "=" + "RET");
+                        if (verificarTipo_variableYFuncion(variable, llamadoAFuncionDerecha, ambitoActual.getAmbito())) {
+                            codigoIntermedio.add(variable + "=" + "RET");
+                        } else {
+                            System.err.println("Error de tipos: variable(" + variable + ") y funcion(" + llamadoAFuncionDerecha + ")");
+                            errores++;
+                        }
                         llamadoAFuncionDerecha = "";
                     } else {
                         String nuevoTemporal = codigoIntermedio_nuevoTemporal();
@@ -240,7 +258,7 @@ parser code{:
         }
     }
 
-    public void codigoIntermedio_generarRETURN() {
+    public void codigoIntermedio_generarRETURN(String valorRetorno) {
         if (codigoFuenteValido()) {
             codigoIntermedio.add("return " + valorRetorno);
         }
@@ -432,13 +450,13 @@ codigo ::= declaracion_variable:dv                                              
          | llamado_funcion:lf puntoYComa                                                      {: RESULT = new Codigo(lf,new puntoYComa());  :}   
          | RETURN operacion_aritmetica:o puntoYComa                                           {: RESULT = new Codigo(new RETURN(), o, new puntoYComa());
                                                                                                  parser.tipoRetorno = new IntegerTipo();
-                                                                                                 parser.valorRetorno =  o._operacionAritmetica2._operacionAritmetica3._entero == null ? o._operacionAritmetica2._operacionAritmetica3._variable._nombreVariable._nombreVariable :  Integer.toString(o._operacionAritmetica2._operacionAritmetica3._entero._entero);:}           
+                                                                                                 parser.codigoIntermedio_generarRETURN(o._operacionAritmetica2._operacionAritmetica3._entero == null ? o._operacionAritmetica2._operacionAritmetica3._variable._nombreVariable._nombreVariable :  Integer.toString(o._operacionAritmetica2._operacionAritmetica3._entero._entero)); :}           
          | RETURN constChar:csc puntoYComa                                                    {: RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa());
                                                                                                  parser.tipoRetorno = new CharTipo();
-                                                                                                 parser.valorRetorno = csc._constChar; :}
+                                                                                                 parser.codigoIntermedio_generarRETURN(csc._constChar); :}
          | RETURN constStr:cst puntoYComa                                                     {: RESULT = new Codigo( new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa() );
                                                                                                  parser.tipoRetorno = new StringTipo();
-                                                                                                 parser.valorRetorno = cst._constStr; :}
+                                                                                                 parser.codigoIntermedio_generarRETURN(cst._constStr); :}
          | error codigo:c                                                                     {: System.out.println("ERROR"); :};
 
 tipo ::= INTEGER {: RESULT = new IntegerTipo(); :}
@@ -609,7 +627,6 @@ funciones ::= tipo:t nombreVariable:id parentesisIzquierdo funciones_parametros:
                                                                                                   parser.errores++;
                                                                                                 } 
                                                                                                 parser.tipoRetorno = new Tipo();
-                                                                                                parser.codigoIntermedio_generarRETURN();
                                                                                                 parser.codigoIntermedio_generarFIN(id._nombreVariable);
                                                                                              :}
 
