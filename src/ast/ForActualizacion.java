@@ -5,6 +5,8 @@
  */
 package ast;
 
+import minic.Token;
+
 /**
  *
  * @author Gabriel
@@ -13,7 +15,7 @@ public class ForActualizacion {
 
     public Variable _variable;
     public operadorAritmeticoIgual _operadorAritmeticoIgual;
-    public operadorIncrementoDecremento _operadorIncrementoDecremento;
+    public Token _operadorIncrementoDecremento;
     public igual _igual;
     public OperacionAritmetica _operacionAritmetica;
     public constChar _constChar;
@@ -48,13 +50,13 @@ public class ForActualizacion {
         this._forActualizacionComa = _forActualizacionComa;
     }
 
-    public ForActualizacion(operadorIncrementoDecremento _operadorIncrementoDecremento, Variable _variable, ForActualizacionComa _forActualizacionComa) {
+    public ForActualizacion(Token _operadorIncrementoDecremento, Variable _variable, ForActualizacionComa _forActualizacionComa) {
         this._operadorIncrementoDecremento = _operadorIncrementoDecremento;
         this._variable = _variable;
         this._forActualizacionComa = _forActualizacionComa;
     }
 
-    public ForActualizacion(Variable _variable, operadorIncrementoDecremento _operadorIncrementoDecremento, ForActualizacionComa _forActualizacionComa) {
+    public ForActualizacion(Variable _variable, Token _operadorIncrementoDecremento, ForActualizacionComa _forActualizacionComa) {
         this._variable = _variable;
         this._operadorIncrementoDecremento = _operadorIncrementoDecremento;
         this._forActualizacionComa = _forActualizacionComa;

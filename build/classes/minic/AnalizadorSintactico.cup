@@ -17,9 +17,12 @@ parser code{:
     public Vector<Tipo> listaParametros = new Vector();
     public Vector<String> listaParametrosVariables = new Vector();
     public Tipo tipoRetorno = new Tipo();
+    public String valorRetorno = "";
     public boolean generar = false;
     public Vector<String> operacionAritmetica = new Vector();
+    public Vector<String> operacionAritmeticaTemp = new Vector();
     public int errores = 0;
+    public String llamadoAFuncionDerecha = "";
 
     public Vector<String> codigoIntermedio = new Vector();
     public int codigoIntermedio_temporales = -1;
@@ -127,21 +130,38 @@ parser code{:
             for (int i = 0; i < codigoIntermedio.size(); i++) {
                 System.out.println(codigoIntermedio.elementAt(i));
             }
+        } else {
+            System.err.println("\n\nSe han encontrado " + errores + " errores");
         }
+    }
+
+    public boolean esFuncion(String nombre) {
+        for(int i = 0; i < lista.size(); i++) {
+            if (lista.elementAt(i).getNombre().equals(nombre) && lista.elementAt(i).isFuncion()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public void codigoIntermedio_asignacionAritmetica(String variable, Vector<String> operacionAritmetica) {
         if (codigoFuenteValido()) {
             if (operacionAritmetica.size() > 0) {
-                if (operacionAritmetica.size() == 1) {
-                    String nuevoTemporal = codigoIntermedio_nuevoTemporal();
-                    String valor = operacionAritmetica.remove(0);
+                if (!llamadoAFuncionDerecha.equals("") || operacionAritmetica.size() == 1) {
+                    if (!llamadoAFuncionDerecha.equals("")) {
+                        codigoIntermedio.add(variable + "=" + "RET");
+                        llamadoAFuncionDerecha = "";
+                    } else {
+                        String nuevoTemporal = codigoIntermedio_nuevoTemporal();
+                        String valor = operacionAritmetica.remove(0);
 
-                    String temporal = nuevoTemporal + "=" + valor;
-                    codigoIntermedio.add(temporal);
+                        String temporal = nuevoTemporal + "=" + valor;
+                        codigoIntermedio.add(temporal);
 
-                    String asignacionFinal = variable + "=" + nuevoTemporal;
-                    codigoIntermedio.add(asignacionFinal);
+                        String asignacionFinal = variable + "=" + nuevoTemporal;
+                        codigoIntermedio.add(asignacionFinal);
+                    }
                 } else {
                     String operadores = "+-*/";
                     String nuevoTemporal = "";
@@ -220,6 +240,12 @@ parser code{:
         }
     }
 
+    public void codigoIntermedio_generarRETURN() {
+        if (codigoFuenteValido()) {
+            codigoIntermedio.add("return " + valorRetorno);
+        }
+    }
+
     public void codigoIntermedio_generarFIN(String nombreFuncion) {
         if (codigoFuenteValido()) {
             codigoIntermedio.add("FIN_" + nombreFuncion);
@@ -270,6 +296,10 @@ parser code{:
     public void codigoIntermedio_generarGOTO(int linea, int etiqueta) {
         codigoIntermedio.add(linea, "goto etiqueta_" + etiqueta);
     }
+    
+    public void codigoIntermedio_generarGOTO(int etiqueta) {
+        codigoIntermedio.add("goto etiqueta_" + etiqueta);
+    }
 
     public void syntax_error(Symbol s)
     {
@@ -319,7 +349,7 @@ terminal Token operadorSuma;
 terminal operadorResta; 
 terminal operadorMultiplicacion; 
 terminal operadorDivision; 
-terminal operadorIncrementoDecremento operadorIncrementoDecremento;
+terminal Token operadorIncrementoDecremento;
 terminal operadorRelacional;
 terminal operadorLogico operadorLogico;
 terminal Token puntoYComa;
@@ -386,7 +416,7 @@ main ::= tipo:t MAIN parentesisIzquierdo parentesisDerecho llaveIzquierda {: par
                                                                              parser.codigoIntermedio_generarEtiquetaFuncion("main");
                                                                           :} 
 
-                                                                          codigos:c llaveDerecha funciones:f         {: RESULT = new MainClass(t, new MainClass(), new parentesisIzquierdo(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f ); :};
+                                                                          codigos:c llaveDerecha {: parser.codigoIntermedio_generarFIN("main"); :} funciones:f         {: RESULT = new MainClass(t, new MainClass(), new parentesisIzquierdo(), new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f ); :};
 
 codigos ::= codigo:c codigos:cs             {:  cs.add(c); RESULT = cs; :}
             |                               {:  RESULT = new Codigos(); :};
@@ -401,11 +431,14 @@ codigo ::= declaracion_variable:dv                                              
          | _for:f                                                                             {: RESULT = f;  :}
          | llamado_funcion:lf puntoYComa                                                      {: RESULT = new Codigo(lf,new puntoYComa());  :}   
          | RETURN operacion_aritmetica:o puntoYComa                                           {: RESULT = new Codigo(new RETURN(), o, new puntoYComa());
-                                                                                                 parser.tipoRetorno = new IntegerTipo(); :}           
+                                                                                                 parser.tipoRetorno = new IntegerTipo();
+                                                                                                 parser.valorRetorno =  o._operacionAritmetica2._operacionAritmetica3._entero == null ? o._operacionAritmetica2._operacionAritmetica3._variable._nombreVariable._nombreVariable :  Integer.toString(o._operacionAritmetica2._operacionAritmetica3._entero._entero);:}           
          | RETURN constChar:csc puntoYComa                                                    {: RESULT = new Codigo(new RETURN(), new constChar(csc._constChar, csc.linea, csc.columna), new puntoYComa());
-                                                                                                 parser.tipoRetorno = new CharTipo(); :}
+                                                                                                 parser.tipoRetorno = new CharTipo();
+                                                                                                 parser.valorRetorno = csc._constChar; :}
          | RETURN constStr:cst puntoYComa                                                     {: RESULT = new Codigo( new RETURN(), new constStr(cst._constStr, cst.linea, cst.columna), new puntoYComa() );
-                                                                                                 parser.tipoRetorno = new StringTipo(); :}
+                                                                                                 parser.tipoRetorno = new StringTipo();
+                                                                                                 parser.valorRetorno = cst._constStr; :}
          | error codigo:c                                                                     {: System.out.println("ERROR"); :};
 
 tipo ::= INTEGER {: RESULT = new IntegerTipo(); :}
@@ -576,7 +609,7 @@ funciones ::= tipo:t nombreVariable:id parentesisIzquierdo funciones_parametros:
                                                                                                   parser.errores++;
                                                                                                 } 
                                                                                                 parser.tipoRetorno = new Tipo();
-
+                                                                                                parser.codigoIntermedio_generarRETURN();
                                                                                                 parser.codigoIntermedio_generarFIN(id._nombreVariable);
                                                                                              :}
 
@@ -605,6 +638,8 @@ funciones ::= tipo:t nombreVariable:id parentesisIzquierdo funciones_parametros:
                                                                                                 System.err.println("Error: retorno invalido para la funcion < " + id._nombreVariable + " >" );
                                                                                                 parser.errores++;
                                                                                               }
+
+                                                                                              parser.codigoIntermedio_generarFIN(id._nombreVariable);
                                                                                            :} 
 
                                                                                  llaveDerecha funciones:f {:  RESULT = new Funciones(new VOID(),new nombreVariable(id._nombreVariable, id.linea, id.columna), new parentesisIzquierdo(), fp, new parentesisDerecho(), new llaveIzquierda(), c, new llaveDerecha(), f); :}
@@ -688,15 +723,23 @@ print ::= printf parentesisIzquierdo constStr:csts parentesisDerecho puntoYComa 
                                                                                                                       }
                                                                                                                     } else {
                                                                                                                         parser.codigoIntermedio_print(csts._constStr, contenido);
-                                                                                                                    } :}
-        ;
+                                                                                                                    } :};
 
 _if ::= IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierda {: String operador = c._operadorRelacional.getOperador();
                                                                                String izquierda = c._operacionAritmetica1._operacionAritmetica2._operacionAritmetica3._variable._nombreVariable._nombreVariable;
                                                                                String derecha = c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._entero == null ? c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._variable._nombreVariable._nombreVariable :  Integer.toString(c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._entero._entero);
-                                              
-                                                                               parser.codigoIntermedio_generarIF(izquierda, operador, derecha);
 
+                                                                               if (!parser.verificarSiLaVariableYaFueDeclarada(izquierda, parser.ambitoActual.getAmbito())) {
+                                                                                 System.err.println("Error: la variable < " + izquierda + " > no ha sido declarada");
+                                                                                 parser.errores++;
+                                                                               } 
+
+                                                                               if(c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._entero == null && !parser.verificarSiLaVariableYaFueDeclarada(derecha, parser.ambitoActual.getAmbito())) {
+                                                                                 System.err.println("Error: la variable < " + derecha + " > no ha sido declarada");
+                                                                                 parser.errores++;                                                                                 
+                                                                               }
+
+                                                                               parser.codigoIntermedio_generarIF(izquierda, operador, derecha);
                                                                                parser.codigoIntermedio_generarEtiqueta();
                                                                             :}
 
@@ -725,9 +768,18 @@ else ::= ELSE IF parentesisIzquierdo condicion:c parentesisDerecho llaveIzquierd
 _while ::= WHILE {: parser.codigoIntermedio_generarEtiqueta(); :} M:m1 parentesisIzquierdo condicion:c {: String operador = c._operadorRelacional.getOperador();
                                                                                                           String izquierda = c._operacionAritmetica1._operacionAritmetica2._operacionAritmetica3._variable._nombreVariable._nombreVariable;
                                                                                                           String derecha = c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._entero == null ? c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._variable._nombreVariable._nombreVariable :  Integer.toString(c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._entero._entero);
-                                              
-                                                                                                          parser.codigoIntermedio_generarIF(izquierda, operador, derecha);
 
+                                                                                                          if (!parser.verificarSiLaVariableYaFueDeclarada(izquierda, parser.ambitoActual.getAmbito())) {
+                                                                                                            System.err.println("Error: la variable < " + izquierda + " > no ha sido declarada");
+                                                                                                            parser.errores++;
+                                                                                                          } 
+
+                                                                                                          if(c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._entero == null && !parser.verificarSiLaVariableYaFueDeclarada(derecha, parser.ambitoActual.getAmbito())) {
+                                                                                                            System.err.println("Error: la variable < " + derecha + " > no ha sido declarada");
+                                                                                                            parser.errores++;                                                                                 
+                                                                                                          }
+
+                                                                                                          parser.codigoIntermedio_generarIF(izquierda, operador, derecha);
                                                                                                           parser.codigoIntermedio_generarEtiqueta();
                                                                                                        :}
                         
@@ -740,11 +792,92 @@ _while ::= WHILE {: parser.codigoIntermedio_generarEtiqueta(); :} M:m1 parentesi
 
         | WHILE error parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                                      {: System.out.println("ERROR");RESULT = new While(new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :};
 
-_for ::= FOR parentesisIzquierdo for_inicializacion:fi puntoYComa condicion:c puntoYComa for_actualizacion:fa parentesisDerecho llaveIzquierda codigos:cg llaveDerecha    {:   RESULT = new For( new parentesisIzquierdo(), fi, new puntoYComa(), c, new puntoYComa(), fa, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha() ); :}
-      | FOR parentesisIzquierdo puntoYComa condicion:c puntoYComa for_actualizacion:fa parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                           {:   RESULT = new For( new parentesisIzquierdo(), new puntoYComa(), c, new puntoYComa(), fa, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha());    :}
-      | FOR parentesisIzquierdo for_inicializacion:fi puntoYComa condicion:c puntoYComa parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                          {:   RESULT = new For( new parentesisIzquierdo(), fi, new puntoYComa(), c, new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
-      | FOR parentesisIzquierdo puntoYComa condicion:c puntoYComa parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                                                {:   RESULT = new For(new parentesisIzquierdo(), new puntoYComa(), c, new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
-      | FOR parentesisIzquierdo puntoYComa puntoYComa parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                                                            {:   RESULT = new For(new parentesisIzquierdo(), new puntoYComa(), new puntoYComa(), new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha()); :}
+_for ::= FOR parentesisIzquierdo {: parser.codigoIntermedio_generarEtiqueta();
+                                    parser.generar = true;
+                                 :} 
+
+                                 for_inicializacion:fi puntoYComa {: String variable = fi._variable._nombreVariable._nombreVariable;
+
+                                                                     if (!parser.verificarSiLaVariableYaFueDeclarada(variable, parser.ambitoActual.getAmbito())) {
+                                                                       System.err.println("Error: la variable < " + variable + " > no ha sido declarada");
+                                                                       parser.errores++;
+                                                                       
+                                                                     }
+
+                                                                     parser.codigoIntermedio_asignacionAritmetica(variable, parser.operacionAritmetica);
+                                                                     parser.operacionAritmetica.clear();
+                                                                     parser.generar = false;
+                                                                     
+                                                                     parser.codigoIntermedio_generarEtiqueta();
+                                                                  :} 
+
+                                                                  M:m1 condicion:c puntoYComa {: String operador = c._operadorRelacional.getOperador();
+                                                                                                 String izquierda = c._operacionAritmetica1._operacionAritmetica2._operacionAritmetica3._variable._nombreVariable._nombreVariable;
+                                                                                                 String derecha = c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._entero == null ? c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._variable._nombreVariable._nombreVariable :  Integer.toString(c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._entero._entero);
+
+                                                                                                 if (!parser.verificarSiLaVariableYaFueDeclarada(izquierda, parser.ambitoActual.getAmbito())) {
+                                                                                                   System.err.println("Error: la variable < " + izquierda + " > no ha sido declarada");
+                                                                                                   parser.errores++;
+                                                                                                 } 
+
+                                                                                                 if(c._operacionAritmetica2._operacionAritmetica2._operacionAritmetica3._entero == null && !parser.verificarSiLaVariableYaFueDeclarada(derecha, parser.ambitoActual.getAmbito())) {
+                                                                                                   System.err.println("Error: la variable < " + derecha + " > no ha sido declarada");
+                                                                                                   parser.errores++;                                                                                 
+                                                                                                 }
+                                              
+                                                                                                 parser.codigoIntermedio_generarIF(izquierda, operador, derecha);
+
+                                                                                                 parser.codigoIntermedio_generarEtiqueta();
+
+                                                                                                 parser.generar = true;
+                                                                                              :} 
+                                                                                                
+                                                                                              N:n1 M:m2 for_actualizacion:fa {: parser.generar = false;
+
+                                                                                                                                parser.operacionAritmeticaTemp = (Vector)parser.operacionAritmetica.clone();
+                                                                                                                                parser.operacionAritmetica.clear();
+                                                                                                                             :} 
+
+                                                                                                                             parentesisDerecho llaveIzquierda codigos:cg llaveDerecha      {: RESULT = new For( new parentesisIzquierdo(), fi, new puntoYComa(), c, new puntoYComa(), fa, new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha() );
+                                                                                                                                                                                  
+                                                                                                                                                                                              parser.codigoIntermedio_generarEtiqueta();
+
+                                                                                                                                                                                              String variable = fa._variable._nombreVariable._nombreVariable;
+
+                                                                                                                                                                                              if (!parser.verificarSiLaVariableYaFueDeclarada(variable, parser.ambitoActual.getAmbito())) {
+                                                                                                                                                                                                System.err.println("Error: la variable < " + variable + " > no ha sido declarada");
+                                                                                                                                                                                                parser.errores++;
+                                                                                                                                                                                              }
+
+                                                                                                                                                                                              if(fa._operadorIncrementoDecremento != null) {
+                                                                                                                                                                                                String operador = fa._operadorIncrementoDecremento.getContenido();
+                                                                                                                                                                                                Vector<String> operacion = new Vector();
+
+                                                                                                                                                                                                if (operador.equals("++")) {
+                                                                                                                                                                                                  operacion.add(variable);
+                                                                                                                                                                                                  operacion.add("+");
+                                                                                                                                                                                                  operacion.add("1");
+                                                                                                                                                                                                } else {
+                                                                                                                                                                                                    operacion.add(variable);
+                                                                                                                                                                                                    operacion.add("-");
+                                                                                                                                                                                                    operacion.add("1");
+                                                                                                                                                                                                }
+
+                                                                                                                                                                                                parser.codigoIntermedio_asignacionAritmetica(variable, operacion);
+                                                                                                                                                                                              } else {
+                                                                                                                                                                                                  parser.codigoIntermedio_asignacionAritmetica(variable, parser.operacionAritmeticaTemp);
+                                                                                                                                                                                              }
+
+                                                                                                                                                                                              parser.operacionAritmeticaTemp.clear();
+
+                                                                                                                                                                                              parser.codigoIntermedio_generarGOTO(m1.getEtiqueta());
+
+                                                                                                                                                                                              parser.codigoIntermedio_generarEtiqueta();
+
+                                                                                                                                                                                              parser.completarIF(n1.getLinea() - 2, m2.getEtiqueta());
+                                                                                                                                                                                              parser.completarIF(n1.getLinea() - 1, parser.codigoIntermedio_getEtiquetaActual());
+                                                                                                                                                                                           :}
+      
       | FOR error parentesisDerecho llaveIzquierda codigos:cg llaveDerecha                                                                                                {:   System.out.println("ERROR");RESULT = new For(new parentesisDerecho(), new llaveIzquierda(), cg, new llaveDerecha());   :};
 
 
@@ -769,13 +902,20 @@ for_actualizacion ::= variable:v igual operacion_aritmetica:o for_actualizacion_
                    | variable:v operadorAritmeticoIgual operacion_aritmetica:o for_actualizacion_coma:fac    {:   RESULT = new ForActualizacion(v, new operadorAritmeticoIgual(), o, fac);    :}
                    | variable:v igual constChar:csc for_actualizacion_coma:fac                               {:   RESULT = new ForActualizacion(v, new igual(), new constChar(csc._constChar, csc.linea, csc.columna), fac);    :}
                    | variable:v igual constStr:css for_actualizacion_coma:fac                                {:   RESULT = new ForActualizacion(v, new igual(), new constStr(css._constStr, css.linea, css.columna), fac);    :}
-                   | variable:v operadorIncrementoDecremento for_actualizacion_coma:fac                      {:   RESULT = new ForActualizacion(v, new operadorIncrementoDecremento(), fac); :}
-                   | operadorIncrementoDecremento variable:v for_actualizacion_coma:fac                      {:   RESULT = new ForActualizacion(new operadorIncrementoDecremento(), v, fac); :};
+                   | variable:v operadorIncrementoDecremento:oid for_actualizacion_coma:fac                  {:   RESULT = new ForActualizacion(v, oid, fac); :}
+                   | operadorIncrementoDecremento:oid variable:v for_actualizacion_coma:fac                  {:   RESULT = new ForActualizacion(oid, v, fac); :};
 
 for_actualizacion_coma ::= coma for_actualizacion:fa                                                         {: RESULT = new ForActualizacionComa(new coma(), fa ); :}
                        |;
 
-condicion ::= operacion_aritmetica:o1 operadorRelacional:or operacion_aritmetica:o2 condicion_operador_logico:col         {: RESULT = new Condicion(o1, new operadorRelacional((Token)or), o2, col);  :}
+condicion ::= operacion_aritmetica:o1 operadorRelacional:or operacion_aritmetica:o2 condicion_operador_logico:col         {: RESULT = new Condicion(o1, new operadorRelacional((Token)or), o2, col);
+                                                                                                                             String izquierdaTipo = o1._operacionAritmetica2._operacionAritmetica3._variable.getTipo().getClass().getSimpleName();
+                                                                                                                             String derechaTipo = o2._operacionAritmetica2._operacionAritmetica3._entero == null ? o2._operacionAritmetica2._operacionAritmetica3._variable.getTipo().getClass().getSimpleName() :  new IntegerTipo().getClass().getSimpleName();
+                                                                                                                             
+                                                                                                                             if (!izquierdaTipo.equals(derechaTipo)) {
+                                                                                                                               System.err.println("Error de tipos: no se puede convertir " + derechaTipo + " a " + izquierdaTipo);
+                                                                                                                               parser.errores++;
+                                                                                                                             }  :}
             | operacion_aritmetica:o1 operadorRelacional:or constChar:csc condicion_operador_logico:col                   {: RESULT = new Condicion(o1, new operadorRelacional((Token)or), new constChar(csc._constChar, csc.linea, csc.columna), col); :}
             | operacion_aritmetica:o1 operadorRelacional:or constStr:css condicion_operador_logico:col                    {: RESULT = new Condicion(o1, new operadorRelacional((Token)or), new constStr(css._constStr, css.linea, css.columna), col); :}
             | constChar:csc operadorRelacional:or operacion_aritmetica:o1 condicion_operador_logico:col                   {: RESULT = new Condicion(new constChar(csc._constChar, csc.linea, csc.columna), new operadorRelacional((Token)or), o1, col); :}
@@ -825,8 +965,8 @@ asignacion_variable ::= variable:v igual {: parser.generar = true; :} operacion_
 asignacion_variable_coma ::= coma asignacion_variable:av                                                               {: RESULT = new AsignacionVariableComa( new coma(), av);  :}
                         | puntoYComa;
 
-incrementarDecrementarVariable ::= variable:v operadorIncrementoDecremento puntoYComa                     {:  RESULT = new IncrementarDecrementarVariable(v, new operadorIncrementoDecremento(), new puntoYComa());  :}
-                                 | operadorIncrementoDecremento variable:v puntoYComa                     {:  RESULT = new IncrementarDecrementarVariable(new operadorIncrementoDecremento(), v, new puntoYComa());  :};
+incrementarDecrementarVariable ::= variable:v operadorIncrementoDecremento:oid puntoYComa                     {:  RESULT = new IncrementarDecrementarVariable(v, oid, new puntoYComa());  :}
+                                 | operadorIncrementoDecremento:oid variable:v puntoYComa                     {:  RESULT = new IncrementarDecrementarVariable(oid, v, new puntoYComa());  :};
 
             
 operacion_aritmetica ::= operacion_aritmetica:o1 operadorSuma:s operacion_aritmetica2:o2                   {: RESULT = new OperacionAritmetica(o1, new operadorSuma(), o2); 
@@ -944,7 +1084,8 @@ operacion_aritmetica3 ::= entero:e                                              
                                                                                                             RESULT.setTipo(v.getTipo()); :}
  
                        | llamado_funcion:lf                                                              {: RESULT = new OperacionAritmetica3(lf);    
-                                                                                                            RESULT.setTipo(lf.getTipo()); :} 
+                                                                                                            RESULT.setTipo(lf.getTipo());
+                                                                                                            parser.llamadoAFuncionDerecha = lf._nombreVariable._nombreVariable; :} 
 
                        | parentesisIzquierdo operacion_aritmetica:o parentesisDerecho                    {: RESULT = new OperacionAritmetica3(new parentesisIzquierdo(), o, new parentesisDerecho());    
                                                                                                             RESULT.setTipo( o.getTipo()); :} ;

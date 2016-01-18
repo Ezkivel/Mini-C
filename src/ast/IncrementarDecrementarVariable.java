@@ -5,6 +5,8 @@
  */
 package ast;
 
+import minic.Token;
+
 /**
  *
  * @author Gabriel
@@ -12,16 +14,16 @@ package ast;
 public class IncrementarDecrementarVariable extends Codigo{
 
     public Variable _variable;
-    public operadorIncrementoDecremento _operadorIncrementoDecremento;
+    public Token _operadorIncrementoDecremento;
     public puntoYComa _puntoYComa;
 
-    public IncrementarDecrementarVariable(Variable _variable, operadorIncrementoDecremento _operadorIncrementoDecremento, puntoYComa _puntoYComa) {
+    public IncrementarDecrementarVariable(Variable _variable, Token _operadorIncrementoDecremento, puntoYComa _puntoYComa) {
         this._variable = _variable;
         this._operadorIncrementoDecremento = _operadorIncrementoDecremento;
         this._puntoYComa = _puntoYComa;
     }
 
-    public IncrementarDecrementarVariable(operadorIncrementoDecremento _operadorIncrementoDecremento, Variable _variable, puntoYComa _puntoYComa) {
+    public IncrementarDecrementarVariable(Token _operadorIncrementoDecremento, Variable _variable, puntoYComa _puntoYComa) {
         this._variable = _variable;
         this._operadorIncrementoDecremento = _operadorIncrementoDecremento;
         this._puntoYComa = _puntoYComa;
