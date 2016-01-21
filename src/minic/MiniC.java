@@ -225,6 +225,13 @@ public class MiniC {
                 codigoFinal.add("li $v0,4");
                 codigoFinal.add("la $a0," + variable);
                 codigoFinal.add("syscall");
+                
+                if (codigoIntermedio.elementAt(a + 1).startsWith("print \"")) {
+                    //Nueva linea
+                    codigoFinal.add("addi $v0,$zero,4");
+                    codigoFinal.add("la $a0,espacio");
+                    codigoFinal.add("syscall");
+                }
             } else if(lineaCodigo.startsWith("print ")) {
                 String variable = lineaCodigo.substring(6);
                 
@@ -256,13 +263,22 @@ public class MiniC {
             //Read
             if (lineaCodigo.startsWith("read ")) {
                 String variable = lineaCodigo.substring(5);
-                String temporal = "$t" + nuevoTemporal();
                 
-                codigoFinal.add("li $v0,5");
-                codigoFinal.add("syscall");
-                codigoFinal.add("move " + temporal + ",$v0");
+                //La variable no ha sido utilizada
+                if (obtenerTemporalDeVariable(variable).equals("-1")) {
+                    String temporal = "$t" + nuevoTemporal();
+                    enlazarContenidoATemporal(variable);
                 
-                enlazarContenidoATemporal(variable);
+                    codigoFinal.add("li $v0,5");
+                    codigoFinal.add("syscall");
+                    codigoFinal.add("move " + temporal + ",$v0");
+                } else {
+                    String temporal = obtenerTemporalDeVariable(variable);
+                    
+                    codigoFinal.add("li $v0,5");
+                    codigoFinal.add("syscall");
+                    codigoFinal.add("move " + temporal + ",$v0");
+                }
             }
             
             
@@ -905,6 +921,9 @@ public class MiniC {
                 String funcion = lineaCodigo.split(" ")[1];
                 
                 codigoFinal.add("jal funcion_" + funcion);
+                
+                //Resetea los parametros
+                codigoFinal_parametro = -1;
             }
             
             if (lineaCodigo.contains("=RET")) {
@@ -925,12 +944,34 @@ public class MiniC {
             
             //Funcion
             if (lineaCodigo.startsWith("funcion_")) {
+                String funcion = lineaCodigo.split("_")[1];
+                
                 codigoFinal.add(lineaCodigo);
                 
                 codigoFinal.add("sw $fp,-4($sp)");
                 codigoFinal.add("sw $ra,-8($sp)");
                 codigoFinal.add("move $fp,$sp");
                 codigoFinal.add("sub $sp,$sp,12");
+                
+                
+                Vector<String> parametros = obtenerParametrosFuncion(funcion);
+                
+                //Recorre los parametros (variable) en caso de que hayan
+                for (int i = 0; i < parametros.size(); i++) {
+                    String variable = parametros.elementAt(i);
+                    
+                    //La variable no ha sido usada
+                    if (obtenerTemporalDeVariable(variable).equals("-1")) {
+                        String temporalVariable = "$t" + nuevoTemporal();
+                        enlazarContenidoATemporal(variable);
+                        
+                        codigoFinal.add("move " + temporalVariable + "," + "$a" + i);
+                    } else {
+                        String temporalVariable = obtenerTemporalDeVariable(variable);
+                        
+                        codigoFinal.add("move " + temporalVariable + "," + "$a" + i);
+                    }
+                }
             }
             
             if (lineaCodigo.startsWith("return ")) {
@@ -1004,11 +1045,7 @@ public class MiniC {
     }
     
     public static int nuevoParametro() {
-        return codigoFinal_parametro == 3 ? 0 : ++codigoFinal_parametro;
-    }
-    
-    public static int cantidadParametros() {
-        return codigoFinal_parametro;
+        return ++codigoFinal_parametro;
     }
     
     public static int temporalActual() {
@@ -1033,6 +1070,27 @@ public class MiniC {
         }
         
         return temporal;
+    }
+    
+    public static Vector<String> obtenerParametrosFuncion(String funcion) {
+        Vector<String> parametros = new Vector();
+        int cantidadParametros = 0;
+        int contador = 1;
+        
+        for (int a = 0; a < tablaSimbolos.size(); a++) {
+            if (tablaSimbolos.elementAt(a).getNombre().equals(funcion) && tablaSimbolos.elementAt(a).isFuncion()) {
+                cantidadParametros = tablaSimbolos.elementAt(a).getParametros().size();
+            }
+            
+            if (contador <= cantidadParametros) {
+                if (tablaSimbolos.elementAt(a).getAmbito().equals(funcion)) {
+                    parametros.add(tablaSimbolos.elementAt(a).getNombre());
+                    contador++;
+                }
+            }
+        }
+        
+        return parametros;
     }
     
     
